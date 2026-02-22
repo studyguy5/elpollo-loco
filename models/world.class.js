@@ -12,22 +12,35 @@ class World {
         new cloud()
     ]
 
-    backgroundObjects = [
-        new background()
+    
+    bg = [
+        new background(0, 0, 720, 400, 'img/5_background/layers/air.png'),
+        new background(0, 80, 720, 400, 'img/5_background/layers/3_third_layer/1.png'),
+        new background(0, 80, 720, 400, 'img/5_background/layers/2_second_layer/1.png'),
+        new background(0, 80, 720, 400, 'img/5_background/layers/1_first_layer/1.png'),
     ]
 
-    ground = new floor()
+    
+
+    // ground = new floor()
     canvas;
     ctx;
+    Keyboard;
 
-    constructor(canvas) {
+    constructor(canvas, Keyboard) {
         this.ctx = canvas.getContext('2d')
         this.canvas = canvas;
-        this.drawBackground();
+        this.Keyboard = Keyboard;
+        this.drawBackgroundLayers();
         this.drawClouds();
+        // this.drawGround();
         this.drawCharacter();
         this.drawChickens();
-        this.drawGround();
+        this.setWorld();
+    }
+
+    setWorld() {
+        this.Character.world = this;
     }
 
     drawCharacter() {
@@ -40,12 +53,12 @@ class World {
         })
     }
 
-    drawBackground(){
-        this.addObjektsToMap(this.backgroundObjects);
+    drawBackgroundLayers(){
+        this.addBackgroundToMap(this.bg);
         
         let self = this;
         requestAnimationFrame(function (){
-            self.drawBackground()
+            self.drawBackgroundLayers()
         })
     }
 
@@ -83,10 +96,20 @@ class World {
     addTomap(mo){
         this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
     }
+
+    drawBackgroundToMap(mo){
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
+    }
     
     addObjektsToMap(objects){
         objects.forEach((o) => {
             this.addTomap(o)
+        })
+    }
+
+    addBackgroundToMap(objects){
+        objects.forEach((o) => {
+            this.drawBackgroundToMap(o)
         })
     }
 }
