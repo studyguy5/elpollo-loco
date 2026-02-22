@@ -1,15 +1,24 @@
 class background extends MovalbleObject{
 x;
 y;
+img;
 
 
-    constructor(){
+
+    constructor(x = 0, y = 0, width = 720, height = 480, path = ''){
         super()
-        this.loadImage('img/5_background/first_half_background.png')
-        this.loadImage('img/5_background/first_half_background.png')
-        this.x = 0;
-        this.y = 0;
-        this.height = 480;
-        this.width = 720; 
+        this.loadBackgroundImage(path)
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this.width = width; 
     }
+
+    loadBackgroundImage(path){
+        this.img = new Image()
+        this.img.src= path;
+        
+    }
+
+
 }
