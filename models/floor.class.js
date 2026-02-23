@@ -1,4 +1,4 @@
-class floor extends MovalbleObject{
+class floor extends MovableObject{
 width = 720;
 height = 240;
 x;

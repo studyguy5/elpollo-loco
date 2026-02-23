@@ -7,6 +7,7 @@ let world;
 function init() {
     canvas = document.getElementById('gameCanvas')
     world = new World(canvas, Keyboard);
+    
 
 
     console.log('My Character is ', world.enemies)
@@ -17,8 +18,7 @@ window.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowRight':
             console.log('Right arrow key pressed');
-            Keyboard.RIGHT = true;
-            // world.Character.moveRight();
+            Keyboard.RIGHT = true; // variablen werden für gedrückte Tasten auf true gesetzt
             break;
         case 'ArrowLeft':
             console.log('Left arrow key pressed');
@@ -32,7 +32,7 @@ window.addEventListener('keydown', (e) => {
         switch (e.key) {
             case 'ArrowRight':
                 console.log('Right arrow key released');
-                Keyboard.RIGHT = false;
+                Keyboard.RIGHT = false; // variablen werden für losgelassene Tasten auf false gesetzt
                 break;
             case 'ArrowLeft':
                 console.log('Left arrow key released');
