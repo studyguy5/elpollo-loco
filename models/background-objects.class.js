@@ -1,4 +1,4 @@
-class background extends MovalbleObject{
+class background extends MovableObject{
 x;
 y;
 img;

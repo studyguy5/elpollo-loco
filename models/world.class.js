@@ -2,23 +2,14 @@ class World {
 
     Character = new character()
 
-    enemies = [
-        new chicken(),
-        new chicken(),
-        new chicken(),
-    ]
+    level = level1;
+    // enemies = level1.enemies;
+    
 
-    clouds = [
-        new cloud()
-    ]
+    // clouds = level1.clouds;
 
     
-    bg = [
-        new background(0, 0, 720, 400, 'img/5_background/layers/air.png'),
-        new background(0, 80, 720, 400, 'img/5_background/layers/3_third_layer/1.png'),
-        new background(0, 80, 720, 400, 'img/5_background/layers/2_second_layer/1.png'),
-        new background(0, 80, 720, 400, 'img/5_background/layers/1_first_layer/1.png'),
-    ]
+    // bg = level1.bg;
 
     
 
@@ -26,6 +17,7 @@ class World {
     canvas;
     ctx;
     Keyboard;
+    camera_x = 0;
 
     constructor(canvas, Keyboard) {
         this.ctx = canvas.getContext('2d')
@@ -41,39 +33,43 @@ class World {
 
     setWorld() {
         this.Character.world = this;
+        //ich lege in der class Character eine Variable namens world an und sage, sie soll genau diese Instanz hier, also auf alles hier zugreifen können
+        //damit verbinde ich die Klassen world und character miteinander
     }
 
     drawCharacter() {
-        // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.addTomap(this.Character)
-
+        
+        
         let self = this;
         requestAnimationFrame(function () {
             self.drawCharacter()
         })
     }
-
+    
     drawBackgroundLayers(){
-        this.addBackgroundToMap(this.bg);
-        
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.addBackgroundToMap(this.level.bg);
+        // this.ctx.translate(this.camera_x, 0)
+        // this.ctx.translate(-this.camera_x, 0)
         let self = this;
         requestAnimationFrame(function (){
             self.drawBackgroundLayers()
         })
     }
 
-    drawGround() {
-        // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        this.addTomap(this.ground)
+    // drawGround() {
+    //     // this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    //     this.addTomap(this.ground)
         
-        let self = this;
-        requestAnimationFrame(function () {
-            self.drawGround()
-        })
-    }
+    //     let self = this;
+    //     requestAnimationFrame(function () {
+    //         self.drawGround()
+    //     })
+    // }
     
     drawChickens() {
-        this.addObjektsToMap(this.enemies);
+        this.addObjektsToMap(this.level.enemies);
         // so wird drawChickens immer wieder aufgerufen (sieht man bei einem console.log)
         let self = this;
         requestAnimationFrame(function () {
@@ -83,7 +79,9 @@ class World {
     
     
     drawClouds() {
-        this.addObjektsToMap(this.clouds);
+        this.ctx.translate(this.camera_x, 0)
+        this.ctx.translate(-this.camera_x, 0)
+        this.addObjektsToMap(this.level.clouds);
         // so wird drawChickens immer wieder aufgerufen (sieht man bei einem console.log)
         let self = this;
         requestAnimationFrame(function () {
@@ -92,24 +90,48 @@ class World {
     }
     
     
-    
-    addTomap(mo){
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
-    }
-
-    drawBackgroundToMap(mo){
-        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
-    }
-    
-    addObjektsToMap(objects){
+    addObjektsToMap(objects){      
         objects.forEach((o) => {
             this.addTomap(o)
+            // this.ctx.translate(this.camera_x, 0)
+            // this.ctx.translate(-this.camera_x, 0)
         })
     }
-
+    
     addBackgroundToMap(objects){
         objects.forEach((o) => {
+            // this.ctx.translate(this.camera_x, 0)
+            // this.ctx.translate(-this.camera_x, 0)
             this.drawBackgroundToMap(o)
         })
+    }
+    previousX;
+
+    addTomap(mo){
+        
+        if (mo.otherDirection) {
+            this.ctx.save();
+            
+            this.ctx.translate(this.camera_x, 0)
+            this.ctx.translate(mo.width, 0);
+            
+            this.ctx.scale(-1, 1);
+            this.ctx.drawImage(mo.img, -mo.x, mo.y, mo.width, mo.height)
+            // this.ctx.translate(-this.camera_x, 0)
+        }
+        if (!mo.otherDirection) {
+            this.ctx.restore();
+            this.ctx.translate(this.camera_x, 0)
+            this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
+            this.ctx.translate(-this.camera_x, 0)
+        }
+    }
+    
+    drawBackgroundToMap(mo){
+        this.ctx.save();
+        this.ctx.translate(this.camera_x, 0)
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
+        this.ctx.restore();
+        // this.ctx.translate(-this.camera_x, 0)
     }
 }
