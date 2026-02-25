@@ -24,6 +24,23 @@ class chicken extends MovableObject {
         this.moveLeft(this.speed);
     }
 
+    // hit() {
+    //     this.Character.energy -= 2;
+    //     if (this.Character.energy < 0) {
+    //         this.Character.energy = 0;
+    //         this.lastHit = new Date.getTime();
+    //     }else{
+    //         this.lastHit = new Date().getTime()
+    //     }
+    // }
+
+    
+    // isHurt(){
+    //     timePassed = new Date().getTime() - this.lastHit;
+    //     timePassed = timePassed / 1000;
+    //     return timePassed < 2;
+    // }
+
     animateChicken() {
         setInterval(() => {
             let path = this.chicken_WALKING[this.currentImage];
