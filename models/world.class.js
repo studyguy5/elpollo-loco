@@ -9,6 +9,7 @@ class World {
     ctx;
     Keyboard;
     camera_x = 0;
+    
 
     constructor(canvas, Keyboard) {
         this.ctx = canvas.getContext('2d')
@@ -24,23 +25,74 @@ class World {
         this.checkCollisions();
     }
 
+    lastHit = 0;
+    timePassed = 0;
+
+    hit() {
+        this.Character.energy -= 2;
+        if (this.Character.energy < 0) {
+            this.Character.energy = 0;
+
+        }else{
+            this.lastHit = new Date().getTime()
+            console.log('Collision detected with ========================', this.timePassed);
+        }
+    }
+
+    
+    isHurt(){
+        this.timePassed = new Date().getTime() - this.lastHit;
+        this.timePassed = this.timePassed / 1000;
+        return this.timePassed == 10 ? this.timePassed = 0 : "", this.timePassed < 2;
+    }
+
     checkCollisions() {
         setInterval(() => {
             this.level.enemies.forEach((enemies) => {
                 if (this.Character.isColliding(enemies)) {
-                    console.log('Collision detected with', enemies);
+                    console.log('is colliding', this.Character.isColliding(enemies))
+                    this.hit()
+                    // this.Character.energy -= 2;
+                    this.Character.playHurtAnimation(this.isHurt);
                 }
-            })
-        }, 1000)
+                
+                if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
+                    console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////', this.timePassed)
+                    
+                    this.Character.playHurtAnimation(this.isHurt);
+                    // this.clearIntervall(this.Character.hurtInterval)
+                }
+
+                if (this.timePassed > 2) {
+                    if(this.timePassed > 30){this.timePassed = 0}
+                    console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
+                }
+            });
+
+
+
+            // // Only set isHurt to false if no collision occurred with any enemy
+            // if (!isCollidingAny) {
+            //     this.isHurt = false;
+            //     this.Character.stopHurtAnimation();
+            // }
+
+            if (this.Character.isDeath()) {
+                this.Character.energy = 0;
+                this.Character.playDeathAnimation();
+                console.log('Game Over');
+            }
+        }, 1000 / 10)
+
 
         setInterval(() => {
             this.level.endboss.forEach((endboss) => {
                 if (this.Character.isCollidingWithEndboss(endboss)) {
                     console.log('Collision detected with endboss', endboss);
                 }
-        }, 1000);
-    })
-}
+            }, 1000 / 10);
+        })
+    }
 
     isCollidingWithEndboss(endboss) {
         return (this.Character.x + this.Character.width > endboss.x &&

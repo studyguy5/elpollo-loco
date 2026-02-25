@@ -6,6 +6,9 @@ class MovableObject {
     characterImages = {};
     chickenImages = {};
     endbossImages = {};
+    hurtImages = {};
+    deathImages = {};
+    idleImages = {};
     subtrahendMax = 0;
     height = 300;
     width = 100;
@@ -13,6 +16,10 @@ class MovableObject {
     speedY = 0;
     acceleration = 3;
     otherDirection = false;
+    energy = 100;
+    
+
+
     loadImage(path) {
         this.img = new Image()
         this.img.src = path;
@@ -94,6 +101,17 @@ class MovableObject {
         })
     };
 
+    loadIdleImages(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.idleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der idleImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    }
+
     loadJumpImages(arr) {
         // Array.isArray(arr) && 
         arr.forEach((path) => {
@@ -104,6 +122,26 @@ class MovableObject {
             // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
         })
     };
+
+    loadHurtImages(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.hurtImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der hurtImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadDeathImages(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.deathImages[path] = img;
+        })
+    }
 
     loadEndbossImages(arr) {
         console.log('loadEndbossImages', arr)
