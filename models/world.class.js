@@ -1,18 +1,21 @@
 class World {
-
+    
+    bottleBar = new statusBar(this, 20, 20, 300, 50) //hier als Parameter die Koordinaten angeben
+    
     Character = new character()
-
+    
     level = level1;
-
-
+    
+    
     canvas;
     ctx;
     Keyboard;
     camera_x = 0;
     
-
+    
     constructor(canvas, Keyboard) {
         this.ctx = canvas.getContext('2d')
+        this.setWorld();
         this.canvas = canvas;
         this.Keyboard = Keyboard;
         this.drawBackgroundLayers();
@@ -21,12 +24,47 @@ class World {
         this.drawEndboss();
         this.drawCharacter();
         this.drawChickens();
-        this.setWorld();
         this.checkCollisions();
     }
+    
+    img;
 
     lastHit = 0;
     timePassed = 0;
+
+
+//status Bar =================================
+    loadStatusBottle(path){
+        this.img = new Image()
+        this.img.src = path;
+        console.log('load Bottle')   
+    }
+
+    addStatusToMap(objects, camera_x) {
+        objects.forEach((o) => {
+            this.drawStatusToMap(o, camera_x)
+        })
+        let self = this;
+        requestAnimationFrame(function () {
+            self.addStatusToMap()
+        })
+    }
+
+    
+    drawStatusToMap(o, camera_x) {
+        this.ctx = canvas.getContext('2d')
+        this.ctx.translate(camera_x, 0)
+        // this.draw(this.ctx,o)
+        this.ctx.translate(-camera_x, 0)
+            console.log('draw Bottle')
+    }
+
+    // draw(ctx, o) {
+        
+    //     ctx.drawImage(this.img, this.bottleBar.x, o.y, o.width, o.height);
+    // }
+
+//=============================================
 
     hit() {
         this.Character.energy -= 2;
@@ -35,7 +73,7 @@ class World {
 
         }else{
             this.lastHit = new Date().getTime()
-            console.log('Collision detected with ========================', this.timePassed);
+            // console.log('Collision detected with ========================', this.timePassed);
         }
     }
 
@@ -57,7 +95,7 @@ class World {
                 }
                 
                 if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
-                    console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////', this.timePassed)
+                    // console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////', this.timePassed)
                     
                     this.Character.playHurtAnimation(this.isHurt);
                     // this.clearIntervall(this.Character.hurtInterval)
@@ -65,7 +103,7 @@ class World {
 
                 if (this.timePassed > 2) {
                     if(this.timePassed > 30){this.timePassed = 0}
-                    console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
+                    // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
                 }
             });
 
@@ -112,6 +150,7 @@ class World {
 
     setWorld() {
         this.Character.world = this;
+        this.bottleBar.worldStatus = this;
         //ich lege in der class Character eine Variable namens world an und sage, sie soll genau diese Instanz hier, also auf alles hier zugreifen können
         //damit verbinde ich die Klassen world und character miteinander
     }

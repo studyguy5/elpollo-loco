@@ -1,8 +1,8 @@
 
 let canvas;
-
-let Keyboard = new keyBoard();
 let world;
+let Keyboard = new keyBoard();
+
 
 function init() {
     canvas = document.getElementById('gameCanvas')
