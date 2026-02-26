@@ -3,6 +3,7 @@ class MovableObject {
     x = 80;
     y = 145;
     img;    //das gespeicherte Bild hier soll dem Bild aus characterImages entsprechen, damit wir es später in der animate Funktion ansprechen können, um es zu animieren
+    
     characterImages = {};
     chickenImages = {};
     endbossImages = {};
@@ -18,6 +19,8 @@ class MovableObject {
     otherDirection = false;
     energy = 100;
     
+//=================bilder laden und zeichnen=====================================
+
 
 
     loadImage(path) {
@@ -184,7 +187,6 @@ class MovableObject {
                 this.x = Math.random() * 3100;
             }
         }, 1000 / 30);
-        console.log('moveLeft');
     }
 
     //===================test fuction for image loop of character, chicken, endboss combined========================

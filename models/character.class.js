@@ -86,6 +86,7 @@ class character extends MovableObject {
         this.Move_Character()
         this.animatejumpAndWalking_Character()
         // this.playHurtAnimation()
+    
     }
     
 checkCollision; 
@@ -107,7 +108,7 @@ checkCollision;
                 this.moveLeftCharacter(this.speed);
             }
             this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
-            console.log(this.world.camera_x) //versetzt die Kamera proportional zur Position des Charakters
+            // console.log(this.world.camera_x) //versetzt die Kamera proportional zur Position des Charakters
         }, 1000 / 25);
         
     }
@@ -132,6 +133,7 @@ checkCollision;
 
 
     isDeath() {
+        
         return this.energy <= 0;
     }
 
@@ -145,10 +147,11 @@ checkCollision;
     //          (this.y + this.offsetTop < mo.y + mo.height - mo.offsetBottom);
     // }
 
+    // Bilder werden in ein objekt geladen, index ausgetauscht und auf das img gesetzt, in der movable Objekt werden die Bilder mit drawImage gezeichnet
     playIdleAnimation() {
         setInterval(() => {
             let path = this.IMAGES_IDLE[this.currentIdleImage];
-            this.img = this.idleImages[path];
+            this.img = this.idleImages[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
             this.currentIdleImage = (this.currentIdleImage + 1) % this.IMAGES_IDLE.length;
         }, 1000 / 24);
     }
@@ -156,7 +159,7 @@ checkCollision;
     
     playHurtAnimation(isHurt) {
         if (isHurt) {
-            console.log('playHurtAnimation läuft');
+            // console.log('playHurtAnimation läuft');
             let path = this.IMAGES_HURT[this.currentHurtImage];
             this.img = this.hurtImages[path];
             this.currentHurtImage = (this.currentHurtImage + 1) % this.IMAGES_HURT.length;
