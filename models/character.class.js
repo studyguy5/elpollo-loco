@@ -197,7 +197,7 @@ checkCollision;
             let path = this.IMAGES_DEAD[this.currentDeathImage];
             this.img = this.deathImages[path];
             this.currentDeathImage = (this.currentDeathImage + 1) % this.IMAGES_DEAD.length;
-        }, 1000 / 24);
+        }, 1000 / 5);
     }
 
 
