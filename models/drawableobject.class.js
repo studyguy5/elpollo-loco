@@ -1,18 +1,27 @@
-
-class MovableObject extends DrawableObjekt{
-    
-    
-    
-   
-    speed = 0.5;
-    speedY = 0;
-    acceleration = 3;
-    otherDirection = false;
-    energy = 100;
-    
-//=================bilder laden und zeichnen=====================================
+class DrawableObjekt {
 
 
+    characterImages = {};
+    chickenImages = {};
+    endbossImages = {};
+    hurtImages = {};
+    deathImages = {};
+    idleImages = {};
+    statusBarImages = {};
+    statusHealthImage = {};
+    subtrahendMax = 0;
+    ctx;
+    canvas;
+    x = 80;
+    y = 145;
+    height = 300;
+    width = 100;
+    img;    //das gespeicherte Bild hier soll dem Bild aus characterImages entsprechen, damit wir es später in der animate Funktion ansprechen können, um es zu animieren
+
+    constructor() {
+        const canvas = document.getElementById('gameCanvas');
+        this.ctx = canvas.getContext('2d');
+    }
 
     loadImage(path) {
         this.img = new Image()
@@ -20,31 +29,7 @@ class MovableObject extends DrawableObjekt{
 
     }
 
-    drawRectangle(ctx, camera_x) {
-        if (this instanceof character || this instanceof chicken || this instanceof endboss) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.translate(camera_x, 0)
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.translate(-camera_x, 0)
-            ctx.stroke();
-            // console.log('drawRectangle', this.x)
-        }
-    }
-
-    drawRectangleForBackground(ctx, camera_x) {
-        if (this instanceof character || this instanceof chicken) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.translate(camera_x, 0)
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.translate(-camera_x, 0)
-            ctx.stroke();
-            // console.log('drawRectangle', this.x)
-        }
-    }
+    
 
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
@@ -58,20 +43,13 @@ class MovableObject extends DrawableObjekt{
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    applyGravity() {
-        setInterval(() => {
-            // console.log('applyGravity läuft', this.speedY, this.y)
-            if (this.y < 120) {
-                this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
-                this.speedY -= this.acceleration;
-            } else { this.speedY = 0; } // hier wird die acceleration von speedY abgezogen, also das null von speedY - 1 von acceleration = -1
-            // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
-        }, 1000 / 25);
-    }
 
-    isAboveGround() {
-        return this.y < 120;
-    }
+
+    //==========load Images ========================================
+
+
+
+
 
     loadChickenImages(arr) {
         // Array.isArray(arr) && 
@@ -90,6 +68,28 @@ class MovableObject extends DrawableObjekt{
             let img = new Image()
             img.src = path;
             this.characterImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadImagesStatus(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.statusBarImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadImagesStatushealth(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.statusHealthImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
         })
@@ -147,47 +147,4 @@ class MovableObject extends DrawableObjekt{
             // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
         })
     };
-
-
-    //could be good for chicken to move left or right
-    moveRightCharacter() {
-        this.x += this.speed;
-        this.otherDirection = false;
-    };
-
-    moveLeftCharacter() {
-        this.x -= this.speed;
-        this.otherDirection = true;
-    }
-
-    jumpCharacter() {
-        this.y -= this.jumpSpeed; // hier setzen wir die y Position des Charakters um 150 höher, damit er springt, aber nur wenn er nicht schon in der Luft ist (isAboveGround)
-        this.jump = true;
-        this.jumpSpeed -= 2; // hier verringern wir die jumpSpeed um 1, damit der Charakter wieder runterkommt, aber nur wenn er in der Luft ist (isAboveGround)
-        console.log('Jumping', this.y)
-        setTimeout(() => {
-            this.jump = false; // hier setzen wir jump wieder auf false, damit der Charakter wieder springen kann, aber erst nach 1 Sekunde, damit er nicht sofort wieder springen kann
-        }, 600);
-    }
-
-    //used for clouds to move left
-    moveLeft() {
-        setInterval(() => {
-            this.x -= this.speed;
-            if (this.x < this.subtrahendMax) {
-                this.x = Math.random() * 3100;
-            }
-        }, 1000 / 30);
-    }
-
-    //===================test fuction for image loop of character, chicken, endboss combined========================
-    // playAnimation(images) {
-    //     let path = images[this.currentImage];
-    //     this.img = this.images[path];
-    //     this.currentImage = (this.currentImage + 1) % images.length;
-    // }
-
-    jump() {
-
-    }
 }
