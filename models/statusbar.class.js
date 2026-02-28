@@ -42,25 +42,24 @@ class statusBar extends DrawableObjekt {
         this.loadImagesStatushealth(statusBarr)
         this.setbottleImage(100)
         this.sethealthImage(100)
-        this.setPercentige()
-        
     }
 
-    setbottleImage() {
-        this.percentige = this.percentige
-        let path = this.statusBarr[this.setPercentige()];
+    setbottleImage(energy) {
+        this.percentige = energy
+        let path = this.statusBarr[this.setPercentige(energy)];
         this.img = this.statusBarImages[path];
+        // console.log(this.img);
     }
 
-    sethealthImage() {
-        this.percentige = this.percentige
-        let path = this.statusBarr[this.setPercentige()];
+    sethealthImage(energy) {
+        this.percentige = this.energy;
+        let path = this.statusBarr[this.setPercentige(energy)];
         this.img = this.statusHealthImage[path];
     }
 
 
-    setPercentige() {
-        this.percentige = this.percentige
+    setPercentige(energy) {
+        this.percentige = energy;
         if (this.percentige == 100) {
             return 5;  
         }else if (this.percentige > 80 && this.percentige < 100) {
