@@ -2,6 +2,15 @@
 
 const level1 = new Level(
 
+    [
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        
+    ],
 
 
     [

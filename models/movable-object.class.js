@@ -1,16 +1,17 @@
 
-class MovableObject extends DrawableObjekt{
-    
-    
-    
-   
+class MovableObject extends DrawableObjekt {
+
+
+
+
     speed = 0.5;
     speedY = 0;
     acceleration = 3;
     otherDirection = false;
     energy = 100;
-    
-//=================bilder laden und zeichnen=====================================
+    gravityInterval = null;
+
+    //=================bilder laden und zeichnen=====================================
 
 
 
@@ -59,18 +60,32 @@ class MovableObject extends DrawableObjekt{
     }
 
     applyGravity() {
-        setInterval(() => {
-            // console.log('applyGravity läuft', this.speedY, this.y)
-            if (this.y < 120) {
-                this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
-                this.speedY -= this.acceleration;
-            } else { this.speedY = 0; } // hier wird die acceleration von speedY abgezogen, also das null von speedY - 1 von acceleration = -1
+        if (this.gravityInterval) {
+        clearInterval(this.gravityInterval);
+        }
+    this.gravityInterval = setInterval(() => {
+        if (this.isAboveGround()) {
+            this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
+            this.speedY -= this.acceleration;
+            console.log('applyGravity läuft','speedY ', this.speedY,'y-achese ', this.y)
+                if(this instanceof ThrowableObject){
+                    this.x += this.speedX;
+                }
+            } else {
+                if(this instanceof ThrowableObject){
+                    clearInterval(this.gravityInterval);
+                }
+                 this.speedY = 0; } // hier wird die acceleration von speedY abgezogen, also das null von speedY - 1 von acceleration = -1
             // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
         }, 1000 / 25);
     }
 
     isAboveGround() {
-        return this.y < 120;
+        if (this instanceof ThrowableObject) {
+            return this.y < 700;
+        } else {
+            return this.y < 120;
+        }
     }
 
     loadChickenImages(arr) {

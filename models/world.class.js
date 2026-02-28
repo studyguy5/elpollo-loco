@@ -1,28 +1,30 @@
 class World {
 
-    bottleBar = new statusBar(this, 20, 20, 210, 30,
+    bottleBar = new statusBar(this, 20, 10, 210, 40,
         [
-        'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/0.png',
-        'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/20.png',
-        'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/40.png',
-        'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/60.png',
-        'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/80.png',
-        'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/100.png'
-    ]
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/0.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/20.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/40.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/60.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/80.png',
+            'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/100.png'
+        ]
     ) //hier als Parameter die Koordinaten angeben
-    healthBar = new statusBar(this, 20, 70, 210, 30,
+    healthBar = new statusBar(this, 20, 50, 210, 40,
         [
-        'img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/green/20.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/green/40.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/green/60.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/green/80.png',
-        'img/7_statusbars/1_statusbar/2_statusbar_health/green/100.png'
-        
-    ]
+            'img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/green/20.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/green/40.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/green/60.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/green/80.png',
+            'img/7_statusbars/1_statusbar/2_statusbar_health/green/100.png'
+
+        ]
     ) //hier als Parameter die Koordinaten angeben
 
     Character = new character()
+
+    throwableObject = [new ThrowableObject()]
 
     level = level1;
 
@@ -43,6 +45,8 @@ class World {
         this.drawClouds();
         this.drawBottleBar()
         this.drawHealthBar()
+        this.showBottleImage()
+        this.showBottleToShoot()
         this.drawEndboss();
         this.drawCharacter();
         this.drawChickens();
@@ -56,21 +60,22 @@ class World {
     timePassed = 0;
 
 
-    
+
     //=============================================
-    
+
     hit() {
         this.Character.energy -= 2;
+        this.healthBar.sethealthImage(this.Character.energy)
         if (this.Character.energy < 0) {
             this.Character.energy = 0;
-            
+
         } else {
             this.lastHit = new Date().getTime()
             // console.log('Collision detected with ========================', this.timePassed);
         }
     }
 
-    
+
     isHurt() {
         this.timePassed = new Date().getTime() - this.lastHit;
         this.timePassed = this.timePassed / 1000;
@@ -83,13 +88,12 @@ class World {
                 if (this.Character.isColliding(enemies)) {
                     // console.log('is colliding', this.Character.isColliding(enemies))
                     this.hit()
-                    // this.Character.energy -= 2;
                     this.Character.playHurtAnimation(this.isHurt);
                 }
 
                 if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
                     // console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////', this.timePassed)
-                    
+
                     this.Character.playHurtAnimation(this.isHurt);
                     // this.clearIntervall(this.Character.hurtInterval)
                 }
@@ -99,9 +103,9 @@ class World {
                     // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
                 }
             });
-            
 
-            
+
+
             // // Only set isHurt to false if no collision occurred with any enemy
             // if (!isCollidingAny) {
             //     this.isHurt = false;
@@ -114,8 +118,8 @@ class World {
                 console.log('Game Over');
             }
         }, 1000 / 10)
-        
-        
+
+
         setInterval(() => {
             this.level.endboss.forEach((endboss) => {
                 if (this.Character.isCollidingWithEndboss(endboss)) {
@@ -124,16 +128,16 @@ class World {
             }, 1000 / 10);
         })
     }
-    
+
     isCollidingWithEndboss(endboss) {
         return (this.Character.x + this.Character.width > endboss.x &&
             this.Character.x < endboss.x + endboss.width &&
             this.Character.y < endboss.y + endboss.height &&
             this.Character.y + this.Character.height > endboss.y);
-        }
+    }
 
-        isColliding(mo) {
-            return (
+    isColliding(mo) {
+        return (
             this.x + this.width > mo.x &&
             this.x < mo.x + mo.width &&
             this.y < mo.y + mo.height &&
@@ -150,14 +154,14 @@ class World {
 
     drawCharacter() {
         this.addTomap(this.Character)
-        
-        
+
+
         let self = this;
         requestAnimationFrame(function () {
             self.drawCharacter()
         })
     }
-    
+
     drawBackgroundLayers() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.addBackgroundToMap(this.level.bg);
@@ -168,8 +172,8 @@ class World {
             self.drawBackgroundLayers()
         })
     }
-    
-    
+
+
     drawChickens() {
         this.addObjektsToMap(this.level.enemies);
         // so wird drawChickens immer wieder aufgerufen (sieht man bei einem console.log)
@@ -186,21 +190,21 @@ class World {
             self.drawEndboss()
         })
     }
-    
+
     addEndbossToMap(objects) {
         objects.forEach((o) => {
             this.addENDBOOSTomap(o)
         })
     }
-    
+
     addENDBOOSTomap(mo) {
         // this.ctx.save();
-        
+
         this.ctx.translate(this.camera_x, 0)
         this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
         this.ctx.translate(-this.camera_x, 0)
     }
-    
+
     drawClouds() {
         this.ctx.translate(this.camera_x, 0)
         this.ctx.translate(-this.camera_x, 0)
@@ -211,40 +215,40 @@ class World {
             self.drawClouds()
         })
     }
-    
-    
+
+
     addObjektsToMap(objects) {
         objects.forEach((o) => {
             this.addTomap(o)
         })
     }
-    
-    
-    
-    
+
+
+
+
     addBackgroundToMap(objects) {
         objects.forEach((o) => {
             this.drawBackgroundToMap(o)
         })
     }
     previousX;
-    
-    
+
+
     //status Bar =================================
     drawBottleBar() {
-        this.addStatusToMap(this.bottleBar)
-            let self = this;
-            requestAnimationFrame(function () {
-                    self.drawBottleBar()
-                })
-            }
-
-    addStatusToMap(bottleBar){
-        this.drawToMap(this.ctx, bottleBar)
+        this.addStatusToMapbottle(this.bottleBar)
+        let self = this;
+        requestAnimationFrame(function () {
+            self.drawBottleBar()
+        })
     }
 
-    
-    drawToMap(ctx, bottleBar) {
+    addStatusToMapbottle(bottleBar) {
+        this.drawToMapbottle(this.ctx, bottleBar)
+    }
+
+
+    drawToMapbottle(ctx, bottleBar) {
         try {
             ctx.drawImage(this.bottleBar.img, bottleBar.x, bottleBar.y, bottleBar.width, bottleBar.height);
         } catch (error) {
@@ -252,25 +256,78 @@ class World {
             console.log('Fehler bei ', this.img)
         }
     }
-   
+
 
     //======================================================================
-    //=======================health Bar====================================================================
 
-        drawHealthBar(){
-        this.addStatusToMap(this.healthBar)
-            let self = this;
-            requestAnimationFrame(function () {
-                    self.drawHealthBar()
-                })
-            }
-        
+    //================bottles=====================================================
 
-        addStatusToMap(healthBar){
-        this.drawToMap(this.ctx, healthBar)
+    showBottleImage() {
+        this.addToMapbottle(this.level.bottles)
+        let self = this;
+        requestAnimationFrame(function () {
+            self.showBottleImage()
+        })
     }
 
-    drawToMap(ctx, healthBar) {
+    addToMapbottle(bottles) {
+        this.addObjektsToMap(bottles)
+    }
+
+
+    //================================Bottle to shoot==============================
+
+    showBottleToShoot() {
+        this.ctx.translate(this.camera_x, 0)
+        this.ctx.translate(-this.camera_x, 0)
+        this.addToMapbottleToShoot(this.throwableObject)
+        let self = this;
+        requestAnimationFrame(function () {
+            self.showBottleToShoot()
+        })
+    }
+
+    addToMapbottleToShoot(to) {
+        this.addObjektsToMapShoot(to)
+    }
+
+
+    addObjektsToMapShoot(objects) {
+        objects.forEach((o) => {
+            // ctx.drawImage(to.img, to.x, to.y, to.width, to.height);
+            // this.addObjektsToMapShoot(to)
+            this.drawToMapbottleImage(this.ctx, o)
+        })
+    }
+
+
+    drawToMapbottleImage(ctx, to) {
+        try {
+            ctx.drawImage(to.img, to.x, to.y, to.width, to.height);
+        } catch (error) {
+            console.warn('Konnte nicht geladen werden', error)
+            console.log('Fehler bei ', this.img)
+        }
+    }
+
+
+
+    //=======================health Bar====================================================================
+
+    drawHealthBar() {
+        this.addStatusToMap(this.healthBar)
+        let self = this;
+        requestAnimationFrame(function () {
+            self.drawHealthBar()
+        })
+    }
+
+
+    addStatusToMap(healthBar) {
+        this.drawToMaphealth(this.ctx, healthBar)
+    }
+
+    drawToMaphealth(ctx, healthBar) {
         try {
             ctx.drawImage(this.healthBar.img, healthBar.x, healthBar.y, healthBar.width, healthBar.height);
         } catch (error) {
@@ -294,13 +351,14 @@ class World {
 
         // Blue rectangle
         mo.drawRectangle(this.ctx, this.camera_x)
-        // this.ctx.beginPath();
-        // this.ctx.lineWidth = '3';
-        // this.ctx.strokeStyle = 'blue';
-        // this.ctx.translate(this.camera_x, 0)
-        // this.ctx.rect(mo.x, mo.y,mo.width,mo.height);
-        // this.ctx.translate(-this.camera_x, 0)
-        // this.ctx.stroke();
+
+        this.ctx.beginPath();
+        this.ctx.lineWidth = '3';
+        this.ctx.strokeStyle = 'blue';
+        this.ctx.translate(this.camera_x, 0)
+        this.ctx.rect(mo.x, mo.y, mo.width, mo.height);
+        this.ctx.translate(-this.camera_x, 0)
+        this.ctx.stroke();
 
 
 
