@@ -7,8 +7,9 @@ class DrawableObjekt {
     hurtImages = {};
     deathImages = {};
     idleImages = {};
-    statusBarImages = {};
+    statusBottleImages = {};
     statusHealthImage = {};
+    statusCoinImage = {};
     subtrahendMax = 0;
     ctx;
     canvas;
@@ -78,7 +79,7 @@ class DrawableObjekt {
         arr.forEach((path) => {
             let img = new Image()
             img.src = path;
-            this.statusBarImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            this.statusBottleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
         })
@@ -90,6 +91,17 @@ class DrawableObjekt {
             let img = new Image()
             img.src = path;
             this.statusHealthImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadImageStatusCoin(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.statusCoinImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
         })

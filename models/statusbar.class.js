@@ -40,21 +40,34 @@ class statusBar extends DrawableObjekt {
         this.statusBarr = statusBarr
         this.loadImagesStatus(statusBarr)
         this.loadImagesStatushealth(statusBarr)
-        this.setbottleImage(100)
+        this.loadImageStatusCoin(statusBarr)
+        this.setbottleImage(0)
         this.sethealthImage(100)
+        this.setCoinImage()
     }
 
-    setbottleImage(energy) {
-        this.percentige = energy
-        let path = this.statusBarr[this.setPercentige(energy)];
-        this.img = this.statusBarImages[path];
-        // console.log(this.img);
+    setbottleImage() {
+        // this.percentige = ThrowableObject
+        if(this.statusBarr[0].includes('bottle', 0)){;
+        let path = this.statusBarr[this.world.reportBottleLenght()];
+        this.img = this.statusBottleImages[path];
+        console.log(this.img);}
     }
 
     sethealthImage(energy) {
+        if(this.statusBarr[0].includes('health', 0)){
         this.percentige = this.energy;
         let path = this.statusBarr[this.setPercentige(energy)];
-        this.img = this.statusHealthImage[path];
+        this.img = this.statusHealthImage[path];}
+        console.log(this.img);
+    }
+
+    setCoinImage() {
+        if(this.statusBarr[0].includes('coin', 0)){
+        this.percentige = this.energy;
+        let path = this.statusBarr[3];
+        this.img = this.statusCoinImage[path];}
+        console.log(this.img);
     }
 
 

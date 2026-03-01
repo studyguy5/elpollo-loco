@@ -27,18 +27,17 @@ class ThrowableObject extends MovableObject {
     }
     
     throw(){
-        document.addEventListener('keydown', (e) =>{
             let pressed = false;
-            this.reset()
-            if( e.keyCode === 68 && !pressed){
-                console.log('Taste gedrückt ', e.keyCode == 68)
+            
+            
+                console.log('Taste gedrückt ')
                 this.speedY = 25;
                 this.speedX = 25;
                 this.y -= this.speedY;
                 this.applyGravity()
                 pressed = true;
-            }
-        })
+            
+        }
         // setInterval(() => {
         //     if(this.y < 250)
         //     this.x += this.speedX;
@@ -48,4 +47,3 @@ class ThrowableObject extends MovableObject {
         //     if(this.y > 330){this.speedY = 0}
         // }, 1000/25);
     }
-}

@@ -75,16 +75,17 @@ class MovableObject extends DrawableObjekt {
                 if(this instanceof ThrowableObject){
                     clearInterval(this.gravityInterval);
                 }
-                 this.speedY = 0; } // hier wird die acceleration von speedY abgezogen, also das null von speedY - 1 von acceleration = -1
+                 this.speedY = 0;
+                this.y = 125 } // hier wird die acceleration von speedY abgezogen, also das null von speedY - 1 von acceleration = -1
             // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
         }, 1000 / 25);
     }
 
     isAboveGround() {
         if (this instanceof ThrowableObject) {
-            return this.y < 700;
+            return this.y < 500;
         } else {
-            return this.y < 120;
+            return this.y < 100;
         }
     }
 
