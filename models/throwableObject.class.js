@@ -23,19 +23,20 @@ class ThrowableObject extends MovableObject {
     reset(){
         this.x = 120;
         this.y = 260;
-        
     }
     
+    
     throw(){
-            let pressed = false;
-            
-            
-                console.log('Taste gedrückt ')
+        document.addEventListener('keydown', (e) => {
+            if(e.keyCode == 'd'){
+            console.log('Taste gedrückt ')
                 this.speedY = 25;
                 this.speedX = 25;
                 this.y -= this.speedY;
                 this.applyGravity()
-                pressed = true;
+                pressed = true;}
+        })        
+                
             
         }
         // setInterval(() => {

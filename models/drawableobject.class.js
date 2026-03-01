@@ -10,7 +10,7 @@ class DrawableObjekt {
     statusBottleImages = {};
     statusHealthImage = {};
     statusCoinImage = {};
-    subtrahendMax = 0;
+    subtrahendMax = -20;
     ctx;
     canvas;
     x = 80;
