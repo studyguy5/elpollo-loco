@@ -66,16 +66,16 @@ class World {
         this.checkCharacter_State();
         this.reportBottleLenght();
     }
-
+    
     img;
     img;
-
+    
     lastHit = 0;
     timePassed = 0;
-
-
+    
+    
     //=============================================
-
+    
     hit() {
         this.Character.energy -= 2;
         console.log('Energy of Character ', this.Character.energy);
@@ -87,14 +87,14 @@ class World {
             // console.log('Collision detected with ========================', this.timePassed);
         }
     }
-
+    
     isHurt() {
         this.timePassed = new Date().getTime() - this.lastHit;
         this.timePassed = this.timePassed / 1000;
         return this.timePassed == 10 ? this.timePassed = 0 : "", this.timePassed < 2; //fragt ab wie lange es schon dauert
     }
-
-
+    
+    
     checkCharacter_State() {
         setInterval(() => {
             this.checkColliding_PlayHurt_andDeleyChicken()
@@ -106,9 +106,27 @@ class World {
             this.checkCollision_PlayHurt_andDeleyEndboss()
             this.checkIfDeath(this.Character)
         }, 1000 / 10);
+        
+        setInterval(() => {
+            this.checkCollisionWidth_Bottles();
+            
+        }, 1000 / 10);
     }
-
-
+    
+    checkCollisionWidth_Bottles(){
+        this.level.bottles.forEach((bottles) => {
+            if(this.isCollidingWidth_Bottle(bottles)){
+                // let rightBottle = bottles.indexOf(this.isCollidingWidth_Bottle())
+                bottles.y = 1000;
+                let bottle = new ThrowableObject(this.Character.x, this.Character.y, this);
+                this.throwableObjects.push(bottle);
+                console.log('collinding with bottle')
+                // this.level.bottles.splice(rightBottle, 1)
+            }
+        })
+    }
+    
+    
     checkColliding_PlayHurt_andDeleyChicken() {
         this.level.enemies.forEach((enemies) => {
             if (this.Character.isColliding(enemies)) {
@@ -116,43 +134,51 @@ class World {
                 this.hit()
                 this.Character.playHurtAnimation(this.isHurt);
             }
-
+            
             if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
                 this.Character.playHurtAnimation(this.isHurt);
                 // this.clearIntervall(this.Character.hurtInterval)
             }
-
+            
             if (this.timePassed > 2) {
                 if (this.timePassed > 30) { this.timePassed = 0 }
                 // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
             }
         });
     }
-
+    
     reportBottleLenght(){
         let amount = this.throwableObjects?.length;
         if(amount){
             return amount;
-        }else{return 0;}
+        }else if(amount > 6){
+            
+        }else{
+            return 0;}
     }
 
     checkThrowObjects() {
-    if (this.Keyboard.d) {
-        let bottle = new ThrowableObject(this.Character.x, this.Character.y, this);
-        this.throwableObjects.push(bottle);
-        this.bottleBar.setbottleImage()
-        console.log(this.throwableObjects.length)
+            this.bottleBar.setbottleImage()
+            console.log(this.throwableObjects.length)
     }
-}
-
-
-
+    
+    
+    
     checkIfDeath() {
         if (this.Character.isDeath()) {
             this.Character.energy = 0;
             this.Character.playDeathAnimation();
             console.log('Game Over');
         }
+    }
+    
+    isCollidingWidth_Bottle(bottles) {
+        return (
+            this.Character.x + this.Character.width > bottles.x &&
+            this.Character.x < bottles.x + bottles.width &&
+            this.Character.y < bottles.y + bottles.height &&
+            this.Character.y + this.Character.height > bottles.y
+        );
     }
 
 
@@ -197,6 +223,7 @@ class World {
     setWorld() {
         this.Character.world = this;
         this.bottleBar.worldStatus = this;
+        // this.level.bottles = this;
         //ich lege in der class Character eine Variable namens world an und sage, sie soll genau diese Instanz hier, also auf alles hier zugreifen können
         //damit verbinde ich die Klassen world und character miteinander
     }
