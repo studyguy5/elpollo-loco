@@ -77,7 +77,7 @@ class character extends MovableObject {
     constructor() {
 
         super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png'),
-        this.loadImages(this.IMAGES_WALKING)
+            this.loadImages(this.IMAGES_WALKING)
         this.loadJumpImages(this.IMAGES_JUMPING)
         this.loadHurtImages(this.IMAGES_HURT)
         this.loadDeathImages(this.IMAGES_DEAD)
@@ -85,11 +85,11 @@ class character extends MovableObject {
         this.applyGravity()
         this.Move_Character()
         this.animatejumpAndWalking_Character()
-        // this.playHurtAnimation()
-    
+        this.playCharacter_Animations();
+
     }
-    
-checkCollision; 
+
+    checkCollision;
 
 
 
@@ -110,9 +110,9 @@ checkCollision;
             this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
             // console.log(this.world.camera_x) //versetzt die Kamera proportional zur Position des Charakters
         }, 1000 / 25);
-        
+
     }
-    
+
     isCollidingWithEndboss(endboss) {
         return (this.x + this.width > endboss.x &&
             this.x < endboss.x + endboss.width &&
@@ -133,11 +133,11 @@ checkCollision;
 
 
     isDeath() {
-        
+
         return this.energy <= 0;
     }
 
-    
+
 
     //=============== isColliding(mo) { with offset to check smaller rectacgles}================
     // isColliding(mo) {
@@ -148,60 +148,52 @@ checkCollision;
     // }
 
     // Bilder werden in ein objekt geladen, index ausgetauscht und auf das img gesetzt, in der movable Objekt werden die Bilder mit drawImage gezeichnet
-    playIdleAnimation() {
+    playCharacter_Animations() {
         setInterval(() => {
-            let path = this.IMAGES_IDLE[this.currentIdleImage];
-            this.img = this.idleImages[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
-            this.currentIdleImage = (this.currentIdleImage + 1) % this.IMAGES_IDLE.length;
+            if(this.speed == 0)
+            this.playIdleAnimation(); //normal
+    
         }, 1000 / 24);
+
+        setInterval(() => {
+            this.playHurtAnimation(); //normal
+            this.playDeathAnimation();
+        }, 1000 / 5);
+
     }
-    
-    
-    playHurtAnimation(isHurt) {
-        if (isHurt) {
+
+    playIdleAnimation() {
+        let path = this.IMAGES_IDLE[this.currentIdleImage];
+        this.img = this.idleImages[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
+        this.currentIdleImage = (this.currentIdleImage + 1) % this.IMAGES_IDLE.length;
+    }
+
+
+
+    playHurtAnimation() {
+        if (this.world.isHurt()) {
             // console.log('playHurtAnimation läuft');
             let path = this.IMAGES_HURT[this.currentHurtImage];
             this.img = this.hurtImages[path];
             this.currentHurtImage = (this.currentHurtImage + 1) % this.IMAGES_HURT.length;
-        } else {}
-        
+        } else { }
+
     }
     
-
-    
-    hurtInterval;
-    
-    // playHurtAnimation(isHurt) {
-    //     this.hurtInterval = setInterval(() => {
-    //         if (isHurt){
-    //             console.log('playHurtAnimation läuft', isHurt);
-    //         let path = this.IMAGES_HURT[this.currentHurtImage];
-    //         this.img = this.hurtImages[path];
-    //         this.currentHurtImage = (this.currentHurtImage + 1) % this.IMAGES_HURT.length;
-    //     }else{}
-        //     }, 1000 / 24);
-        // }
-
-    // stopHurtAnimation() {
-    //     if (this.hurtInterval) {
-    //         clearInterval(this.hurtInterval);
-    //         this.hurtInterval = null;
-    //         this.currentHurtImage = 0; // Reset the image counter
-    //     }
-    // }
-
-    
-
     playDeathAnimation() {
-        setInterval(() => {
+        if(this.isDeath()){
             let path = this.IMAGES_DEAD[this.currentDeathImage];
             this.img = this.deathImages[path];
             this.currentDeathImage = (this.currentDeathImage + 1) % this.IMAGES_DEAD.length;
-        }, 1000 / 5);
+        }
     }
 
 
-    
+    hurtInterval;
+
+
+
+
     animatejumpAndWalking_Character() {
         //================Animate character============
         // this.checkCollision = this.world.isColliding();
@@ -211,6 +203,9 @@ checkCollision;
                 this.img = this.characterImages[path];
                 this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
             }
+            // if(!this.isAboveGround()){
+            //     let path = this.IMAGES_IDLE[1];
+            //     this.img = this.idleImages[path]; }
 
             //isColliding hier abfragen, damit dien animation hurt im vordergrund steht
 

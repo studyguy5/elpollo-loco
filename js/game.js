@@ -14,7 +14,7 @@ function init() {
 }
 
 window.addEventListener('keydown', (e) => {
-
+    // e.preventDefault();  // ← Alle Keys blocken!
     switch (e.key) {
         case 'ArrowRight':
             Keyboard.RIGHT = true; // variablen werden für gedrückte Tasten auf true gesetzt
@@ -28,14 +28,19 @@ window.addEventListener('keydown', (e) => {
         case 'ArrowDown':
             Keyboard.DOWN = true;
             break;
+        case  'd':
+            Keyboard.d = true;
+            console.log('d Taste gedrückt')
+            break;
         case ' ':
             Keyboard.SPACE = true;
             break;
+            
     }})
 
 
     window.addEventListener('keyup', (e) => {
-
+    
         switch (e.key) {
             case 'ArrowUp':
                 Keyboard.UP = false; // variablen werden für losgelassene Tasten auf false gesetzt
@@ -48,6 +53,10 @@ window.addEventListener('keydown', (e) => {
                 break;
             case 'ArrowLeft':
                 Keyboard.LEFT = false;
+                break;
+            case  'd':
+            Keyboard.d = false;
+            console.log('d Taste losgelassen')
                 break;
             case ' ':
                 Keyboard.SPACE = false;

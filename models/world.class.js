@@ -22,9 +22,21 @@ class World {
         ]
     ) //hier als Parameter die Koordinaten angeben
 
+    coinBar = new statusBar(this, 20, 90, 210, 40,
+        [
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/40.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/60.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/80.png',
+            'img/7_statusbars/1_statusbar/1_statusbar_coin/green/100.png'
+
+        ]
+    ) //hier als Parameter die Koordinaten angeben
+
     Character = new character()
 
-    throwableObject = [new ThrowableObject()]
+    throwableObjects = []
 
     level = level1;
 
@@ -45,12 +57,14 @@ class World {
         this.drawClouds();
         this.drawBottleBar()
         this.drawHealthBar()
+        this.drawCoinBar()
         this.showBottleImage()
         this.showBottleToShoot()
         this.drawEndboss();
         this.drawCharacter();
         this.drawChickens();
-        this.checkCollisions();
+        this.checkCharacter_State();
+        this.reportBottleLenght();
     }
 
     img;
@@ -60,81 +74,88 @@ class World {
     timePassed = 0;
 
 
-
     //=============================================
 
     hit() {
         this.Character.energy -= 2;
+        console.log('Energy of Character ', this.Character.energy);
         this.healthBar.sethealthImage(this.Character.energy)
         if (this.Character.energy < 0) {
             this.Character.energy = 0;
-
         } else {
             this.lastHit = new Date().getTime()
             // console.log('Collision detected with ========================', this.timePassed);
         }
     }
 
-
     isHurt() {
         this.timePassed = new Date().getTime() - this.lastHit;
         this.timePassed = this.timePassed / 1000;
-        return this.timePassed == 10 ? this.timePassed = 0 : "", this.timePassed < 2;
+        return this.timePassed == 10 ? this.timePassed = 0 : "", this.timePassed < 2; //fragt ab wie lange es schon dauert
     }
 
-    checkCollisions() {
+
+    checkCharacter_State() {
         setInterval(() => {
-            this.level.enemies.forEach((enemies) => {
-                if (this.Character.isColliding(enemies)) {
-                    // console.log('is colliding', this.Character.isColliding(enemies))
-                    this.hit()
-                    this.Character.playHurtAnimation(this.isHurt);
-                }
-
-                if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
-                    // console.log('//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////', this.timePassed)
-
-                    this.Character.playHurtAnimation(this.isHurt);
-                    // this.clearIntervall(this.Character.hurtInterval)
-                }
-
-                if (this.timePassed > 2) {
-                    if (this.timePassed > 30) { this.timePassed = 0 }
-                    // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
-                }
-            });
-
-
-
-            // // Only set isHurt to false if no collision occurred with any enemy
-            // if (!isCollidingAny) {
-            //     this.isHurt = false;
-            //     this.Character.stopHurtAnimation();
-            // }
-
-            if (this.Character.isDeath()) {
-                this.Character.energy = 0;
-                this.Character.playDeathAnimation();
-                console.log('Game Over');
-            }
+            this.checkColliding_PlayHurt_andDeleyChicken()
+            this.checkIfDeath(this.Character)
+            this.checkThrowObjects()
         }, 1000 / 10)
-
-
+        //==============================================
         setInterval(() => {
-            this.level.endboss.forEach((endboss) => {
-                if (this.Character.isCollidingWithEndboss(endboss)) {
-                    console.log('Collision detected with endboss', endboss);
-                }
-            }, 1000 / 10);
-        })
+            this.checkCollision_PlayHurt_andDeleyEndboss()
+            this.checkIfDeath(this.Character)
+        }, 1000 / 10);
     }
 
-    isCollidingWithEndboss(endboss) {
-        return (this.Character.x + this.Character.width > endboss.x &&
-            this.Character.x < endboss.x + endboss.width &&
-            this.Character.y < endboss.y + endboss.height &&
-            this.Character.y + this.Character.height > endboss.y);
+
+    checkColliding_PlayHurt_andDeleyChicken() {
+        this.level.enemies.forEach((enemies) => {
+            if (this.Character.isColliding(enemies)) {
+                // console.log('is colliding', this.Character.isColliding(enemies))
+                this.hit()
+                this.Character.playHurtAnimation(this.isHurt);
+            }
+
+            if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
+                this.Character.playHurtAnimation(this.isHurt);
+                // this.clearIntervall(this.Character.hurtInterval)
+            }
+
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+                // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
+            }
+        });
     }
+
+    reportBottleLenght(){
+        let amount = this.throwableObjects?.length;
+        if(amount){
+            return amount;
+        }else{return 0;}
+    }
+
+    checkThrowObjects() {
+    if (this.Keyboard.d) {
+        let bottle = new ThrowableObject(this.Character.x, this.Character.y, this);
+        this.throwableObjects.push(bottle);
+        this.bottleBar.setbottleImage()
+        console.log(this.throwableObjects.length)
+    }
+}
+
+
+
+    checkIfDeath() {
+        if (this.Character.isDeath()) {
+            this.Character.energy = 0;
+            this.Character.playDeathAnimation();
+            console.log('Game Over');
+        }
+    }
+
+
 
     isColliding(mo) {
         return (
@@ -143,6 +164,34 @@ class World {
             this.y < mo.y + mo.height &&
             this.y + this.height > mo.y
         );
+    }
+
+
+    checkCollision_PlayHurt_andDeleyEndboss() {
+        this.level.endboss.forEach((endboss) => {
+            if (this.Character.isCollidingWithEndboss(endboss)) {
+                console.log('Collision detected with endboss', endboss);
+                this.hit()
+                this.Character.playHurtAnimation(this.isHurt);
+            }
+
+            if (!this.Character.isColliding(endboss) && this.lastHit > 0 && this.isHurt()) {
+                this.Character.playHurtAnimation(this.isHurt);
+                // this.clearIntervall(this.Character.hurtInterval)
+            }
+
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+                // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
+            }
+        })
+    }
+
+    isCollidingWithEndboss(endboss) {
+        return (this.Character.x + this.Character.width > endboss.x &&
+            this.Character.x < endboss.x + endboss.width &&
+            this.Character.y < endboss.y + endboss.height &&
+            this.Character.y + this.Character.height > endboss.y);
     }
 
     setWorld() {
@@ -278,14 +327,15 @@ class World {
     //================================Bottle to shoot==============================
 
     showBottleToShoot() {
+        
         this.ctx.translate(this.camera_x, 0)
         this.ctx.translate(-this.camera_x, 0)
-        this.addToMapbottleToShoot(this.throwableObject)
+        this.addToMapbottleToShoot(this.throwableObjects)
         let self = this;
         requestAnimationFrame(function () {
             self.showBottleToShoot()
-        })
-    }
+        })}
+    
 
     addToMapbottleToShoot(to) {
         this.addObjektsToMapShoot(to)
@@ -337,10 +387,33 @@ class World {
     }
 
 
-
-
-
     //===============================================================================================
+
+    //===========================Coin Status Bar===============================================
+
+    drawCoinBar() {
+        this.addStatusToMap(this.coinBar)
+        let self = this;
+        requestAnimationFrame(function () {
+            self.drawCoinBar()
+        })
+    }
+
+    addStatusToMap(coinBar) {
+        this.drawToMapCoinBar(this.ctx, coinBar)
+    }
+
+    drawToMapCoinBar(ctx, coinBar) {
+        try {
+            ctx.drawImage(coinBar.img, coinBar.x, coinBar.y, coinBar.width, coinBar.height);
+        } catch (error) {
+            console.warn('Konnte nicht geladen werden', error)
+            console.log('Fehler bei ', this.img)
+        }
+    }
+
+
+    //=======================================================================================
     addTomap(mo) {
         if (!mo.otherDirection) {
             this.ctx.restore();

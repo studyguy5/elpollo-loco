@@ -6,7 +6,7 @@ class keyBoard {
     UP = false;
     DOWN = false;
     JUMP = false;
-    
+    d = false;
     constructor() {
 
     }
