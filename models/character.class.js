@@ -98,6 +98,11 @@ class character extends MovableObject {
         setInterval(() => {
             if (this.world.Keyboard.SPACE && !this.isAboveGround() && !this.jump) {
                 this.jumpCharacter(this.jumpSpeed = 250);
+                
+                // if(this.world.throwableObjects[0].matchJump()){
+                //     this.world.throwableObjects[0].matchJump()
+                // }
+                
             }
             //Move right
             if (this.world.Keyboard.RIGHT && this.x < this.world.level.level_end_x) {

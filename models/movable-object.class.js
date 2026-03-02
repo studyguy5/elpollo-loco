@@ -59,6 +59,8 @@ class MovableObject extends DrawableObjekt {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
+    applyGravityForBottle
+
     applyGravity() {
         if (this.gravityInterval) {
         clearInterval(this.gravityInterval);
@@ -73,10 +75,13 @@ class MovableObject extends DrawableObjekt {
                 }
             } else {
                 if(this instanceof ThrowableObject){
-                    clearInterval(this.gravityInterval);
+                    setTimeout(() => {
+                        clearInterval(this.gravityInterval);
+                    }, 5000);
                 }
-                 this.speedY = 0;
-                this.y = 125 } // hier wird die acceleration von speedY abgezogen, also das null von speedY - 1 von acceleration = -1
+                this.speedY = 0;
+                this.y = 125 
+            }
             // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
         }, 1000 / 25);
     }
@@ -184,6 +189,7 @@ class MovableObject extends DrawableObjekt {
         setTimeout(() => {
             this.jump = false; // hier setzen wir jump wieder auf false, damit der Charakter wieder springen kann, aber erst nach 1 Sekunde, damit er nicht sofort wieder springen kann
         }, 600);
+        return true;
     }
 
     //used for clouds to move left

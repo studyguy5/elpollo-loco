@@ -59,6 +59,6 @@ const level1 = new Level(
     ],
 
     [
-        new endboss(500, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
+        new endboss(3100, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
     ]
 );
