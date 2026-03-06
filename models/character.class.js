@@ -99,10 +99,6 @@ class character extends MovableObject {
             if (this.world.Keyboard.SPACE && !this.isAboveGround() && !this.jump) {
                 this.jumpCharacter(this.jumpSpeed = 250);
                 
-                // if(this.world.throwableObjects[0].matchJump()){
-                //     this.world.throwableObjects[0].matchJump()
-                // }
-                
             }
             //Move right
             if (this.world.Keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -133,6 +129,14 @@ class character extends MovableObject {
             this.y < mo.y + mo.height &&
             this.y + this.height > mo.y
         );
+    }
+
+    isChrushingChicken(mo) {
+        return (
+            this.y + this.height >= mo.y &&
+            this.y + this.height <= mo.y +15 &&
+            this.x + this.width > mo.x
+        );  // 8px Toleranz
     }
 
 

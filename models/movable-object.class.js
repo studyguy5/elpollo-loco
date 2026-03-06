@@ -59,28 +59,29 @@ class MovableObject extends DrawableObjekt {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
 
-    applyGravityForBottle
+    // applyGravityForBottle
 
     applyGravity() {
-        if (this.gravityInterval) {
-        clearInterval(this.gravityInterval);
+        if (this.gravityInterval !== null) {
+            clearInterval(this.gravityInterval);
         }
-    this.gravityInterval = setInterval(() => {
-        if (this.isAboveGround()) {
-            this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
-            this.speedY -= this.acceleration;
-            console.log('applyGravity läuft','speedY ', this.speedY,'y-achese ', this.y)
-                if(this instanceof ThrowableObject){
+        this.gravityInterval = setInterval(() => {
+            if (this.isAboveGround()) {
+                this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
+                this.speedY -= this.acceleration;
+                    // console.log('applyGravity läuft', 'speedY ', this.speedY, 'y-achese ', this.y)
+                if (this instanceof ThrowableObject) {
                     this.x += this.speedX;
+                    // console.log('applyGravity for Bottle läuft', 'speedY ', this.speedY, 'y-achese ', this.y)
                 }
             } else {
-                if(this instanceof ThrowableObject){
+                if (this instanceof ThrowableObject) {
                     setTimeout(() => {
                         clearInterval(this.gravityInterval);
-                    }, 5000);
+                    }, 1600);
                 }
                 this.speedY = 0;
-                this.y = 125 
+                this.y = 125
             }
             // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
         }, 1000 / 25);

@@ -10,10 +10,10 @@ class chicken extends MovableObject {
         'img/3_enemies_chicken/chicken_normal/1_walk/3_w.png',
     ]
     speed = 0.3 + Math.random() * 0.5;
-    
+    chickenIntervall;
     currentImage = 0;
 
-    constructor(y = 0) {
+    constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png')
         this.loadChickenImages(this.chicken_WALKING)
         //wir haben Zugriff auf die keys im MovableObjekt und sagen this.x = (....) und weisen hier in der chicken class jedem Chicken einen random x wert zu
@@ -34,7 +34,7 @@ class chicken extends MovableObject {
     //     }
     // }
 
-    
+
     // isHurt(){
     //     timePassed = new Date().getTime() - this.lastHit;
     //     timePassed = timePassed / 1000;
@@ -42,13 +42,20 @@ class chicken extends MovableObject {
     // }
 
     animateChicken() {
-        setInterval(() => {
+        this.chickenIntervall = setInterval(() => {
             let path = this.chicken_WALKING[this.currentImage];
             this.img = this.chickenImages[path];
             this.currentImage = (this.currentImage + 1) % this.chicken_WALKING.length;
         }, 1000 / 20);
     }
 
+    chrushChicken() {
+        this.loadImage('img/3_enemies_chicken/chicken_normal/2_dead/dead.png')
+        clearInterval(this.chickenIntervall)
+        this.speed = 0;
+        setTimeout(() => { 
+            this.y = 490 }, 1500);
+    }
 
 
 

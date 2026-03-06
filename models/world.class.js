@@ -65,6 +65,7 @@ class World {
         this.drawChickens();
         this.checkCharacter_State();
         this.reportBottleLenght();
+        this.drawDeathChicken()
     }
 
     img;
@@ -78,7 +79,7 @@ class World {
 
     hit() {
         this.Character.energy -= 2;
-        console.log('Energy of Character ', this.Character.energy);
+        // console.log('Energy of Character ', this.Character.energy);
         this.healthBar.sethealthImage(this.Character.energy)
         if (this.Character.energy < 0) {
             this.Character.energy = 0;
@@ -118,17 +119,17 @@ class World {
             if (this.isCollidingWidth_Bottle(bottles)) {
                 // let rightBottle = bottles.indexOf(this.isCollidingWidth_Bottle())
                 bottles.y = 1000;
-                let bottle = new ThrowableObject(this.Character.x, this.Character.y, this.throwableObjects.worldLink = this);
+                let bottle = new ThrowableObject(this.Character.x, this.Character.y);
                 this.throwableObjects.push(bottle);
                 console.log('collinding with bottle')
                 // this.level.bottles.splice(rightBottle, 1)
             }
-            document.addEventListener('keydown', (e) => {
-                if (e.key == 'd') {
-                    let index = (this.throwableObjects?.length -1)
-                    this.throwableObjects[index].throw()
-                    }
-            })
+
+            if (this.Keyboard.d == true) {
+                let index = (this.throwableObjects?.length - 1)
+                this.throwableObjects[index]?.throw()
+            }
+
         }
         )
     }
@@ -152,6 +153,10 @@ class World {
                 if (this.timePassed > 30) { this.timePassed = 0 }
                 // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
             }
+            if (this.Character.isChrushingChicken(enemies)) {
+                console.log('chicken gechrushed')
+                enemies.chrushChicken()
+            }
         });
     }
 
@@ -168,9 +173,9 @@ class World {
 
     cutBottleFrom_Array() {
         if (this.Keyboard.d) {
-            // setTimeout(() => {
-            //     this.throwableObjects.pop()
-            // }, 5000);
+            setTimeout(() => {
+                this.throwableObjects.pop()
+            }, 1500);
         }
     }
 
@@ -209,6 +214,12 @@ class World {
         );
     }
 
+    // isChrushingChicken(mo) {
+    //     return (
+    //         this.Character.y + this.Character.height >= mo.y
+    //         // this.Character.y + this.Character.height <= mo.y + 8
+    //     );  // 8px Toleranz
+    // }
 
     checkCollision_PlayHurt_andDeleyEndboss() {
         this.level.endboss.forEach((endboss) => {
@@ -240,15 +251,13 @@ class World {
     setWorld() {
         this.Character.world = this;
         this.bottleBar.worldStatus = this;
-        this.throwableObjects.worldLink
+        // this.throwableObjects.worldLink
         //ich lege in der class Character eine Variable namens world an und sage, sie soll genau diese Instanz hier, also auf alles hier zugreifen können
         //damit verbinde ich die Klassen world und character miteinander
     }
 
     drawCharacter() {
         this.addTomap(this.Character)
-
-
         let self = this;
         requestAnimationFrame(function () {
             self.drawCharacter()
@@ -275,6 +284,17 @@ class World {
             self.drawChickens()
         })
     }
+
+    drawDeathChicken(){
+        this.addObjektsToMap(this.level.enemies);
+        // so wird drawChickens immer wieder aufgerufen (sieht man bei einem console.log)
+        let self = this;
+        requestAnimationFrame(function () {
+            self.drawChickens()
+        })
+    }
+
+
 
     drawEndboss() {
         this.addEndbossToMap(this.level.endboss);
