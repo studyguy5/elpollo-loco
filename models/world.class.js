@@ -69,7 +69,7 @@ class World {
     }
 
     img;
-    img;
+    // img;
 
     lastHit = 0;
     timePassed = 0;
@@ -100,7 +100,7 @@ class World {
         setInterval(() => {
             this.checkColliding_PlayHurt_andDeleyChicken()
             this.checkIfDeath(this.Character)
-            this.checkThrowObjects()
+            this.checkThrowObjects() //responsible for bottle bar lenght
         }, 1000 / 10)
         //==============================================
         setInterval(() => {
@@ -114,20 +114,26 @@ class World {
         }, 1000 / 10);
     }
 
+    collected = 0;
+
     checkCollisionWidth_Bottles() {
+
         this.level.bottles.forEach((bottles) => {
             if (this.isCollidingWidth_Bottle(bottles)) {
-                // let rightBottle = bottles.indexOf(this.isCollidingWidth_Bottle())
                 bottles.y = 1000;
-                let bottle = new ThrowableObject(this.Character.x, this.Character.y);
-                this.throwableObjects.push(bottle);
-                console.log('collinding with bottle')
+                this.collected++
+                console.log(this.collected)
                 // this.level.bottles.splice(rightBottle, 1)
             }
 
             if (this.Keyboard.d == true) {
+                let bottle = new ThrowableObject(this.Character.x, this.Character.y);
+                this.throwableObjects.push(bottle);
                 let index = (this.throwableObjects?.length - 1)
+                console.log(this.throwableObjects.length);
                 this.throwableObjects[index]?.throw()
+                this.collected--
+                //das hier wird zu oft auseführt nach Tastenanschlag
             }
 
         }
@@ -161,10 +167,11 @@ class World {
     }
 
     reportBottleLenght() {
-        let amount = this.throwableObjects?.length;
-        if (amount < 6) {
-            return amount;
-        } else if (amount >= 6) {
+        // let amount = this.throwableObjects?.length;
+
+        if (this.collected < 6) {
+            return this.collected;
+        } else if (this.collected >= 6) {
             return 5;
         } else {
             return 0;
@@ -285,7 +292,7 @@ class World {
         })
     }
 
-    drawDeathChicken(){
+    drawDeathChicken() {
         this.addObjektsToMap(this.level.enemies);
         // so wird drawChickens immer wieder aufgerufen (sieht man bei einem console.log)
         let self = this;
