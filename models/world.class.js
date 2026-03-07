@@ -41,6 +41,8 @@ class World {
     level = level1;
 
 
+    
+
     ar = 0;
     canvas;
     ctx;
@@ -115,6 +117,8 @@ class World {
     }
 
     collected = 0;
+    d_wasPressed = false;
+    drawOtherDirection = false;
 
     checkCollisionWidth_Bottles() {
 
@@ -126,14 +130,21 @@ class World {
                 // this.level.bottles.splice(rightBottle, 1)
             }
 
-            if (this.Keyboard.d == true) {
+            if (this.Keyboard.d == true && !this.d_wasPressed && this.collected > 0) {
                 let bottle = new ThrowableObject(this.Character.x, this.Character.y);
                 this.throwableObjects.push(bottle);
                 let index = (this.throwableObjects?.length - 1)
                 console.log(this.throwableObjects.length);
-                this.throwableObjects[index]?.throw()
+                if(this.Character.otherDirection){
+                    console.log(this.Character.otherDirection);
+                this.throwableObjects[index]?.throw(-45)
+            }else{this.throwableObjects[index]?.throw(45)}
                 this.collected--
-                //das hier wird zu oft auseführt nach Tastenanschlag
+                this.d_wasPressed = true;
+            }
+
+            if(this.d_wasPressed && this.Keyboard.d == false){
+                this.d_wasPressed = false
             }
 
         }
@@ -492,6 +503,7 @@ class World {
         if (!mo.otherDirection) {
             this.ctx.restore();
             this.ctx.translate(this.camera_x, 0)
+            // this.drawOtherDirection = false;
             mo.draw(this.ctx)
             this.ctx.translate(-this.camera_x, 0)
         }
@@ -513,6 +525,7 @@ class World {
             this.ctx.save();
             this.ctx.translate(this.camera_x, 0)
             this.ctx.translate(mo.width, 0);
+            this.drawOtherDirection = true;
             this.ctx.scale(-1, 1);
             mo.drawBackward(this.ctx)
         }
