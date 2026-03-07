@@ -9,12 +9,12 @@ class ThrowableObject extends MovableObject {
     speedX;
     fallOfBottle = 0.13;
     // wordLink;
+    otherDirection = false;
 
 
     constructor() {
         super()
-        // this.throw(100, 150)
-        this.x = (Math.random() * 120);
+        this.x = 120;
         this.y = 260;
         this.width = 40;
         this.height = 80;
@@ -23,14 +23,16 @@ class ThrowableObject extends MovableObject {
 
 
 
-    throw() {
-
-       
-
-        console.log('Taste gedrückt ')
+    throw(speedX) {
+        console.log(this.otherDirection)
         this.speedY = 25;
-        this.speedX = 45;
-        this.applyGravity()
+
+        // this.speedX = 45;
+        this.applyGravity(speedX)
+
+
+
+
     }
 
 

@@ -61,7 +61,7 @@ class MovableObject extends DrawableObjekt {
 
     // applyGravityForBottle
 
-    applyGravity() {
+    applyGravity(speedX) {
         if (this.gravityInterval !== null) {
             clearInterval(this.gravityInterval);
         }
@@ -71,10 +71,11 @@ class MovableObject extends DrawableObjekt {
                 this.speedY -= this.acceleration;
                     // console.log('applyGravity läuft', 'speedY ', this.speedY, 'y-achese ', this.y)
                 if (this instanceof ThrowableObject) {
-                    this.x += this.speedX;
+                    // if(this.otherDirection){
+                        this.x += speedX;}
                     // console.log('applyGravity for Bottle läuft', 'speedY ', this.speedY, 'y-achese ', this.y)
                 }
-            } else {
+             else {
                 if (this instanceof ThrowableObject) {
                     setTimeout(() => {
                         clearInterval(this.gravityInterval);
@@ -171,15 +172,17 @@ class MovableObject extends DrawableObjekt {
     };
 
 
-    //could be good for chicken to move left or right
+    //used for Character to move Left or Right
     moveRightCharacter() {
         this.x += this.speed;
         this.otherDirection = false;
+        
     };
 
     moveLeftCharacter() {
         this.x -= this.speed;
         this.otherDirection = true;
+        console.log(this.otherDirection)  
     }
 
     jumpCharacter() {
