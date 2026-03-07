@@ -24,6 +24,9 @@ class ThrowableObject extends MovableObject {
 
 
     throw() {
+
+       
+
         console.log('Taste gedrückt ')
         this.speedY = 25;
         this.speedX = 45;
