@@ -7,6 +7,7 @@ class DrawableObjekt {
     hurtImages = {};
     deathImages = {};
     idleImages = {};
+    longIdleImages = {};
     statusBottleImages = {};
     statusHealthImage = {};
     statusCoinImage = {};
@@ -113,6 +114,17 @@ class DrawableObjekt {
             let img = new Image()
             img.src = path;
             this.idleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der idleImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    }
+
+    loadLongIdleImages(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.longIdleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der idleImages Objekt ansprechen können, um sie dann zu animieren
         })
