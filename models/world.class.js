@@ -63,6 +63,7 @@ class World {
         this.showBottleImage()
         this.showBottleToShoot()
         this.drawEndboss();
+        // this.drawEndbossWaling()
         this.drawCharacter();
         this.drawChickens();
         this.checkCharacter_State();
@@ -269,7 +270,7 @@ class World {
     setWorld() {
         this.Character.world = this;
         this.bottleBar.worldStatus = this;
-        // this.throwableObjects.worldLink
+        this.level.endboss[0].camera = this;
         //ich lege in der class Character eine Variable namens world an und sage, sie soll genau diese Instanz hier, also auf alles hier zugreifen können
         //damit verbinde ich die Klassen world und character miteinander
     }
@@ -314,6 +315,30 @@ class World {
 
 
 
+//=============Endboss Moves Left ===============================
+// drawEndbossWaling(){
+//     this.addEndbossWalkingToMap(this.level.endboss[0]);
+//         let self = this;
+//         requestAnimationFrame(function () {
+//             self.drawEndbossWaling()
+//         })
+// }
+
+// addEndbossWalkingToMap(objects) {
+//         objects.forEach((o) => {
+//             this.addEndbossWalkingToMap(o)
+//         })
+//     }
+
+//     addEndbossWalkingToMap(mo) {
+//         // this.ctx.save();
+
+//         this.ctx.translate(this.camera_x, 0)
+//         this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
+//         this.ctx.translate(-this.camera_x, 0)
+//     }
+
+//=============EndbossAngry====================================
     drawEndboss() {
         this.addEndbossToMap(this.level.endboss);
         let self = this;

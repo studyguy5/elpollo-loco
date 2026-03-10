@@ -172,9 +172,6 @@ class character extends MovableObject {
             // console.log(this.world.camera_x) //versetzt die Kamera proportional zur Position des Charakters
         }, 1000 / 25);
 
-
-
-
     }
 
 
@@ -188,18 +185,6 @@ class character extends MovableObject {
                 this.playLongIdleAnimation()
             }, 8000);
     }
-
-
-
-
-
-
-
-    // clearTimeout(this.IdleTimeout)
-    // clearTimeout(this.longIdleTimeout)
-    // this.IdleTimeout = null;
-    // this.longIdleTimeout = null;
-
 
 
     isCollidingWithEndboss(endboss) {
@@ -276,9 +261,6 @@ class character extends MovableObject {
 
 
     hurtInterval;
-
-
-
 
     animatejumpAndWalking_Character() {
         //================Animate character============

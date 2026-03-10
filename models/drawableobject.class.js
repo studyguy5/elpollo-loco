@@ -3,7 +3,8 @@ class DrawableObjekt {
 
     characterImages = {};
     chickenImages = {};
-    endbossImages = {};
+    endbossAngryImages = {};
+    endboss_WalkingImage = {};
     hurtImages = {};
     deathImages = {};
     idleImages = {};
@@ -11,6 +12,7 @@ class DrawableObjekt {
     statusBottleImages = {};
     statusHealthImage = {};
     statusCoinImage = {};
+    bottleRotateImage = {}
     subtrahendMax = -20;
     ctx;
     canvas;
@@ -19,6 +21,7 @@ class DrawableObjekt {
     height = 300;
     width = 100;
     img;    //das gespeicherte Bild hier soll dem Bild aus characterImages entsprechen, damit wir es später in der animate Funktion ansprechen können, um es zu animieren
+    img;
 
     constructor() {
         const canvas = document.getElementById('gameCanvas');
@@ -59,6 +62,18 @@ class DrawableObjekt {
             let img = new Image()
             img.src = path;
             this.chickenImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    }
+
+
+    loadbottleRotationImages(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.bottleRotateImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
         })
@@ -166,7 +181,18 @@ class DrawableObjekt {
         arr.forEach((path) => {
             let img = new Image()
             img.src = path;
-            this.endbossImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            this.endbossAngryImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadEndbossWalkingImages(arr) {
+        console.log('loadEndbossImages', arr)
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.endboss_WalkingImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
         })
