@@ -69,8 +69,8 @@ class MovableObject extends DrawableObjekt {
             if (this.isAboveGround()) {
                 this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
                 this.speedY -= this.acceleration;
-                if (this instanceof ThrowableObject) {
-                        this.x += speedX;}
+                if (this instanceof ThrowableObject) {  //only exists if i press "d", therefore now it doesn't exist
+                        this.x += speedX;}  
                     }
              else {
                 if (this instanceof ThrowableObject) {
@@ -92,6 +92,8 @@ class MovableObject extends DrawableObjekt {
             return this.y < 100;
         }
     }
+
+    
 
     // loadChickenImages(arr) {
     //     // Array.isArray(arr) && 

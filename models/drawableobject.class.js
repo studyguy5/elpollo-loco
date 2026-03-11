@@ -7,6 +7,8 @@ class DrawableObjekt {
     endboss_WalkingImage = {};
     hurtImages = {};
     deathImages = {};
+    endbossHurtImage = {};
+    endbossDeathImage = {};
     idleImages = {};
     longIdleImages = {};
     statusBottleImages = {};
@@ -188,13 +190,30 @@ class DrawableObjekt {
     };
 
     loadEndbossWalkingImages(arr) {
-        console.log('loadEndbossImages', arr)
         arr.forEach((path) => {
             let img = new Image()
             img.src = path;
             this.endboss_WalkingImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadEndbossHurtImages(arr) {
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.endbossHurtImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadEndbossDeathImages(arr) {
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.endbossDeathImage[path] = img; 
         })
     };
 }
