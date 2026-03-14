@@ -1,10 +1,10 @@
 class statusBar extends DrawableObjekt {
-
+    world;
     x;
     y;
-    statusBarr;
     width;
     height;
+    statusBarr;
     //connection to world class
     currentStatusImage = 5;
     camera_x = 0;
@@ -41,9 +41,18 @@ class statusBar extends DrawableObjekt {
         this.loadImagesStatus(statusBarr)
         this.loadImagesStatushealth(statusBarr)
         this.loadImageStatusCoin(statusBarr)
+        this.loadImageStatusEndbossHealth(statusBarr)
         this.setbottleImage(0)
         this.sethealthImage(100)
         this.setCoinImage()
+        this.checkCharacterReach()
+    }
+    
+    checkCharacterReach(){
+        setInterval(() => {
+            if(this.world.Character.x > (719 * 3.5))
+            this.setEndbossHealthImage(100)
+        }, 1000/24);
     }
 
     setbottleImage() {
@@ -69,6 +78,28 @@ class statusBar extends DrawableObjekt {
         let path = this.statusBarr[3];
         this.img = this.statusCoinImage[path];}
         console.log(this.img);
+    }
+
+    setEndbossHealthImage(endbossEnergy){
+        if(this.statusBarr[0].includes('endboss', 0)){
+            let path = this.statusBarr[this.setEndbossPercentige(endbossEnergy)]
+            this.img = this.statusEndbossHealthImage[path];
+        }
+    }
+
+    setEndbossPercentige(endbossEnergy){
+        // let endbossEnergy = this.world.level.endboss.endbossEnergy
+        if(endbossEnergy == 100){
+            return 5;
+        }else if(endbossEnergy > 80 && endbossEnergy < 100){
+            return 4;
+        }else if(endbossEnergy > 60 && endbossEnergy < 80){
+            return 3;
+        }else if(endbossEnergy > 40 && endbossEnergy < 60){
+            return 2;
+        }else if(endbossEnergy > 20 && endbossEnergy < 40){
+            return 1;
+        }else{ return 0;}
     }
 
 

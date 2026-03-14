@@ -153,11 +153,11 @@ class character extends MovableObject {
                 if(!this.normal){
               this.normal = setTimeout(() => {
                 this.normalIdle = false;
-               }, 5000);}
+               }, 8000);}
                if(!this.long){
                this.long = setTimeout(() => {
                 this.sleepIdle = true;
-               }, 5000);}
+               }, 8000);}
 
                 this.animationCounter++
                 if(this.animationCounter % 3 === 0 && this.normalIdle){
@@ -223,8 +223,8 @@ class character extends MovableObject {
             this.y + this.height - this.offset.bottom >= mo.y  &&
             this.y < 115 &&
             this.x + this.width - this.offset.right > mo.x &&
-            this.x + this.offset.left < mo.x 
-        );  // 8px Toleranz
+            this.x + this.offset.left < mo.x
+        );  
     }
 
     isDeath() {

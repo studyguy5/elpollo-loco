@@ -15,7 +15,9 @@ class DrawableObjekt {
     statusBottleImages = {};
     statusHealthImage = {};
     statusCoinImage = {};
-    bottleRotateImage = {}
+    statusEndbossHealthImage = {};
+    bottleRotateImage = {};
+    smallChickenWalksImage = {};
     subtrahendMax = -20;
     ctx;
     canvas;
@@ -24,7 +26,7 @@ class DrawableObjekt {
     height = 300;
     width = 100;
     img;    //das gespeicherte Bild hier soll dem Bild aus characterImages entsprechen, damit wir es später in der animate Funktion ansprechen können, um es zu animieren
-    img;
+    // img;
 
     constructor() {
         const canvas = document.getElementById('gameCanvas');
@@ -121,6 +123,17 @@ class DrawableObjekt {
             let img = new Image()
             img.src = path;
             this.statusCoinImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadImageStatusEndbossHealth(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.statusEndbossHealthImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
         })
@@ -225,4 +238,13 @@ class DrawableObjekt {
             this.endbossDeathImage[path] = img; 
         })
     };
+
+    loadminiChickenWalkImages(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.smallChickenWalksImage[path] = img;
+        })
+    }
 }
