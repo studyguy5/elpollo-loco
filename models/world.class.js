@@ -34,6 +34,19 @@ class World {
         ]
     ) //hier als Parameter die Koordinaten angeben
 
+
+    endbossHealthBar = new statusBar(this, 505, 50, 210, 40,
+        [
+            'img/7_statusbars/2_statusbar_endboss/green/green0.png',
+            'img/7_statusbars/2_statusbar_endboss/green/green20.png',
+            'img/7_statusbars/2_statusbar_endboss/green/green40.png',
+            'img/7_statusbars/2_statusbar_endboss/green/green60.png',
+            'img/7_statusbars/2_statusbar_endboss/green/green80.png',
+            'img/7_statusbars/2_statusbar_endboss/green/green100.png',
+        ]
+    )
+
+
     Character = new character()
 
     throwableObjects = []
@@ -60,15 +73,16 @@ class World {
         this.drawBottleBar()
         this.drawHealthBar()
         this.drawCoinBar()
+        this.drawEndbossHealthbar()
         this.showBottleImage()
         this.showBottleToShoot()
         this.drawEndboss();
-        // this.drawEndbossWaling()
         this.drawCharacter();
         this.drawChickens();
         this.checkCharacter_State();
         this.reportBottleLenght();
-        this.drawDeathChicken()
+        this.drawDeathChicken();
+        this.drawMiniChickenWaling();
     }
 
     img;
@@ -92,6 +106,13 @@ class World {
         }
     }
 
+    hitEndboss() {
+        this.level.endboss.endbossEnergy;
+        // console.log('Energy of Character ', this.Character.energy);
+        this.endbossHealthBar.setEndbossHealthImage(this.level.endboss.endbossEnergy)
+        
+    }
+
     isHurt() {
         this.timePassed = new Date().getTime() - this.lastHit;
         this.timePassed = this.timePassed / 1000;
@@ -102,6 +123,7 @@ class World {
     checkCharacter_State() {
         setInterval(() => {
             this.checkColliding_PlayHurt_andDeleyChicken()
+            this.checkColliding_PlayHurt_andDeleyMiniChicken()
             this.checkIfDeath(this.Character)
             this.checkThrowObjects() //responsible for bottle bar lenght
         }, 1000 / 10)
@@ -161,9 +183,12 @@ class World {
                 enemies.chrushChicken()
             }
             
+            if(this.isCollidingWithChicken(enemies)){ //check if throwable Bottle is colliding with enemie
+                console.log('chicken getroffen')
+                enemies.chrushChicken(enemies);
+            }
             
             if (this.Character.isColliding(enemies)) {
-                // console.log('is colliding', this.Character.isColliding(enemies))
                 if(!this.Character.isInvincible()){
                     this.hit()
                     this.Character.playHurtAnimation(this.isHurt);
@@ -181,6 +206,57 @@ class World {
                 
             }
         });
+    }
+
+    checkColliding_PlayHurt_andDeleyMiniChicken() {
+        this.level.miniEnemies.forEach((miniEnemies) => {            
+            if (this.Character.isChrushingChicken(miniEnemies)) {
+                console.log('MiniChicken gechrushed')
+                this.Character.makeInvincible(3)
+                miniEnemies.chrushMiniChicken(miniEnemies)
+            }
+            
+            if(this.isCollidingWithMiniChicken(miniEnemies)){ //checks if a throwable bottle is colliding with a miniEnemie
+                console.log('chicken getroffen')
+                miniEnemies.chrushMiniChicken(miniEnemies);
+            }
+            
+            if (this.Character.isColliding(miniEnemies)) {
+                if(!this.Character.isInvincible()){
+                    this.hit()
+                    this.Character.playHurtAnimation(this.isHurt);
+                }
+            }
+            
+            if (!this.Character.isColliding(miniEnemies) && this.lastHit > 0 && this.isHurt()) {
+                if(!this.Character.isInvincible()){
+                    this.Character.playHurtAnimation(this.isHurt);
+                }
+            }
+            
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+                
+            }
+        });
+    }
+
+    isCollidingWithChicken(enemies){
+        return (
+            (this.Character.x + (this.throwableObjects[0]?.x -120)) + this.throwableObjects[0]?.width > enemies.x &&
+            (this.Character.x + (this.throwableObjects[0]?.x - 120)) < enemies.x + enemies.width &&
+            this.throwableObjects[0]?.y < enemies.y + enemies.height &&
+            this.throwableObjects[0]?.y + this.throwableObjects[0]?.height > enemies.y
+        );
+    }
+
+    isCollidingWithMiniChicken(miniEnemies){
+        return (
+            (this.Character.x + (this.throwableObjects[0]?.x -120)) + this.throwableObjects[0]?.width > miniEnemies.x &&
+            (this.Character.x + (this.throwableObjects[0]?.x - 120)) < miniEnemies.x + miniEnemies.width &&
+            this.throwableObjects[0]?.y < miniEnemies.y + miniEnemies.height &&
+            this.throwableObjects[0]?.y + this.throwableObjects[0]?.height > miniEnemies.y
+        );
     }
 
     reportBottleLenght() {
@@ -229,7 +305,7 @@ class World {
 
 
 
-    isColliding(mo) {
+    isColliding(mo) { //  eventuell Doppelt - auch in character
         return (
             this.x + this.width + this.offset.right > mo.x + mo.offset.left &&
             this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
@@ -244,7 +320,7 @@ class World {
         this.level.endboss.forEach((endboss) => {
             if (this.Character.isCollidingWithEndboss(endboss)) {
                 console.log('Collision detected with endboss', endboss);
-                this.hit()
+                this.hitEndboss()
                 this.Character.playHurtAnimation(this.isHurt);
             }
 
@@ -315,28 +391,28 @@ class World {
 
 
 
-//=============Endboss Moves Left ===============================
-// drawEndbossWaling(){
-//     this.addEndbossWalkingToMap(this.level.endboss[0]);
-//         let self = this;
-//         requestAnimationFrame(function () {
-//             self.drawEndbossWaling()
-//         })
-// }
+//=============miniChicken ===============================
+drawMiniChickenWaling(){
+    this.addMiniChickenWalkingToMap(this.level.miniEnemies);
+        let self = this;
+        requestAnimationFrame(function () {
+            self.drawMiniChickenWaling()
+        })
+}
 
-// addEndbossWalkingToMap(objects) {
-//         objects.forEach((o) => {
-//             this.addEndbossWalkingToMap(o)
-//         })
-//     }
+addMiniChickenWalkingToMap(objects) {
+        objects.forEach((o) => {
+            this.addminiChickenWalkingToMap(o)
+        })
+    }
 
-//     addEndbossWalkingToMap(mo) {
-//         // this.ctx.save();
+    addminiChickenWalkingToMap(mo) {
+        // this.ctx.save();
 
-//         this.ctx.translate(this.camera_x, 0)
-//         this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
-//         this.ctx.translate(-this.camera_x, 0)
-//     }
+        this.ctx.translate(this.camera_x, 0)
+        this.ctx.drawImage(mo.img, mo.x, mo.y, mo.width, mo.height)
+        this.ctx.translate(-this.camera_x, 0)
+    }
 
 //=============EndbossAngry====================================
     drawEndboss() {
@@ -389,6 +465,28 @@ class World {
     }
     previousX;
 
+    //===========EndbossHealthbar=======================
+    drawEndbossHealthbar(){
+        this.addEndbossHealthStatusToMap(this.endbossHealthBar)
+        let self = this;
+        requestAnimationFrame(function (){
+            self.drawEndbossHealthbar()
+        })
+    }
+
+    addEndbossHealthStatusToMap(endbossHealthBar){
+        this.drawEndbossHealthStatusToMap(this.ctx, endbossHealthBar)
+    }
+
+    drawEndbossHealthStatusToMap(ctx, endbossHealthBar){
+        if(endbossHealthBar.img){
+        try{
+            ctx.drawImage(this.endbossHealthBar.img, endbossHealthBar.x, endbossHealthBar.y, endbossHealthBar.width, endbossHealthBar.height);
+        } catch (error){
+            console.warn('Konnte nicht geladen werden', error)
+            console.log('Fehler bei ', this.img)
+        }}
+    }
 
     //status Bar =================================
     drawBottleBar() {

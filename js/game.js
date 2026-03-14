@@ -30,7 +30,7 @@ window.addEventListener('keydown', (e) => {
             break;
         case  'd':
             Keyboard.d = true;
-            console.log('d Taste gedrückt')
+            // console.log('d Taste gedrückt')
             break;
         case ' ':
             Keyboard.SPACE = true;
@@ -56,7 +56,7 @@ window.addEventListener('keydown', (e) => {
                 break;
             case  'd':
             Keyboard.d = false;
-            console.log('d Taste losgelassen')
+            // console.log('d Taste losgelassen')
                 break;
             case ' ':
                 Keyboard.SPACE = false;
