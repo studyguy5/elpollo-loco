@@ -8,8 +8,9 @@ class endboss extends MovableObject {
     currentEndbossMoveImage = 0;
     currentEndbossDeathImage = 0;
     currentHurtEndbossImage = 0;
+    currentEndbossAttackImage = 0;
     camera;
-    endboss_speed = 2;
+    endboss_speed = 4;
     endbossEnergy = 100;
     endboss_getsAngry = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
@@ -41,6 +42,17 @@ class endboss extends MovableObject {
         'img/4_enemie_boss_chicken/5_dead/G26.png'
     ]
 
+    endboss_IS_Attacking = [
+        'img/4_enemie_boss_chicken/3_attack/G13.png',
+        'img/4_enemie_boss_chicken/3_attack/G14.png',
+        'img/4_enemie_boss_chicken/3_attack/G15.png',
+        'img/4_enemie_boss_chicken/3_attack/G16.png',
+        'img/4_enemie_boss_chicken/3_attack/G17.png',
+        'img/4_enemie_boss_chicken/3_attack/G18.png',
+        'img/4_enemie_boss_chicken/3_attack/G19.png',
+        'img/4_enemie_boss_chicken/3_attack/G20.png',
+    ]
+
 
     constructor(x = 0) {
         super().loadImage(this.endboss_getsAngry[0])
@@ -48,6 +60,7 @@ class endboss extends MovableObject {
         this.loadEndbossWalkingImages(this.endboss_Moves_Left)
         this.loadEndbossHurtImages(this.endboss_Is_Hurt)
         this.loadEndbossDeathImages(this.endboss_IS_Death);
+        this.loadEndbossAttackImages(this.endboss_IS_Attacking)
         this.x = x;
         this.y = 80;
         this.height = 400;
@@ -55,24 +68,45 @@ class endboss extends MovableObject {
         this.animateEndboss()
     }
 
-    // loadEndbossImage(path){
-    //     this.img = new Image()
-    //     this.img.src= path;
+    offset = { //setup Values for Offset here
+        top: 15,
+        left: 8,
+        right: 8,
+        bottom: 15
+    };
 
-    // }
-
-    // played = 0;
+    attackjump = 30;
+    gravity = 6;
+    jumped = false;
     //load images of endboss ==== zusammenfassen: alle arraybenennungen ersetzen mit einem allgemeinen namen, z.b images
     animateEndboss() {
         setInterval(() => {
-            if((this.camera.Character.x + 200) > this.x){
+            if((this.camera.Character.x + 400) > this.x && !this.isDeath()){
                 this.endbossIsAngry()
             }
-            if((-this.camera.Character.x < (-2900)) && (this.camera.Character.x + 200) < this.x && !this.isDeath()) {
+            if((this.camera.Character.x + 300) > this.x && !this.isDeath()) {
                 this.x -= this.endboss_speed
                 this.endboss_Walking()
                 console.log(this.camera.Character.x)
-        
+            }
+            
+            if(((this.camera.Character.x + 300) > this.x && !this.isDeath() && !this.jumped) || this.y < 70){
+                if(this.y < 90){
+                this.jumped = true;
+                this.y  -=this.attackjump;
+                this.x -=this.endboss_speed;
+                this.attackjump -= this.gravity;
+                this.endbossAttacking()
+                setTimeout(() => {
+                    this.jumped = false;
+                }, 3000);
+            }
+                if(this.y > 80){
+                    this.y = 80;
+                    this.attackjump = 30;
+                    console.log(this.y);
+                }
+                
             }
 
             if(this.isCollidingWithEndboss()){
@@ -92,9 +126,14 @@ class endboss extends MovableObject {
                 }, 2000);
             }
             
-        }, 1000);
+        }, 700);
         
     }
+
+    // endbossIsAboveGround(){
+
+    //     return this.y < 81;
+    // }
 
     isDeath(){
         return this.endbossEnergy < 0;
@@ -105,6 +144,12 @@ class endboss extends MovableObject {
         let path = this.endboss_Is_Hurt[this.currentHurtEndbossImage];
         this.img = this.endbossHurtImage[path];
         this.currentHurtEndbossImage = (this.currentHurtEndbossImage + 1) % this.endboss_Is_Hurt.length;
+    }
+
+    endbossAttacking(){
+        let path = this.endboss_IS_Attacking[this.currentEndbossAttackImage];
+        this.img = this.endboss_AttackImages[path];
+        this.currentEndbossAttackImage = (this.currentEndbossAttackImage + 1) % this.endboss_IS_Attacking.length;
     }
 
     endbossDeath(){

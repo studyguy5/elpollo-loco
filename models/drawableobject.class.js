@@ -5,6 +5,7 @@ class DrawableObjekt {
     chickenImages = {};
     endbossAngryImages = {};
     endboss_WalkingImage = {};
+    endboss_AttackImages = {};
     hurtImages = {};
     deathImages = {};
     endbossHurtImage = {};
@@ -206,6 +207,14 @@ class DrawableObjekt {
             this.endbossHurtImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    };
+
+    loadEndbossAttackImages(arr) {
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.endboss_AttackImages[path] = img; 
         })
     };
 

@@ -138,8 +138,8 @@ class World {
                 console.log(this.throwableObjects.length);
                 if(this.Character.otherDirection){
                     console.log(this.Character.otherDirection);
-                this.throwableObjects[index]?.throw(-45)
-            }else{this.throwableObjects[index]?.throw(45)}
+                this.throwableObjects[index]?.throw(-35)
+            }else{this.throwableObjects[index]?.throw(35)}
                 this.collected--
                 this.d_wasPressed = true;
             }
@@ -153,27 +153,32 @@ class World {
     }
 
 
-
     checkColliding_PlayHurt_andDeleyChicken() {
-        this.level.enemies.forEach((enemies) => {
-            if (this.Character.isColliding(enemies)) {
-                // console.log('is colliding', this.Character.isColliding(enemies))
-                this.hit()
-                this.Character.playHurtAnimation(this.isHurt);
-            }
-
-            if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
-                this.Character.playHurtAnimation(this.isHurt);
-                // this.clearIntervall(this.Character.hurtInterval)
-            }
-
-            if (this.timePassed > 2) {
-                if (this.timePassed > 30) { this.timePassed = 0 }
-                // console.log('hat versucht zu stoppen&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&', this.timePassed)
-            }
+        this.level.enemies.forEach((enemies) => {            
             if (this.Character.isChrushingChicken(enemies)) {
                 console.log('chicken gechrushed')
+                this.Character.makeInvincible(3)
                 enemies.chrushChicken()
+            }
+            
+            
+            if (this.Character.isColliding(enemies)) {
+                // console.log('is colliding', this.Character.isColliding(enemies))
+                if(!this.Character.isInvincible()){
+                    this.hit()
+                    this.Character.playHurtAnimation(this.isHurt);
+                }
+            }
+            
+            if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
+                if(!this.Character.isInvincible()){
+                    this.Character.playHurtAnimation(this.isHurt);
+                }
+            }
+            
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+                
             }
         });
     }
@@ -226,19 +231,14 @@ class World {
 
     isColliding(mo) {
         return (
-            this.x + this.width > mo.x &&
-            this.x < mo.x + mo.width &&
-            this.y < mo.y + mo.height &&
-            this.y + this.height > mo.y
+            this.x + this.width + this.offset.right > mo.x + mo.offset.left &&
+            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+            this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom &&
+            this.y + this.height - this.offset.bottom > mo.y + mo.offset.top
         );
     }
 
-    // isChrushingChicken(mo) {
-    //     return (
-    //         this.Character.y + this.Character.height >= mo.y
-    //         // this.Character.y + this.Character.height <= mo.y + 8
-    //     );  // 8px Toleranz
-    // }
+    
 
     checkCollision_PlayHurt_andDeleyEndboss() {
         this.level.endboss.forEach((endboss) => {
