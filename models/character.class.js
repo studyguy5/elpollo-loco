@@ -78,13 +78,13 @@ class character extends MovableObject {
     jumpSpeed;
     jump = false;
 
+    invincibleUntil;
 
-
-    offset = {
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
+    offset = { //setup Values for Offset here
+        top: 50,
+        left: 20,
+        right: 20,
+        bottom: 10
     };
 
 
@@ -188,32 +188,46 @@ class character extends MovableObject {
 
 
     isCollidingWithEndboss(endboss) {
-        return (this.x + this.width > endboss.x &&
-            this.x < endboss.x + endboss.width &&
-            this.y < endboss.y + endboss.height &&
-            this.y + this.height > endboss.y);
+        return (this.x + this.width -this.offset.right > endboss.x - endboss.offset.left &&
+            this.x + this.offset.left < endboss.x + endboss.width - endboss.offset.right &&
+            this.y - this.offset.top < endboss.y + endboss.height - endboss.offset.bottom &&
+            this.y + this.height - this.offset.bottom > endboss.y + endboss.offset.top);
     }
 
 
-    isColliding(mo) {
+    isColliding(mo) { 
         return (
-            this.x + this.width > mo.x &&
-            this.x < mo.x + mo.width &&
-            this.y < mo.y + mo.height &&
-            this.y + this.height > mo.y
+            this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
+            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+            this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom &&
+            this.y + this.height - this.offset.bottom > mo.y + mo.offset.top
         );
     }
 
-    isChrushingChicken(mo) {
+    makeInvincible(seconds){
+        let fiveSecond = seconds * 1000
+        this.invincibleUntil = new Date().getTime() + fiveSecond
+    }
+
+    isInvincible(){
+        let now = new Date().getTime()
+        if(now < this.invincibleUntil){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    isChrushingChicken(mo) { // it is easier without offset
         return (
-            this.y + this.height >= mo.y &&
-            this.y + this.height <= mo.y + 15 &&
-            this.x + this.width > mo.x
+            this.y + this.height - this.offset.bottom >= mo.y  &&
+            this.y < 115 &&
+            this.x + this.width - this.offset.right > mo.x &&
+            this.x + this.offset.left < mo.x 
         );  // 8px Toleranz
     }
 
     isDeath() {
-
         return this.energy <= 0;
     }
 

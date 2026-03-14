@@ -1,7 +1,7 @@
 
 class chicken extends MovableObject {
     // Höhe und Breite von Chicken
-    height = 80;
+    height = 70;
     width = 40;
     img;
     chicken_WALKING = [
@@ -17,9 +17,9 @@ class chicken extends MovableObject {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png')
         this.loadChickenImages(this.chicken_WALKING)
         //wir haben Zugriff auf die keys im MovableObjekt und sagen this.x = (....) und weisen hier in der chicken class jedem Chicken einen random x wert zu
-        this.x = 400 + Math.random() * 450;
+        this.x = 600 + Math.random() * 3100;
         //die chickens sollen vorerst alle am boden sein, deshalb gesamthöhe mit eigene Höhe ergebit abstand von oben y = 0, x = 0  ist in diesem 2d canvas ganz links oben in der Ecke
-        this.y = 335;
+        this.y = 345;
         this.animateChicken()
         this.moveLeft(this.speed);
     }

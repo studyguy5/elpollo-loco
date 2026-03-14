@@ -1,6 +1,12 @@
 
 class MovableObject extends DrawableObjekt {
 
+    offset = { //setup Values for Offset here
+        top: 15,
+        left: 8,
+        right: 8,
+        bottom: 15
+    };
 
 
 
@@ -181,7 +187,7 @@ class MovableObject extends DrawableObjekt {
     moveLeftCharacter() {
         this.x -= this.speed;
         this.otherDirection = true;
-        console.log(this.otherDirection)  
+        // console.log(this.otherDirection)  
     }
 
     jumpCharacter() {

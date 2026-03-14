@@ -39,7 +39,7 @@ class ThrowableObject extends MovableObject {
             this.img = this.bottleRotateImage[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
             this.currentRotateImage = (this.currentRotateImage + 1) % this.bottle_Rotate_Images.length;
         }, 1000/35);
-        this.speedY = 25;
+        this.speedY = 15;
 
         // this.speedX = 45;
         this.applyGravity(speedX)
