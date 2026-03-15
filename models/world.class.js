@@ -83,6 +83,7 @@ class World {
         this.reportBottleLenght();
         this.drawDeathChicken();
         this.drawMiniChickenWaling();
+        this.drawCoins()
     }
 
     img;
@@ -134,6 +135,7 @@ class World {
         }, 1000 / 10);
 
         setInterval(() => {
+            this.checkCollisionWithCoins()
             this.checkCollisionWidth_Bottles();
             this.cutBottleFrom_Array();
         }, 1000 / 10);
@@ -142,6 +144,14 @@ class World {
     collected = 0;
     d_wasPressed = false;
     drawOtherDirection = false;
+
+    checkCollisionWithCoins(){
+        this.level.coins.forEach((coins) => {
+            if(this.isCollidingWidth_Coin(coins)){
+                coins.y = 500;
+                // hier noch die StatusBar der Coins verändern
+            }
+        })}
 
     checkCollisionWidth_Bottles() {
 
@@ -300,6 +310,15 @@ class World {
             this.Character.x < bottles.x + bottles.width &&
             this.Character.y < bottles.y + bottles.height &&
             this.Character.y + this.Character.height > bottles.y
+        );
+    }
+
+    isCollidingWidth_Coin(coins) {
+        return (
+            this.Character.x + this.Character.width > coins.x &&
+            this.Character.x < coins.x + coins.width &&
+            this.Character.y < coins.y + coins.height &&
+            this.Character.y + this.Character.height > coins.y
         );
     }
 
@@ -615,6 +634,36 @@ addMiniChickenWalkingToMap(objects) {
         try {
             ctx.drawImage(coinBar.img, coinBar.x, coinBar.y, coinBar.width, coinBar.height);
         } catch (error) {
+            console.warn('Konnte nicht geladen werden', error)
+            console.log('Fehler bei ', this.img)
+        }
+    }
+
+    //==========Coins =======================================
+    drawCoins(){
+        this.addCoinToMap(this.level.coins)
+        let self = this;
+        requestAnimationFrame(function(){
+            self.drawCoins()
+        })
+    }
+
+    addCoinToMap(objects) {
+        objects.forEach((o) => {
+            this.drawToMapCoins(this.ctx, o)
+        })
+    }
+
+    // addCoinToMap(coins){
+    //     this.drawToMapCoins(this.ctx, coins)
+    // }
+
+    drawToMapCoins(ctx, o){
+        try{
+            this.ctx.translate(this.camera_x, 0)
+            ctx.drawImage(o.img, o.x, o.y, o.width, o.height);
+            this.ctx.translate(-this.camera_x, 0)
+        } catch(error){
             console.warn('Konnte nicht geladen werden', error)
             console.log('Fehler bei ', this.img)
         }

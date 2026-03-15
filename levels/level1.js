@@ -3,6 +3,19 @@
 const level1 = new Level(
 
     [
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+    ],
+
+    [
         new bottlesOnFloorObject(),
         new bottlesOnFloorObject(),
         new bottlesOnFloorObject(),
