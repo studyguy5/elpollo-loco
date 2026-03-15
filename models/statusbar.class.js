@@ -49,11 +49,14 @@ class statusBar extends DrawableObjekt {
     }
     
     checkCharacterReach(){
+        
         setInterval(() => {
+            console.log(this.world.Character.x);
             if(this.world.Character.x > (719 * 3.5))
-            this.setEndbossHealthImage(100)
-        }, 1000/24);
-    }
+            this.setEndbossHealthImage(this.world.level.endboss[0].endbossEnergy)
+        
+        }, 719*3.5);
+        }
 
     setbottleImage() {
         // this.percentige = ThrowableObject

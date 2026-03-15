@@ -110,8 +110,9 @@ class endboss extends MovableObject {
             }
 
             if(this.isCollidingWithEndboss()){
-                this.endbossEnergy -= 9,5
-                this.endbossHurt()  
+                this.endbossEnergy -= 7,5
+                this.endbossHurt()
+                // this.camera.endbossHealthBar.setEndbossHealthImage()  
                 console.log('bottle hit Endboss Energy: ', this.endbossEnergy)
             }
             
