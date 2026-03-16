@@ -2,15 +2,34 @@
 let canvas;
 let world;
 let Keyboard = new keyBoard();
-
+let startscreen;
 
 function init() {
     canvas = document.getElementById('gameCanvas')
-    world = new World(canvas, Keyboard);
+    startscreen = new StartScreen(canvas)
+    startMaskforGame();
     
+    
+    
+    // console.log('My Character is ', world.level.enemies)
+}
 
+function startMaskforGame(){
+    let mask = document.getElementById('startMask')
+    mask.innerHTML +=`
+    <div id="startDialog" class="startDialog">
+    <h3 onclick="startGame()">StartGame</h3>
+    
+    <h3>Settings</h3>
+    </div>
+    `
+}
 
-    console.log('My Character is ', world.level.enemies)
+function startGame(){
+    let dialog = document.getElementById('startDialog')
+    dialog.style.display = "none";
+    startscreen.hideStartScreen()
+    world = new World(canvas, Keyboard);
 }
 
 window.addEventListener('keydown', (e) => {

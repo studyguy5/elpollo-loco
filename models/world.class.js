@@ -84,6 +84,7 @@ class World {
         this.drawDeathChicken();
         this.drawMiniChickenWaling();
         this.drawCoins()
+        
     }
 
     img;
@@ -144,11 +145,13 @@ class World {
     collected = 0;
     d_wasPressed = false;
     drawOtherDirection = false;
-
+    coinAmount = 0;
     checkCollisionWithCoins(){
         this.level.coins.forEach((coins) => {
             if(this.isCollidingWidth_Coin(coins)){
                 coins.y = 500;
+                this.coinAmount++;
+                this.coinBar.setCoinImage(this.coinAmount)
                 // hier noch die StatusBar der Coins verändern
             }
         })}

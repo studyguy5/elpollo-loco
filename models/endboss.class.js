@@ -81,16 +81,16 @@ class endboss extends MovableObject {
     //load images of endboss ==== zusammenfassen: alle arraybenennungen ersetzen mit einem allgemeinen namen, z.b images
     animateEndboss() {
         setInterval(() => {
-            if((this.camera.Character.x + 400) > this.x && !this.isDeath()){
+            if((this.camera?.Character.x + 400) > this.x && !this.isDeath()){
                 this.endbossIsAngry()
             }
-            if((this.camera.Character.x + 300) > this.x && !this.isDeath()) {
+            if((this.camera?.Character.x + 300) > this.x && !this.isDeath()) {
                 this.x -= this.endboss_speed
                 this.endboss_Walking()
                 console.log(this.camera.Character.x)
             }
             
-            if(((this.camera.Character.x + 300) > this.x && !this.isDeath() && !this.jumped) || this.y < 70){
+            if(((this.camera?.Character.x + 300) > this.x && !this.isDeath() && !this.jumped) || this.y < 70){
                 if(this.y < 90){
                 this.jumped = true;
                 this.y  -=this.attackjump;
@@ -127,7 +127,7 @@ class endboss extends MovableObject {
                 }, 2000);
             }
             
-        }, 700);
+        }, 600);
         
     }
 
@@ -172,10 +172,10 @@ class endboss extends MovableObject {
     }
 
     isCollidingWithEndboss(){
-        return ((this.camera.Character.x + (this.camera.throwableObjects[0]?.x - 120))  + this.camera.throwableObjects[0]?.width > this.x &&
-            (this.camera.Character.x + (this.camera.throwableObjects[0]?.x - 120)) < this.x + this.width &&
-            this.camera.throwableObjects[0]?.y < this.y + this.height &&
-            this.camera.throwableObjects[0]?.y + this.camera.throwableObjects[0]?.height > this.y);
+        return ((this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120))  + this.camera?.throwableObjects[0]?.width > this.x &&
+            (this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) < this.x + this.width &&
+            this.camera?.throwableObjects[0]?.y < this.y + this.height &&
+            this.camera?.throwableObjects[0]?.y + this.camera?.throwableObjects[0]?.height > this.y);
     }
 }
 

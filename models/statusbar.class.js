@@ -30,6 +30,8 @@ class statusBar extends DrawableObjekt {
     // ]
 
 
+    
+
     constructor(world, x, y, width, height, statusBarr) {
         super()
         this.world = world;
@@ -44,7 +46,7 @@ class statusBar extends DrawableObjekt {
         this.loadImageStatusEndbossHealth(statusBarr)
         this.setbottleImage(0)
         this.sethealthImage(100)
-        this.setCoinImage()
+        this.setCoinImage(0)
         this.checkCharacterReach()
     }
     
@@ -75,10 +77,10 @@ class statusBar extends DrawableObjekt {
         // console.log(this.img);
     }
 
-    setCoinImage() {
+    setCoinImage(coinAmount) {
         if(this.statusBarr[0].includes('coin', 0)){
-        this.percentige = this.energy;
-        let path = this.statusBarr[3];
+        
+        let path = this.statusBarr[this.checkCoinAmount(coinAmount)];
         this.img = this.statusCoinImage[path];}
         console.log(this.img);
     }
@@ -88,6 +90,20 @@ class statusBar extends DrawableObjekt {
             let path = this.statusBarr[this.setEndbossPercentige(endbossEnergy)]
             this.img = this.statusEndbossHealthImage[path];
         }
+    }
+
+    checkCoinAmount(coinAmount){
+        if(coinAmount == 0){
+            return 0;
+        }else if(coinAmount == 1){
+            return 1;
+        }else if(coinAmount == 2){
+            return 2;
+        }else if(coinAmount == 3){
+            return 3;
+        }else if(coinAmount == 4){
+            return 4;
+        }else{return 5}
     }
 
     setEndbossPercentige(endbossEnergy){

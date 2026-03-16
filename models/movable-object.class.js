@@ -36,7 +36,7 @@ class MovableObject extends DrawableObjekt {
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.translate(-camera_x, 0)
             ctx.stroke();
-            // console.log('drawRectangle', this.x)
+            
         }
     }
 
@@ -48,8 +48,7 @@ class MovableObject extends DrawableObjekt {
             ctx.translate(camera_x, 0)
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.translate(-camera_x, 0)
-            ctx.stroke();
-            // console.log('drawRectangle', this.x)
+            ctx.stroke();    
         }
     }
 
@@ -193,7 +192,7 @@ class MovableObject extends DrawableObjekt {
     jumpCharacter() {
         this.y -= this.jumpSpeed; // hier setzen wir die y Position des Charakters um 150 höher, damit er springt, aber nur wenn er nicht schon in der Luft ist (isAboveGround)
         this.jump = true;
-        this.jumpSpeed -= 2; // hier verringern wir die jumpSpeed um 1, damit der Charakter wieder runterkommt, aber nur wenn er in der Luft ist (isAboveGround)
+        this.jumpSpeed -= 0.2; // hier verringern wir die jumpSpeed um 1, damit der Charakter wieder runterkommt, aber nur wenn er in der Luft ist (isAboveGround)
         console.log('Jumping', this.y)
         setTimeout(() => {
             this.jump = false; // hier setzen wir jump wieder auf false, damit der Charakter wieder springen kann, aber erst nach 1 Sekunde, damit er nicht sofort wieder springen kann

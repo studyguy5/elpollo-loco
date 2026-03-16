@@ -13,12 +13,12 @@ class character extends MovableObject {
     IMAGES_JUMPING = [
         'img/2_character_pepe/3_jump/J-31.png',
         'img/2_character_pepe/3_jump/J-32.png',
-        // 'img/2_character_pepe/3_jump/J-33.png',
+        'img/2_character_pepe/3_jump/J-33.png',
         'img/2_character_pepe/3_jump/J-34.png',
         'img/2_character_pepe/3_jump/J-35.png',
-        // 'img/2_character_pepe/3_jump/J-36.png',
+        'img/2_character_pepe/3_jump/J-36.png',
         'img/2_character_pepe/3_jump/J-37.png',
-        // 'img/2_character_pepe/3_jump/J-38.png',
+        'img/2_character_pepe/3_jump/J-38.png',
         'img/2_character_pepe/3_jump/J-39.png',
     ]
 
@@ -90,7 +90,8 @@ class character extends MovableObject {
 
     constructor() {
 
-        super().loadImage('img/2_character_pepe/1_idle/idle/I-1.png'),
+        super()
+        this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png'),
 
             this.loadImages(this.IMAGES_WALKING)
         this.loadJumpImages(this.IMAGES_JUMPING)
@@ -280,11 +281,11 @@ class character extends MovableObject {
         //================Animate character============
         // this.checkCollision = this.world.isColliding();
         setInterval(() => {
-            if (this.isAboveGround()) {
-                let path = this.IMAGES_JUMPING[this.currentJumpImage];
-                this.img = this.characterImages[path];
-                this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
-            }
+            // if (this.isAboveGround()) {
+            //     let path = this.IMAGES_JUMPING[this.currentJumpImage];
+            //     this.img = this.characterImages[path];
+            //     this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
+            // }
             // if(!this.isAboveGround()){
             //     let path = this.IMAGES_IDLE[1];
             //     this.img = this.idleImages[path]; }
@@ -297,5 +298,13 @@ class character extends MovableObject {
                 this.currentImage = (this.currentImage + 1) % this.IMAGES_WALKING.length;
             }
         }, 1000 / 24);
+
+        setInterval(() => {
+            if (this.isAboveGround()) {
+                let path = this.IMAGES_JUMPING[this.currentJumpImage];
+                this.img = this.characterImages[path];
+                this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
+            }
+        }, 1000/10);
     }
 }
