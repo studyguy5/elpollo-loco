@@ -3,20 +3,21 @@ let canvas;
 let world;
 let Keyboard = new keyBoard();
 let startscreen;
+let endState;
 
 function init() {
     canvas = document.getElementById('gameCanvas')
     startscreen = new StartScreen(canvas)
     startMaskforGame();
-    
-    
-    
+    checkWinLooseIntervall;
+
+
     // console.log('My Character is ', world.level.enemies)
 }
 
-function startMaskforGame(){
+function startMaskforGame() {
     let mask = document.getElementById('startMask')
-    mask.innerHTML +=`
+    mask.innerHTML += `
     <div id="startDialog" class="startDialog">
     <h3 onclick="startGame()">StartGame</h3>
     
@@ -25,12 +26,32 @@ function startMaskforGame(){
     `
 }
 
-function startGame(){
+function startGame() {
     let dialog = document.getElementById('startDialog')
     dialog.style.display = "none";
     startscreen.hideStartScreen()
     world = new World(canvas, Keyboard);
 }
+
+let checkWinLooseIntervall = setInterval(() => {
+    if (world?.Character.isDeath()) {
+        clearInterval(checkWinLooseIntervall);
+        checkWinLooseIntervall = null;
+        world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+        world = null;
+        // this.ctx.clearRect(0, 0, this.width, this.height)
+        endState = new endScreen(canvas, 'loose')
+    } else if (world?.level.endboss[0].isDeath()) {
+        clearInterval(checkWinLooseIntervall);
+        checkWinLooseIntervall = null;
+        world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+        world = null;
+        // this.ctx.clearRect(0, 0, this.width, this.height)
+        endState = new endScreen(canvas, 'win')
+    }
+
+}, 1000 / 20);
+
 
 window.addEventListener('keydown', (e) => {
     // e.preventDefault();  // ← Alle Keys blocken!
@@ -47,47 +68,48 @@ window.addEventListener('keydown', (e) => {
         case 'ArrowDown':
             Keyboard.DOWN = true;
             break;
-        case  'd':
+        case 'd':
             Keyboard.d = true;
             // console.log('d Taste gedrückt')
             break;
         case ' ':
             Keyboard.SPACE = true;
             break;
-            
-    }})
+
+    }
+})
 
 
-    window.addEventListener('keyup', (e) => {
-    
-        switch (e.key) {
-            case 'ArrowUp':
-                Keyboard.UP = false; // variablen werden für losgelassene Tasten auf false gesetzt
-                break;
-            case 'ArrowDown':
-                Keyboard.DOWN = false;
-                break;
-            case 'ArrowRight':
-                Keyboard.RIGHT = false;
-                break;
-            case 'ArrowLeft':
-                Keyboard.LEFT = false;
-                break;
-            case  'd':
+window.addEventListener('keyup', (e) => {
+
+    switch (e.key) {
+        case 'ArrowUp':
+            Keyboard.UP = false; // variablen werden für losgelassene Tasten auf false gesetzt
+            break;
+        case 'ArrowDown':
+            Keyboard.DOWN = false;
+            break;
+        case 'ArrowRight':
+            Keyboard.RIGHT = false;
+            break;
+        case 'ArrowLeft':
+            Keyboard.LEFT = false;
+            break;
+        case 'd':
             Keyboard.d = false;
             // console.log('d Taste losgelassen')
-                break;
-            case ' ':
-                Keyboard.SPACE = false;
-                break;
-        }
-    })
+            break;
+        case ' ':
+            Keyboard.SPACE = false;
+            break;
+    }
+})
 
 
 
-        // if(e.key == 'ArrowRight'){
-        //     console.log('Right arrow key pressed');
-        //     world.Character.moveRight();
-        // }   else if(e.key == 'ArrowLeft'){
-        //     console.log('Left arrow key pressed');
-        //     world.Character.moveLeft();
+// if(e.key == 'ArrowRight'){
+//     console.log('Right arrow key pressed');
+//     world.Character.moveRight();
+// }   else if(e.key == 'ArrowLeft'){
+//     console.log('Left arrow key pressed');
+//     world.Character.moveLeft();
