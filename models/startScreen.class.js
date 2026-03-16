@@ -30,19 +30,22 @@ class StartScreen {
     }
 
     drawStartScreen() {
+        // this.ctx.clearRect(0, 0, this.width, this.height);
         this.addStartScreenToMap(this.img)
         let self = this;
         requestAnimationFrame(function () {
-            self.addStartScreenToMap()
+            self.drawStartScreen()
         })
     }
-
+    
     addStartScreenToMap() {
         this.drawStartScreenToMap(this.ctx, this.img)
     }
-
+    
     drawStartScreenToMap(ctx, img) {
         try {
+            
+            ctx.beginPath()
             ctx.drawImage(img, this.x, this.y, this.width, this.height);
         }
         catch (error) {
