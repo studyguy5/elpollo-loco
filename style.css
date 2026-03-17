@@ -48,3 +48,30 @@ h3:hover{
     cursor: pointer;
 }
 
+.endMask{
+    display:none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position:absolute;
+    top:174px;
+    width: 720px;
+    height: 480px;
+    z-index: 13;
+}
+
+.endDialog{
+    opacity: 0;
+    background-color:rgb(240, 248, 255, 0.6);
+    padding: 20px 40px;
+    border-radius: 25px;
+    position:absolute;
+    top:175px;
+    z-index: 13;
+    transition: opacity 1500ms ease-in;
+}
+
+.endDialog.visible {
+  opacity: 1;
+}
+

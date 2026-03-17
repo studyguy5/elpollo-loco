@@ -67,6 +67,6 @@ class endScreen {
     drawImageToMap2(ctx, img2) {
         // ctx.clearRect(0, 0, this.width, this.height)
         // ctx.beginPath()
-        ctx.drawImage(img2, this.x +100, this.y +50, this.width -200, this.height -100)
+        ctx.drawImage(img2, this.x +100, this.y +50, this.width -200, this.height -150)
     }
 }

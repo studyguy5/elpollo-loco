@@ -35,22 +35,46 @@ function startGame() {
 
 let checkWinLooseIntervall = setInterval(() => {
     if (world?.Character.isDeath()) {
-        clearInterval(checkWinLooseIntervall);
+        // clearInterval(checkWinLooseIntervall);
         checkWinLooseIntervall = null;
         world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
         world = null;
         // this.ctx.clearRect(0, 0, this.width, this.height)
         endState = new endScreen(canvas, 'loose')
+        endMaskForGame()
     } else if (world?.level.endboss[0].isDeath()) {
-        clearInterval(checkWinLooseIntervall);
+        // clearInterval(checkWinLooseIntervall);
         checkWinLooseIntervall = null;
         world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
         world = null;
         // this.ctx.clearRect(0, 0, this.width, this.height)
         endState = new endScreen(canvas, 'win')
+        endMaskForGame()
     }
-
+    
 }, 1000 / 20);
+
+function endMaskForGame(){
+    let end = document.getElementById('endMask')
+    end.innerHTML= "";
+    end.style.display = "flex";
+    end.innerHTML += `
+    <div id="endDialog" class="endDialog">
+    <h3 onclick="startGame(); hideEndDialog()">Restart Game</h3>
+    
+    <h3>Placeholder</h3>
+    </div>
+    `
+    setTimeout(() => {
+    document.querySelector('.endDialog').classList.add('visible');
+  }, 20);  // 10ms reicht!
+}
+
+function hideEndDialog(){
+    let end = document.getElementById('endDialog')
+    end.classList.remove('visible')
+}
+
 
 
 window.addEventListener('keydown', (e) => {
