@@ -19,7 +19,7 @@ function startMaskforGame() {
     let mask = document.getElementById('startMask')
     mask.innerHTML += `
     <div id="startDialog" class="startDialog">
-    <h3 onclick="startGame()">StartGame</h3>
+    <h3 onclick="startGame()">Start Game</h3>
     
     <h3>Settings</h3>
     </div>
@@ -131,9 +131,10 @@ window.addEventListener('keyup', (e) => {
 
 
 
-// if(e.key == 'ArrowRight'){
-//     console.log('Right arrow key pressed');
-//     world.Character.moveRight();
-// }   else if(e.key == 'ArrowLeft'){
-//     console.log('Left arrow key pressed');
-//     world.Character.moveLeft();
+window.addEventListener("orientationchange", () => {
+  if (window.matchMedia("(orientation: landscape)").matches) {
+    console.log("Jetzt Querformat");
+  } else {
+    console.log("Jetzt Hochformat");
+  }
+});

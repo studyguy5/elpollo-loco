@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="sp">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>El Pollo Loco</title>
     <link rel="stylesheet" href="./style.css">
 </head>
+
 <body onload="init()">
     <h1>El pollo Loco</h1>
     <h2>Hello let's play</h2>
-    <div class="startMask" id="startMask"></div>
-    <div class="endMask" id="endMask"></div>
-    <canvas id="gameCanvas" width="720" height="480">
-    </canvas>
-    
-    
+
+    <div class="canvaAria" id="canvaAria">
+        <div class="startMask" id="startMask"></div>
+        <div class="endMask" id="endMask"></div>
+        <canvas id="gameCanvas" width="720" height="480">
+        </canvas>
+
+    </div>
+
+
 </body>
 <script src="./models/startScreen.class.js"></script>
 <script src="./models/drawableobject.class.js"></script>
