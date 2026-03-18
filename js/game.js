@@ -134,7 +134,8 @@ function renderControlButton(){
     <button>Left</button>
     <button>Right</button>
     </div>
-    <div>
+    <div class="JumpShootPanel">
+    <button>Shoot</button>
     <button>Jump</button>
     </div>
     `
