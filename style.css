@@ -11,6 +11,8 @@ body {
 }
 
 .canvaAria{
+    
+    position: relative;
     width:100%;
     max-width:720px;
     aspect-ratio: 720 / 480;
@@ -25,7 +27,6 @@ h2 {
 }
 
 canvas {
-    position: relative;
     background-color: black;
     z-index: 11;
 }
@@ -36,7 +37,7 @@ canvas {
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 96px;
+    top: 0px;
     width: 100%;
     max-width: 720px;
     aspect-ratio: 720 / 480;
@@ -68,7 +69,7 @@ h3:hover {
     justify-content: center;
     align-items: center;
     position: absolute;
-    top: 65px;
+    top: 0px;
     /* width: 720px; */
     /* height: 480px; */
     width: 100%;
@@ -90,6 +91,46 @@ h3:hover {
 
 .endDialog.visible {
     opacity: 1;
+}
+
+/* ============Buttons for HandyMode=========================== */
+
+.controlHud{
+    display:none;
+    justify-content: space-between;
+    align-items: center;
+    height: 80px;
+    width:100%;
+    background-color: rgb(245, 245, 220, 0.7);
+    position:absolute;
+    bottom:0px;
+    left:0px;
+    z-index: 13;
+}
+
+.controlHud button{
+    width:35px;
+    height:35px;
+    text-align: center;
+    margin:0px;
+    padding:0px;
+    font-size: 10px;
+    border-radius: 50%;
+    background-color: red;
+}
+
+.MovePanel{
+    padding-left:30px;
+}
+
+.userInfo{
+    display:flex;
+}
+
+.userInfo p{
+    padding: 5px 20px;
+    background-color: rgb(169, 169, 169, 0.7);
+    border-radius: 30px;
 }
 
 

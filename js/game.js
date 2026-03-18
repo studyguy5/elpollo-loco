@@ -9,10 +9,8 @@ function init() {
     canvas = document.getElementById('gameCanvas')
     startscreen = new StartScreen(canvas)
     startMaskforGame();
+    renderControlButton()
     checkWinLooseIntervall;
-
-
-    // console.log('My Character is ', world.level.enemies)
 }
 
 function startMaskforGame() {
@@ -20,7 +18,6 @@ function startMaskforGame() {
     mask.innerHTML += `
     <div id="startDialog" class="startDialog">
     <h3 onclick="startGame()">Start Game</h3>
-    
     <h3>Settings</h3>
     </div>
     `
@@ -130,11 +127,25 @@ window.addEventListener('keyup', (e) => {
 })
 
 
+function renderControlButton(){
+    let buttonField = document.getElementById('controlHud')
+    buttonField.innerHTML += `
+    <div class="MovePanel">
+    <button>Left</button>
+    <button>Right</button>
+    </div>
+    <div>
+    <button>Jump</button>
+    </div>
+    `
+    
+}
 
-window.addEventListener("orientationchange", () => {
-  if (window.matchMedia("(orientation: landscape)").matches) {
-    console.log("Jetzt Querformat");
-  } else {
-    console.log("Jetzt Hochformat");
-  }
-});
+
+// window.addEventListener("orientationchange", () => {
+//   if (window.matchMedia("(orientation: landscape)").matches) {
+//     console.log("Jetzt Querformat");
+//   } else {
+//     console.log("Jetzt Hochformat");
+//   }
+// });
