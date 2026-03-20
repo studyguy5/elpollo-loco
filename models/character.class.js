@@ -116,6 +116,8 @@ class character extends MovableObject {
     normal = null;
     long = null;
 
+    jumpsound = new Audio('/audio/jump_sound.mp3');
+    walkSound = new Audio('/audio/character_walk.mp3')
     //==================change position of character when key is pressed
     Move_Character() {
         setInterval(() => {
@@ -127,6 +129,8 @@ class character extends MovableObject {
                 this.normalIdle = true;
                 this.sleepIdle = false;
                 this.jumpCharacter(this.jumpSpeed = 250);
+                this.jumpsound.volume = 0.1;
+                this.jumpsound.play()
             }
             //Move right
             if (this.world.Keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -136,7 +140,8 @@ class character extends MovableObject {
                 this.long = null;
                 this.normalIdle = true;
                 this.sleepIdle = false;
-
+                this.walkSound.volume = 0.1;
+                this.walkSound.play()
                 this.moveRightCharacter(this.speed);
             }
             //Move left
@@ -147,85 +152,109 @@ class character extends MovableObject {
                 this.long = null;
                 this.normalIdle = true;
                 this.sleepIdle = false;
+                this.walkSound.volume = 0.1;
+                this.walkSound.play()
                 this.moveLeftCharacter(this.speed);
             }
 
-            if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT && !this.world.Keyboard.SPACE) {
-                if(!this.normal){
-              this.normal = setTimeout(() => {
-                this.normalIdle = false;
-               }, 8000);}
-               if(!this.long){
-               this.long = setTimeout(() => {
-                this.sleepIdle = true;
-               }, 8000);}
+            if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT) {
+                this.walkSound.pause();
+                this.walkSound.currentTime = 0;}
 
-                this.animationCounter++
-                if(this.animationCounter % 3 === 0 && this.normalIdle){
-                this.playIdleAnimation()}
-                if(this.animationCounter % 3 === 0 && this.sleepIdle){
-                this.playLongIdleAnimation()
-                }
+            if(!this.world.Keyboard.SPACE){
+                this.jumpsound.pause();
+                this.jumpsound.currentTime = 0;
             }
 
+                if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT && !this.world.Keyboard.SPACE) {
+                    if (!this.normal) {
+                        this.normal = setTimeout(() => {
+                            this.normalIdle = false;
+                        }, 8000);
+                    }
+                    if (!this.long) {
+                        this.long = setTimeout(() => {
+                            this.sleepIdle = true;
+                        }, 8000);
+                    }
 
-            this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
-            // console.log(this.world.camera_x) //versetzt die Kamera proportional zur Position des Charakters
-        }, 1000 / 25);
+                    this.animationCounter++
+                    if (this.animationCounter % 3 === 0 && this.normalIdle) {
+                        this.playIdleAnimation()
+                    }
+                    if (this.animationCounter % 3 === 0 && this.sleepIdle) {
+                        this.playLongIdleAnimation()
+                    }
+                }
 
+
+                this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
+                // console.log(this.world.camera_x) //versetzt die Kamera proportional zur Position des Charakters
+            }, 1000 / 25);
     }
 
 
     showIdle_OnCharacter() {
 
-            this.IdleTimeout = setTimeout(() => {
-                this.playIdleAnimation()
-            }, 3000);
+        this.IdleTimeout = setTimeout(() => {
+            this.playIdleAnimation()
+        }, 3000);
 
-            this.longIdleTimeout = setTimeout(() => {
-                this.playLongIdleAnimation()
-            }, 8000);
+        this.longIdleTimeout = setTimeout(() => {
+            this.playLongIdleAnimation()
+        }, 8000);
     }
 
 
     isCollidingWithEndboss(endboss) {
-        return (this.x + this.width -this.offset.right > endboss.x - endboss.offset.left &&
+        return (this.x + this.width - this.offset.right > endboss.x - endboss.offset.left &&
             this.x + this.offset.left < endboss.x + endboss.width - endboss.offset.right &&
             this.y - this.offset.top < endboss.y + endboss.height - endboss.offset.bottom &&
             this.y + this.height - this.offset.bottom > endboss.y + endboss.offset.top);
     }
 
 
-    isColliding(mo) { 
+    isColliding(mo) {
         return (
             this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
             this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
             this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom &&
             this.y + this.height - this.offset.bottom > mo.y + mo.offset.top
         );
+
     }
 
-    makeInvincible(seconds){
+    isCollidingMiniChicken(mo) {
+        return (
+            this.x + this.width > mo.x &&
+            this.x < mo.x + mo.width &&
+            this.y < mo.y + mo.height &&
+            this.y + this.height > mo.y
+        );
+
+    }
+
+    makeInvincible(seconds) {
         let fiveSecond = seconds * 1000
         this.invincibleUntil = new Date().getTime() + fiveSecond
     }
 
-    isInvincible(){
+    isInvincible() {
         let now = new Date().getTime()
-        if(now < this.invincibleUntil){
+        if (now < this.invincibleUntil) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
     isChrushingChicken(mo) { // it is easier without offset
         return (
-            this.y + this.height - this.offset.bottom >= mo.y  &&
+            this.y + this.height - this.offset.bottom >= mo.y &&
             this.y < 115 &&
             this.x + this.width - this.offset.right > mo.x &&
-            this.x + this.offset.left < mo.x
-        );  
+            this.x < mo.x
+        );
     }
 
     isDeath() {
@@ -305,6 +334,14 @@ class character extends MovableObject {
                 this.img = this.characterImages[path];
                 this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
             }
-        }, 1000/10);
+        }, 1000 / 10);
     }
 }
+
+// 4 Intervalle hier
+// chicken.class 1 intervall
+// miniChicken auch 1 Intervall
+// endboss.class 2 Intervalle
+// movable objekt 2 Intervalle
+// statusbar 1 Intervall
+// throwable Objekt 1 Intervall

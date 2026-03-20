@@ -3,11 +3,17 @@ class MovableObject extends DrawableObjekt {
 
     offset = { //setup Values for Offset here
         top: 15,
-        left: 8,
-        right: 8,
-        bottom: 15
+        left: 20,
+        right: 20,
+        bottom: 30
     };
 
+    offsetMini = { //setup Values for Offset here
+        top: 10,
+        left: 3,
+        right: 3,
+        bottom: 30
+    };
 
 
     speed = 0.5;
@@ -28,7 +34,7 @@ class MovableObject extends DrawableObjekt {
     }
 
     drawRectangle(ctx, camera_x) {
-        if (this instanceof character || this instanceof chicken || this instanceof endboss) {
+        if (this instanceof character) {
             ctx.beginPath();
             ctx.lineWidth = '3';
             ctx.strokeStyle = 'blue';
@@ -41,12 +47,12 @@ class MovableObject extends DrawableObjekt {
     }
 
     drawRectangleForBackground(ctx, camera_x) {
-        if (this instanceof character || this instanceof chicken) {
+        if (this instanceof chicken || this instanceof miniChicken) {
             ctx.beginPath();
             ctx.lineWidth = '3';
             ctx.strokeStyle = 'blue';
             ctx.translate(camera_x, 0)
-            ctx.rect(this.x, this.y, this.width, this.height);
+            ctx.rect((this.x + this.offset.left), (this.y + this.offset.top), this.width, this.height);
             ctx.translate(-camera_x, 0)
             ctx.stroke();    
         }

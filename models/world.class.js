@@ -228,20 +228,20 @@ class World {
                 this.Character.makeInvincible(3)
                 miniEnemies.chrushMiniChicken(miniEnemies)
             }
-            
-            if(this.isCollidingWithMiniChicken(miniEnemies)){ //checks if a throwable bottle is colliding with a miniEnemie
+            //checks if a throwable bottle is colliding with a miniEnemie
+            if(this.isCollidingWithMiniChicken(miniEnemies)){ 
                 console.log('chicken getroffen')
                 miniEnemies.chrushMiniChicken(miniEnemies);
             }
             
-            if (this.Character.isColliding(miniEnemies)) {
+            if (this.Character.isCollidingMiniChicken(miniEnemies)) {
                 if(!this.Character.isInvincible()){
                     this.hit()
                     this.Character.playHurtAnimation(this.isHurt);
                 }
             }
             
-            if (!this.Character.isColliding(miniEnemies) && this.lastHit > 0 && this.isHurt()) {
+            if (!this.Character.isCollidingMiniChicken(miniEnemies) && this.lastHit > 0 && this.isHurt()) {
                 if(!this.Character.isInvincible()){
                     this.Character.playHurtAnimation(this.isHurt);
                 }
@@ -327,14 +327,14 @@ class World {
 
 
 
-    isColliding(mo) { //  eventuell Doppelt - auch in character
-        return (
-            this.x + this.width + this.offset.right > mo.x + mo.offset.left &&
-            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
-            this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom &&
-            this.y + this.height - this.offset.bottom > mo.y + mo.offset.top
-        );
-    }
+    // isColliding(mo) { //  eventuell Doppelt - auch in character
+    //     return (console.log('is Colliding World'),
+    //         this.x + this.width + this.offset.right > mo.x + mo.offset.left &&
+    //         this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
+    //         this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom &&
+    //         this.y + this.height - this.offset.bottom > mo.y + mo.offset.top
+    //     );
+    // }
 
     
 
