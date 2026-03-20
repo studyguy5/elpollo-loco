@@ -4,7 +4,7 @@ let world;
 let Keyboard = new keyBoard();
 let startscreen;
 let endState;
-backgroundSound = new Audio('audio/background-mexico.mp3')
+backgroundSound = new Audio('audio/background-music_short.mp3')
 
 function init() {
     canvas = document.getElementById('gameCanvas')
@@ -20,7 +20,7 @@ function init() {
 // })
 
 function playBackgroundMusic(){
-    backgroundSound.volume = 0.1
+    backgroundSound.volume = 0.2
     backgroundSound.play()
     
 }
