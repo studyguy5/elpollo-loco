@@ -52,7 +52,7 @@ class statusBar extends DrawableObjekt {
     
     checkCharacterReach(){
         
-        setInterval(() => {
+        setStoppableInterval(() => {
             console.log(this.world.Character.x);
             if(this.world.Character.x > (719 * 3.5))
             this.setEndbossHealthImage(this.world.level.endboss[0].endbossEnergy)

@@ -19,10 +19,10 @@ function init() {
 //   playBackgroundMusic();
 // })
 
-function playBackgroundMusic(){
+function playBackgroundMusic() {
     backgroundSound.volume = 0.2
     backgroundSound.play()
-    
+
 }
 
 function startMaskforGame() {
@@ -35,21 +35,17 @@ function startMaskforGame() {
     `
 }
 
-function startGame() {
-    let dialog = document.getElementById('startDialog')
-    dialog.style.display = "none";
-    startscreen.hideStartScreen()
-    world = new World(canvas, Keyboard);
-}
+let checkWinLooseIntervall;
 
-let checkWinLooseIntervall = setInterval(() => {
+function checkWinLoose() {
+    console.log('checkWin Intervall läuft')
     if (world?.Character.isDeath()) {
         // clearInterval(checkWinLooseIntervall);
         checkWinLooseIntervall = null;
         world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
         world = null;
         setTimeout(() => {
-            
+
             endState = new endScreen(canvas, 'loose')
             endMaskForGame()
         }, 500);
@@ -61,10 +57,127 @@ let checkWinLooseIntervall = setInterval(() => {
         setTimeout(() => {
             endState = new endScreen(canvas, 'win')
             endMaskForGame()
+            stopAllIntervall()
         }, 1500);
     }
+    
+};
 
-}, 1000 / 20);
+
+function startGame() {
+    console.log('start wird aufgerufen')
+    let dialog = document.getElementById('startDialog')
+    dialog.style.display = "none";
+    startscreen.hideStartScreen()
+    world = new World(canvas, Keyboard);
+    checkWinLooseIntervall = setInterval(checkWinLoose, 1000/20);
+}
+
+function restartGame() {
+    console.log('restart wird aufgerufen')
+    // let dialog = document.getElementById('startDialog')
+    // dialog.style.display = "none";
+    clearInterval(checkWinLoose);
+    console.log('checkWin Intervall wird gestoppt')
+    startscreen.hideStartScreen()
+    level1 = new Level([
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+    ],
+    
+    [
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        new bottlesOnFloorObject(),
+        
+    ],
+    
+    [
+        new miniChicken(),
+        new miniChicken(),
+        new miniChicken(),
+        new miniChicken(),
+        new miniChicken(),
+        new miniChicken(),
+    ],
+    
+    [
+        new chicken(),
+        new chicken(),
+        new chicken(),
+        new chicken(),
+        new chicken(),
+        new chicken(),
+    ],
+    
+    [
+        new cloud(),
+        new cloud(),
+        new cloud(),
+        new cloud(),
+    ],
+    
+    [
+        new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
+        new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+        new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+        new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+        
+        new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
+        new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+        new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+        new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+        
+        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
+        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
+        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+        
+        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
+        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+        
+        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
+        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+    ],
+    
+    [
+        new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
+    ])
+    world = new World(canvas, Keyboard);
+    setTimeout(() => {
+        checkWinLooseIntervall = setInterval(() => {
+            checkWinLoose();
+        }, 1000/20);;
+    }, 500);
+    console.log('checkWin Intervall läuft wieder neu') // gleich
+}
+
+
+function stopAllIntervall() {
+    console.log('try to stop intervalls')
+    intervalIds.forEach(clearInterval);
+    intervalIds = [];
+}
 
 function endMaskForGame() {
     let end = document.getElementById('endMask')
@@ -72,7 +185,7 @@ function endMaskForGame() {
     end.style.display = "flex";
     end.innerHTML += `
     <div id="endDialog" class="endDialog">
-    <h3 onclick="startGame(); hideEndDialog()">Restart Game</h3>
+    <h3 onclick="restartGame(); hideEndDialog()">Restart Game</h3>
     
     <h3>Placeholder</h3>
     </div>
@@ -166,7 +279,7 @@ window.addEventListener('touchend', (e) => {
             Keyboard.RIGHT = false;
             break;
         case 'btnShoot':
-            Keyboard.d = false; 
+            Keyboard.d = false;
             break;
         case 'btnJump':
             Keyboard.SPACE = false;
@@ -204,52 +317,52 @@ let elem = document.getElementById('canvaAria');
 document.addEventListener('fullscreenchange', () => {
     setTimeout(() => {
         if (document.fullscreenElement) {
-          canvas.style.width = window.innerWidth + 'px';
-          canvas.style.height = window.innerHeight + 'px';
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
         } else {
-          canvas.style.width = 720 + 'px';
-          canvas.style.height = 480 + 'px';
+            canvas.style.width = 720 + 'px';
+            canvas.style.height = 480 + 'px';
         }
     }, 100);
 });
 
-function changeToFullscreen(){
-    if (elem.requestFullscreen && !document.fullscreenElement){
+function changeToFullscreen() {
+    if (elem.requestFullscreen && !document.fullscreenElement) {
         openFullscreen(elem)
-    }else{
+    } else {
         resetFullscreen(elem)
     }
 }
 
 // let canvas = document.getElementById('gameCanvas')
 function openFullscreen() {
-  if (elem.requestFullscreen && !document.fullscreenElement) {
-    elem.requestFullscreen();
-  } else if (elem.webkitRequestFullscreen && !document.fullscreenElement) { /* Safari */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen && !document.fullscreenElement) { /* IE11 */
-    elem.msRequestFullscreen();
-  }
+    if (elem.requestFullscreen && !document.fullscreenElement) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen && !document.fullscreenElement) { /* Safari */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen && !document.fullscreenElement) { /* IE11 */
+        elem.msRequestFullscreen();
+    }
 }
 
-function resetFullscreen(){
-    if(document.exitFullscreen && document.fullscreenElement){
-      document.exitFullscreen();
+function resetFullscreen() {
+    if (document.exitFullscreen && document.fullscreenElement) {
+        document.exitFullscreen();
     } else if (document.webkitexitFullscreen && document.fullscreenElement) { /* Safari */
-      document.exitFullscreen();
+        document.exitFullscreen();
     } else if (elem.msRequestFullscreen && document.fullscreenElement) { /* IE11 */
-      document.exitFullscreen();
+        document.exitFullscreen();
     }
 
 }
 
-function changeMuteStatus(){
+function changeMuteStatus() {
     let img = document.getElementById('soundPanel')
     let currentImg = img.querySelector('img');
-    if(currentImg.src.includes('muted_icon')){
+    if (currentImg.src.includes('muted_icon')) {
         currentImg.src = './img/not_mute.png';
         playBackgroundMusic();
-    }else{
+    } else {
         currentImg.src = './img/muted_icon.jpg'
         backgroundSound.pause();
         backgroundSound.currentTime = 0;

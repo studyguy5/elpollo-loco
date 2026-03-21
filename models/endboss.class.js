@@ -80,7 +80,7 @@ class endboss extends MovableObject {
     jumped = false;
     //load images of endboss ==== zusammenfassen: alle arraybenennungen ersetzen mit einem allgemeinen namen, z.b images
     animateEndboss() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             if((this.camera?.Character.x + 400) > this.x && !this.isDeath()){
                 this.endbossIsAngry()
             }
@@ -111,20 +111,15 @@ class endboss extends MovableObject {
 
             if(this.isCollidingWithEndboss()){
                 this.endbossEnergy -= 7,5
-                this.endbossHurt()
-                // this.camera.endbossHealthBar.setEndbossHealthImage()  
+                this.endbossHurt()  
                 console.log('bottle hit Endboss Energy: ', this.endbossEnergy)
             }
             
         }, 1000 / 10);
         
-        setInterval(() => {
+        setStoppableInterval(() => {
             if(this.isDeath()){
                 this.endbossDeath()
-                setTimeout(() => {
-                    this.y = 1000;
-                    
-                }, 2000);
             }
             
         }, 600);

@@ -123,19 +123,19 @@ class World {
 
 
     checkCharacter_State() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.checkColliding_PlayHurt_andDeleyChicken()
             this.checkColliding_PlayHurt_andDeleyMiniChicken()
             this.checkIfDeath(this.Character)
             this.checkThrowObjects() //responsible for bottle bar lenght
         }, 1000 / 10)
         //==============================================
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.checkCollision_PlayHurt_andDeleyEndboss()
             this.checkIfDeath(this.Character)
         }, 1000 / 10);
 
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.checkCollisionWithCoins()
             this.checkCollisionWidth_Bottles();
             this.cutBottleFrom_Array();

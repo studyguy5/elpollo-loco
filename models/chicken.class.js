@@ -27,7 +27,7 @@ class chicken extends MovableObject {
     
 
     animateChicken() {
-        this.chickenIntervall = setInterval(() => {
+        this.chickenIntervall = setStoppableInterval(() => {
             let path = this.chicken_WALKING[this.currentImage];
             this.img = this.chickenImages[path];
             this.currentImage = (this.currentImage + 1) % this.chicken_WALKING.length;

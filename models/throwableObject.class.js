@@ -34,7 +34,7 @@ class ThrowableObject extends MovableObject {
 
 
     throw(speedX) {
-        setInterval(() => {
+        setStoppableInterval(() => {
             
             let path = this.bottle_Rotate_Images[this.currentRotateImage];
             this.img = this.bottleRotateImage[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird

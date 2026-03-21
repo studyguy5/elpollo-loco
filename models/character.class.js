@@ -120,7 +120,7 @@ class character extends MovableObject {
     walkSound = new Audio('/audio/character_walk.mp3')
     //==================change position of character when key is pressed
     Move_Character() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.world.Keyboard.SPACE && !this.isAboveGround() && !this.jump) {
                 clearTimeout(this.normal);
                 this.idleAnimation = null
@@ -264,7 +264,7 @@ class character extends MovableObject {
 
     // Bilder werden in ein objekt geladen, index ausgetauscht und auf das img gesetzt, in der movable Objekt werden die Bilder mit drawImage gezeichnet
     playCharacter_Animations() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.playHurtAnimation(); //normal
             this.playDeathAnimation();
         }, 1000 / 5);
@@ -309,7 +309,7 @@ class character extends MovableObject {
     animatejumpAndWalking_Character() {
         //================Animate character============
         // this.checkCollision = this.world.isColliding();
-        setInterval(() => {
+        setStoppableInterval(() => {
             // if (this.isAboveGround()) {
             //     let path = this.IMAGES_JUMPING[this.currentJumpImage];
             //     this.img = this.characterImages[path];
@@ -328,7 +328,7 @@ class character extends MovableObject {
             }
         }, 1000 / 24);
 
-        setInterval(() => {
+        setStoppableInterval(() => {
             if (this.isAboveGround()) {
                 let path = this.IMAGES_JUMPING[this.currentJumpImage];
                 this.img = this.characterImages[path];
@@ -338,10 +338,8 @@ class character extends MovableObject {
     }
 }
 
-// 4 Intervalle hier
-// chicken.class 1 intervall
-// miniChicken auch 1 Intervall
-// endboss.class 2 Intervalle
-// movable objekt 2 Intervalle
-// statusbar 1 Intervall
-// throwable Objekt 1 Intervall
+
+
+
+
+

@@ -26,7 +26,7 @@ smallChickenWalk = [
     
     
     MiniChickenWalk(){
-        this.miniChickenIntervall = setInterval(() => {
+        this.miniChickenIntervall = setStoppableInterval(() => {
             this.x -=this.walkingSpeed;
             let path = this.smallChickenWalk[this.currentMiniChickenImage];
             this.img = this.smallChickenWalksImage[path];

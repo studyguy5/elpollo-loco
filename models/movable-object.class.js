@@ -76,7 +76,7 @@ class MovableObject extends DrawableObjekt {
         if (this.gravityInterval !== null) {
             clearInterval(this.gravityInterval);
         }
-        this.gravityInterval = setInterval(() => {
+        this.gravityInterval = setStoppableInterval(() => {
             if (this.isAboveGround()) {
                 this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
                 this.speedY -= this.acceleration;
@@ -208,7 +208,7 @@ class MovableObject extends DrawableObjekt {
 
     //used for clouds to move left
     moveLeft() {
-        setInterval(() => {
+        setStoppableInterval(() => {
             this.x -= this.speed;
             if (this.x < this.subtrahendMax) {
                 this.x = Math.random() * 3100;
