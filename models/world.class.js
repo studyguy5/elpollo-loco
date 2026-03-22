@@ -173,8 +173,8 @@ class World {
                 console.log(this.throwableObjects.length);
                 if(this.Character.otherDirection){
                     console.log(this.Character.otherDirection);
-                this.throwableObjects[index]?.throw(-35)
-            }else{this.throwableObjects[index]?.throw(35)}
+                this.throwableObjects[index]?.throw(-35, this)
+            }else{this.throwableObjects[index]?.throw(35, this)}
                 this.collected--
                 this.d_wasPressed = true;
             }
@@ -199,6 +199,7 @@ class World {
             if(this.isCollidingWithChicken(enemies)){ //check if throwable Bottle is colliding with enemie
                 console.log('chicken getroffen')
                 enemies.chrushChicken(enemies);
+                this.throwableObjects[0]?.splashBottle();
             }
             
             if (this.Character.isColliding(enemies)) {
@@ -232,6 +233,7 @@ class World {
             if(this.isCollidingWithMiniChicken(miniEnemies)){ 
                 console.log('chicken getroffen')
                 miniEnemies.chrushMiniChicken(miniEnemies);
+                this.throwableObjects[0]?.splashBottle();
             }
             
             if (this.Character.isCollidingMiniChicken(miniEnemies)) {
@@ -288,7 +290,7 @@ class World {
         if (this.Keyboard.d) {
             setTimeout(() => {
                 this.throwableObjects.pop()
-            }, 1500);
+            }, 3000);
         }
     }
 

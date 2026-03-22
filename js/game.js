@@ -38,9 +38,7 @@ function startMaskforGame() {
 let checkWinLooseIntervall;
 
 function checkWinLoose() {
-    console.log('checkWin Intervall läuft')
     if (world?.Character.isDeath()) {
-        // clearInterval(checkWinLooseIntervall);
         checkWinLooseIntervall = null;
         world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
         world = null;
@@ -50,7 +48,6 @@ function checkWinLoose() {
             endMaskForGame()
         }, 500);
     } else if (world?.level.endboss[0].isDeath()) {
-        // clearInterval(checkWinLooseIntervall);
         checkWinLooseIntervall = null;
         world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
         world = null;
@@ -65,7 +62,6 @@ function checkWinLoose() {
 
 
 function startGame() {
-    console.log('start wird aufgerufen')
     let dialog = document.getElementById('startDialog')
     dialog.style.display = "none";
     startscreen.hideStartScreen()
@@ -74,11 +70,9 @@ function startGame() {
 }
 
 function restartGame() {
-    console.log('restart wird aufgerufen')
     // let dialog = document.getElementById('startDialog')
     // dialog.style.display = "none";
     clearInterval(checkWinLoose);
-    console.log('checkWin Intervall wird gestoppt')
     startscreen.hideStartScreen()
     level1 = new Level([
         new Coin(),
@@ -169,12 +163,10 @@ function restartGame() {
             checkWinLoose();
         }, 1000/20);;
     }, 500);
-    console.log('checkWin Intervall läuft wieder neu') // gleich
 }
 
 
 function stopAllIntervall() {
-    console.log('try to stop intervalls')
     intervalIds.forEach(clearInterval);
     intervalIds = [];
 }

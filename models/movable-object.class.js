@@ -85,12 +85,17 @@ class MovableObject extends DrawableObjekt {
                     }
              else {
                 if (this instanceof ThrowableObject) {
-                    setTimeout(() => {
-                        clearInterval(this.gravityInterval);
-                    }, 1600);
+                    speedX = 0;
+
+                    clearInterval(this.gravityInterval);
+                    this.gravityInterval = null;
+                    return;
+                    // setTimeout(() => {
+                    // }, 200);
                 }
+                if(this instanceof character){
                 this.speedY = 0;
-                this.y = 125
+                this.y = 125}
             }
             // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
         }, 1000 / 25);
@@ -105,81 +110,6 @@ class MovableObject extends DrawableObjekt {
     }
 
     
-
-    // loadChickenImages(arr) {
-    //     // Array.isArray(arr) && 
-    //     arr.forEach((path) => {
-    //         let img = new Image()
-    //         img.src = path;
-    //         this.chickenImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-    //         // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-    //         // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
-    //     })
-    // }
-
-    // loadImages(arr) {
-    //     // Array.isArray(arr) && 
-    //     arr.forEach((path) => {
-    //         let img = new Image()
-    //         img.src = path;
-    //         this.characterImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-    //         // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-    //         // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-    //     })
-    // };
-
-    // loadIdleImages(arr) {
-    //     // Array.isArray(arr) && 
-    //     arr.forEach((path) => {
-    //         let img = new Image()
-    //         img.src = path;
-    //         this.idleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-    //         // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-    //         // damit wir später mit diesem Pfad die Bilder in der idleImages Objekt ansprechen können, um sie dann zu animieren
-    //     })
-    // }
-
-    // loadJumpImages(arr) {
-    //     // Array.isArray(arr) && 
-    //     arr.forEach((path) => {
-    //         let img = new Image()
-    //         img.src = path;
-    //         this.characterImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-    //         // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-    //         // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-    //     })
-    // };
-
-    // loadHurtImages(arr) {
-    //     // Array.isArray(arr) && 
-    //     arr.forEach((path) => {
-    //         let img = new Image()
-    //         img.src = path;
-    //         this.hurtImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-    //         // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-    //         // damit wir später mit diesem Pfad die Bilder in der hurtImages Objekt ansprechen können, um sie dann zu animieren
-    //     })
-    // };
-
-    // loadDeathImages(arr) {
-    //     // Array.isArray(arr) && 
-    //     arr.forEach((path) => {
-    //         let img = new Image()
-    //         img.src = path;
-    //         this.deathImages[path] = img;
-    //     })
-    // }
-
-    // loadEndbossImages(arr) {
-    //     console.log('loadEndbossImages', arr)
-    //     arr.forEach((path) => {
-    //         let img = new Image()
-    //         img.src = path;
-    //         this.endbossImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-    //         // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-    //         // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
-    //     })
-    // };
 
 
     //used for Character to move Left or Right

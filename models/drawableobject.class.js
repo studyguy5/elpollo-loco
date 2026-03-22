@@ -17,6 +17,7 @@ class DrawableObjekt {
     statusCoinImage = {};
     statusEndbossHealthImage = {};
     bottleRotateImage = {};
+    bottleSplashImage = {};
     smallChickenWalksImage = {};
     subtrahendMax = -20;
     ctx;
@@ -79,6 +80,17 @@ class DrawableObjekt {
             let img = new Image()
             img.src = path;
             this.bottleRotateImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
+            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
+            // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
+        })
+    }
+
+    loadBottleSplashImages(arr) {
+        // Array.isArray(arr) && 
+        arr.forEach((path) => {
+            let img = new Image()
+            img.src = path;
+            this.bottleSplashImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
             // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
             // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
         })
