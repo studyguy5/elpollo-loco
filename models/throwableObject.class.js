@@ -44,19 +44,24 @@ class ThrowableObject extends MovableObject {
     }
 
 
-intervalId;
-hit = false;
+    intervalId;
+    hit = false;
+    speedY = 0;
+    acceleration = 3;
+    speedY = 15;
+    
 
     throw(speedX, world) {
-       this.intervalId = setStoppableInterval(() => {
-            if(this.hit) return;
+        this.intervalId = setStoppableInterval(() => {
+            if (this.hit) return;
             let enemiesC = world.level.enemies.some(e => world.isCollidingWithChicken(e));
             let miniEnemiesC = world.level.miniEnemies.some(e => world.isCollidingWithMiniChicken(e));
             let endbossC = world.isCollidingWithEndboss(world.level.endboss[0]);
             console.log('collision mit Enemie ', enemiesC, 'collision mit MiniEnemie ', miniEnemiesC, 'collision mit endboss ', endbossC)
-            if (enemiesC || miniEnemiesC || endbossC || this.y > 400) {
+            if (enemiesC || miniEnemiesC || endbossC || this.y > 360) {
                 this.hit = true;
                 clearInterval(this.intervalId);
+                this.splashBottle()
                 return;
             }
             console.log('throw läuft ========================');
@@ -64,10 +69,18 @@ hit = false;
             this.img = this.bottleRotateImage[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
             this.currentRotateImage = (this.currentRotateImage + 1) % this.bottle_Rotate_Images.length;
             console.log('koordinaten vom der Bottle ', this.x + 'x-achse', this.y + 'y-achse')
+            this.applyGravityBottle(speedX)
 
         }, 1000 / 35);
-        this.speedY = 15;
-        this.applyGravity(speedX)
+
+
+    }
+
+
+    applyGravityBottle(speedX, ){
+         this.x += speedX;
+         this.y -= this.speedY;
+         this.speedY -= this.acceleration
     }
 
     splashBottle() {

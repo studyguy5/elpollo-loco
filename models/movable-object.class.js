@@ -42,7 +42,7 @@ class MovableObject extends DrawableObjekt {
             ctx.rect(this.x, this.y, this.width, this.height);
             ctx.translate(-camera_x, 0)
             ctx.stroke();
-            
+
         }
     }
 
@@ -54,7 +54,7 @@ class MovableObject extends DrawableObjekt {
             ctx.translate(camera_x, 0)
             ctx.rect((this.x + this.offset.left), (this.y + this.offset.top), this.width, this.height);
             ctx.translate(-camera_x, 0)
-            ctx.stroke();    
+            ctx.stroke();
         }
     }
 
@@ -72,7 +72,7 @@ class MovableObject extends DrawableObjekt {
 
     // applyGravityForBottle
 
-    applyGravity(speedX) {
+    applyGravity() {
         if (this.gravityInterval !== null) {
             clearInterval(this.gravityInterval);
         }
@@ -80,43 +80,23 @@ class MovableObject extends DrawableObjekt {
             if (this.isAboveGround()) {
                 this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
                 this.speedY -= this.acceleration;
-                if (this instanceof ThrowableObject) {  //only exists if i press "d", therefore now it doesn't exist
-                        this.x += speedX;}  
-                    }
-             else {
-                if (this instanceof ThrowableObject) {
-                    speedX = 0;
-
-                    clearInterval(this.gravityInterval);
-                    this.gravityInterval = null;
-                    return;
-                    // setTimeout(() => {
-                    // }, 200);
-                }
-                if(this instanceof character){
+            } else {
                 this.speedY = 0;
-                this.y = 125}
+                this.y = 125
             }
             // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
         }, 1000 / 25);
     }
 
     isAboveGround() {
-        if (this instanceof ThrowableObject) {
-            return this.y < 500;
-        } else {
             return this.y < 100;
         }
-    }
-
     
-
-
     //used for Character to move Left or Right
     moveRightCharacter() {
         this.x += this.speed;
         this.otherDirection = false;
-        
+
     };
 
     moveLeftCharacter() {

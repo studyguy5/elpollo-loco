@@ -54,8 +54,6 @@ class World {
     level = level1;
 
 
-    
-
     ar = 0;
     canvas;
     ctx;
@@ -199,7 +197,7 @@ class World {
             if(this.isCollidingWithChicken(enemies)){ //check if throwable Bottle is colliding with enemie
                 console.log('chicken getroffen')
                 enemies.chrushChicken(enemies);
-                this.throwableObjects[0]?.splashBottle();
+                // this.throwableObjects[0]?.splashBottle();
             }
             
             if (this.Character.isColliding(enemies)) {
@@ -233,7 +231,7 @@ class World {
             if(this.isCollidingWithMiniChicken(miniEnemies)){ 
                 console.log('chicken getroffen')
                 miniEnemies.chrushMiniChicken(miniEnemies);
-                this.throwableObjects[0]?.splashBottle();
+                // this.throwableObjects[0]?.splashBottle();
             }
             
             if (this.Character.isCollidingMiniChicken(miniEnemies)) {
@@ -290,7 +288,7 @@ class World {
         if (this.Keyboard.d) {
             setTimeout(() => {
                 this.throwableObjects.pop()
-            }, 3000);
+            }, 1000);
         }
     }
 
@@ -326,17 +324,6 @@ class World {
             this.Character.y + this.Character.height > coins.y
         );
     }
-
-
-
-    // isColliding(mo) { //  eventuell Doppelt - auch in character
-    //     return (console.log('is Colliding World'),
-    //         this.x + this.width + this.offset.right > mo.x + mo.offset.left &&
-    //         this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
-    //         this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom &&
-    //         this.y + this.height - this.offset.bottom > mo.y + mo.offset.top
-    //     );
-    // }
 
     
 
