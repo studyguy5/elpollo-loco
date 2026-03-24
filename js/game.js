@@ -12,6 +12,7 @@ function init() {
     startMaskforGame();
     renderControlButton();
     renderSoundButton();
+    renderInfo();
     checkWinLooseIntervall;
 }
 
@@ -30,9 +31,29 @@ function startMaskforGame() {
     mask.innerHTML += `
     <div id="startDialog" class="startDialog">
     <h3 onclick="startGame()">Start Game</h3>
-    <h3>Settings</h3>
+    <h3 onclick="makeInfoVisible()">Info</h3onclick=>
     </div>
     `
+}
+
+function renderInfo(){
+    let info = document.getElementById('infoDiv')
+    info.innerHTML = /*html*/`
+    <div class="infoWrapper">
+    <div class="closeButton"><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
+    <div class="infoHead">Info for the game
+    <img src="img/2_character_pepe/1_idle/idle/I-1.png"> //here you nee to resize the Image for the info div
+    </div>
+    </div>
+    `
+}
+
+function makeInfoVisible(){
+    console.log('triggert')
+    let info = document.getElementById('infoDiv')
+    if(info.classList.contains('infoDivVisible')){
+        info.classList.remove('infoDivVisible')
+    }else{info.classList.add('infoDivVisible')}
 }
 
 let checkWinLooseIntervall;
@@ -46,6 +67,7 @@ function checkWinLoose() {
 
             endState = new endScreen(canvas, 'loose')
             endMaskForGame()
+            stopAllIntervall()
         }, 500);
     } else if (world?.level.endboss[0].isDeath()) {
         checkWinLooseIntervall = null;
