@@ -4,10 +4,10 @@
     justify-content: center;
     align-items: center;
     position:absolute;
-    top:-620px;
+    top:-720px;
     max-width:760px;
     width:100%;
-    height:600px;
+    height:700px;
     border-radius: 15px;
     z-index: 15;
     box-sizing: border-box;
@@ -28,9 +28,10 @@
     align-self: center;
     max-width:720px;
     height:100%;
-    max-height:560px;
+    max-height:660px;
     padding:10px;
-    background-color: rgba(231, 229, 229, 0.897);
+    background-size: cover;
+    background-image: url(./img/info_background.PNG);
 }
 
 .closeButton{
@@ -42,7 +43,11 @@
 
 .closeButton img{
     cursor: pointer;
-    
+}
+
+.closeButton img:hover{
+    background-color: white;
+    border-radius: 25px;
 }
 
 .infoHead{
@@ -50,9 +55,49 @@
     height:60px;
     display:flex;
     justify-content: space-evenly;
+    align-items: center;
     font-size: 23px;
+}
+
+.infoHead img{
+    width:40px;
+    height: auto;
+    transform:rotateZ(25deg)
 }
 
 .infoHead text{
     padding-top:10px;
+}
+
+.infoMainText{
+    width:100%;
+    height:280px;
+}
+ol{
+    height:283px;
+    background-color: rgb(233, 232, 232, 0.5);
+}
+
+h4{
+    padding:0px;
+    margin:0px;
+}
+
+li{
+    font-size: 24px;
+}
+
+hr{
+    width: 700px;
+    height:1px;
+    border-color: white;
+}
+
+.inmpressum{
+    padding:10px 25px;
+    background-color: rgb(233, 232, 232, 0.5);
+}
+
+h4{
+    font-size: 23px;
 }

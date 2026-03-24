@@ -42,7 +42,26 @@ function renderInfo(){
     <div class="infoWrapper">
     <div class="closeButton"><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
     <div class="infoHead">Info for the game
-    <img src="img/2_character_pepe/1_idle/idle/I-1.png"> //here you nee to resize the Image for the info div
+    <img src="img/little_chicken.jpg">
+    </div>
+    <div class="infoMainText">
+    <ol>
+    <li><h4>Goal</h4> - conquer or avoid all enemies and finaly conquer the big endboss chicken to win</li>
+    <li><h4>Chicken</h4> - conquer chicken by shooting a bottle at them oder jump on them</li>
+    <li><h4>mini Chicken</h4> - conquer mini Chicken by shotting bottles or jump on them</li>
+    <li><h4>Endboss</h4> - conquer the endboss by shooting three or up to four bottle on the endboss</li>
+    </div>
+    <hr>
+    <div class="inmpressum">
+    <h4>Impressum</h4>
+    <p>Leonhard<br />
+            Fantasy Street 28b<br />
+            45971 Koppenhagen Avenue</p>
+
+        <h3>Kontakt</h3>
+        <p>E-Mail: beispiel@gmail.com</p>
+
+        <p>Quelle: <a class="footer-link" href="https://www.e-recht24.de">e-recht24.de</a></p>
     </div>
     </div>
     `
