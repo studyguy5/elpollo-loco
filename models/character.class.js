@@ -80,11 +80,11 @@ class character extends MovableObject {
 
     invincibleUntil;
 
-    offset = { //setup Values for Offset here
+    offsetCharacter = { //setup Values for Offset here
         top: 50,
-        left: 20,
-        right: 20,
-        bottom: 10
+        left: 30,
+        right: 30,
+        bottom: 30
     };
 
 
@@ -216,22 +216,44 @@ class character extends MovableObject {
 
     isColliding(mo) {
         return (
-            this.x + this.width - this.offset.right > mo.x + mo.offset.left &&
-            this.x + this.offset.left < mo.x + mo.width - mo.offset.right &&
-            this.y + this.offset.top < mo.y + mo.height - mo.offset.bottom &&
-            this.y + this.height - this.offset.bottom > mo.y + mo.offset.top
+            this.x + this.width - this.offsetCharacter.right > mo.x &&
+            this.x + this.offsetCharacter.left < mo.x + mo.width &&
+            this.y + this.offsetCharacter.top < mo.y + mo.height &&
+            this.y + this.height - this.offsetCharacter.bottom > mo.y
         );
 
     }
 
+    isChrushingChicken(mo) { // it is easier without offset
+        return (console.log('isChrushing ', this.x, 'width ', this.width),
+            this.x + this.width - this.offset.right > mo.x &&
+            this.x + this.offsetCharacter.left < mo.x + mo.width &&
+            this.y + this.height - this.offsetCharacter.bottom <= mo.y  &&
+            this.y + this.height - this.offsetCharacter.bottom >= mo.y &&
+            this.speedY <= -0.3 &&
+            this.y < 120
+        );
+    }
+
     isCollidingMiniChicken(mo) {
         return (
-            this.x + this.width > mo.x &&
+            this.x + this.width - this.offsetCharacter.right > mo.x &&
             this.x < mo.x + mo.width &&
             this.y < mo.y + mo.height &&
-            this.y + this.height > mo.y
+            this.y + this.height - this.offsetCharacter.bottom > mo.y
         );
 
+    }
+
+    isChrushingMiniChicken(mo) {
+        return( // it is easier without offset
+            this.x + this.width - this.offsetCharacter.right > mo.x &&
+            this.x + this.offsetCharacter.left < mo.x + mo.width &&
+            this.speedY <= -0.3 &&
+            this.y + this.height - this.offsetCharacter.bottom > mo.y  &&
+            this.y + this.height - this.offsetCharacter.bottom < mo.y &&
+            this.y < 120
+        );
     }
 
     makeInvincible(seconds) {
@@ -246,15 +268,6 @@ class character extends MovableObject {
         } else {
             return false;
         }
-    }
-
-    isChrushingChicken(mo) { // it is easier without offset
-        return (
-            this.y + this.height - this.offset.bottom >= mo.y &&
-            this.y < 115 &&
-            this.x + this.width - this.offset.right > mo.x &&
-            this.x < mo.x
-        );
     }
 
     isDeath() {
@@ -287,7 +300,6 @@ class character extends MovableObject {
 
     playHurtAnimation() {
         if (this.world.isHurt()) {
-            // console.log('playHurtAnimation läuft');
             let path = this.IMAGES_HURT[this.currentHurtImage];
             this.img = this.hurtImages[path];
             this.currentHurtImage = (this.currentHurtImage + 1) % this.IMAGES_HURT.length;
@@ -304,23 +316,11 @@ class character extends MovableObject {
     }
 
 
-    hurtInterval;
+
 
     animatejumpAndWalking_Character() {
         //================Animate character============
-        // this.checkCollision = this.world.isColliding();
         setStoppableInterval(() => {
-            // if (this.isAboveGround()) {
-            //     let path = this.IMAGES_JUMPING[this.currentJumpImage];
-            //     this.img = this.characterImages[path];
-            //     this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
-            // }
-            // if(!this.isAboveGround()){
-            //     let path = this.IMAGES_IDLE[1];
-            //     this.img = this.idleImages[path]; }
-
-            //isColliding hier abfragen, damit dien animation hurt im vordergrund steht
-
             if (this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) {
                 let path = this.IMAGES_WALKING[this.currentImage];
                 this.img = this.characterImages[path];

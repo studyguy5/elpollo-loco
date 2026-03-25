@@ -10,10 +10,18 @@
     <link rel="icon" href="./img/favicon.png" type="image">
 </head>
 
+<script>
+
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+    });
+
+</script>
+
 <body onload="init()">
     <h1>El pollo Loco</h1>
     <h2>Hello let's play</h2>
-
+    <div class="mobileDeviceInfo" id="mobileDeviceInfo"><img src="./img/mobile_device_info.png"></div>
     <div class="canvaAria" id="canvaAria">
         <div class="startMask" id="startMask"></div>
         <div class="endMask" id="endMask"></div>

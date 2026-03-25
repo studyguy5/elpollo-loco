@@ -13,6 +13,8 @@ function init() {
     renderControlButton();
     renderSoundButton();
     renderInfo();
+    localStorage.setItem('muteStatus', true)
+    checkMuteStatus();
     checkWinLooseIntervall;
 }
 
@@ -40,7 +42,7 @@ function renderInfo(){
     let info = document.getElementById('infoDiv')
     info.innerHTML = /*html*/`
     <div class="infoWrapper">
-    <div class="closeButton"><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
+    <div class="closeButton">Back to Start Screen ><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
     <div class="infoHead">Info for the game
     <img src="img/little_chicken.jpg">
     </div>
@@ -68,7 +70,6 @@ function renderInfo(){
 }
 
 function makeInfoVisible(){
-    console.log('triggert')
     let info = document.getElementById('infoDiv')
     if(info.classList.contains('infoDivVisible')){
         info.classList.remove('infoDivVisible')
@@ -389,16 +390,30 @@ function resetFullscreen() {
 
 }
 
+function checkMuteStatus(){
+    
+    if(localStorage.getItem('muteStatus') == 'true'){
+
+    }else{
+        playBackgroundMusic()
+    }
+}
+
 function changeMuteStatus() {
     let img = document.getElementById('soundPanel')
     let currentImg = img.querySelector('img');
     if (currentImg.src.includes('muted_icon')) {
         currentImg.src = './img/not_mute.png';
         playBackgroundMusic();
+        localStorage.removeItem('muteStatus')
+        // localStorage.removeItem('shoppingCart')
+        localStorage.setItem('muteStatus', false)
     } else {
         currentImg.src = './img/muted_icon.jpg'
         backgroundSound.pause();
         backgroundSound.currentTime = 0;
+        localStorage.removeItem('muteStatus')
+        localStorage.setItem('muteStatus', true)
     }
 }
 

@@ -193,6 +193,7 @@ class World {
                 this.Character.makeInvincible(3)
                 enemies.chrushChicken()
             }
+
             
             if(this.isCollidingWithChicken(enemies)){ //check if throwable Bottle is colliding with enemie
                 console.log('chicken getroffen')
@@ -222,11 +223,13 @@ class World {
 
     checkColliding_PlayHurt_andDeleyMiniChicken() {
         this.level.miniEnemies.forEach((miniEnemies) => {            
-            if (this.Character.isChrushingChicken(miniEnemies)) {
+            if (this.Character.isChrushingMiniChicken(miniEnemies)) {
                 console.log('MiniChicken gechrushed')
                 this.Character.makeInvincible(3)
                 miniEnemies.chrushMiniChicken(miniEnemies)
             }
+
+            
             //checks if a throwable bottle is colliding with a miniEnemie
             if(this.isCollidingWithMiniChicken(miniEnemies)){ 
                 console.log('chicken getroffen')
