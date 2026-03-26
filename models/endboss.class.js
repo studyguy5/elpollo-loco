@@ -112,7 +112,7 @@ class endboss extends MovableObject {
             }
 
             if(this.isCollidingWithEndboss()){
-                this.endbossEnergy -= 7,5
+                this.endbossEnergy -= 5,5
                 this.endbossHurt();
                 if(localStorage.getItem('muteStatus') == 'true'){}else{
                 this.chickenHurtSound.volume = 0.3

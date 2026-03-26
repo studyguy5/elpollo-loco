@@ -322,19 +322,19 @@ class World {
 
     isCollidingWidth_Bottle(bottles) {
         return (
-            this.Character.x + this.Character.width > bottles.x &&
-            this.Character.x < bottles.x + bottles.width &&
+            this.Character.x + this.Character.width - this.Character.offsetCharacter.right> bottles.x &&
+            this.Character.x + this.Character.offsetCharacter.left < bottles.x + bottles.width &&
             this.Character.y < bottles.y + bottles.height &&
-            this.Character.y + this.Character.height > bottles.y
+            this.Character.y + this.Character.height + this.Character.offsetCharacter.bottom > bottles.y
         );
     }
 
     isCollidingWidth_Coin(coins) {
         return (
-            this.Character.x + this.Character.width > coins.x &&
-            this.Character.x < coins.x + coins.width &&
+            this.Character.x + this.Character.width - this.Character.offsetCharacter.right > coins.x &&
+            this.Character.x + this.Character.offsetCharacter.left < coins.x + coins.width &&
             this.Character.y < coins.y + coins.height &&
-            this.Character.y + this.Character.height > coins.y
+            this.Character.y + this.Character.height + this.Character.offsetCharacter.bottom > coins.y
         );
     }
 

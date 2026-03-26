@@ -19,9 +19,16 @@ function init() {
     checkWinLooseIntervall;
 }
 
-// document.addEventListener('click', () => {
-//   playBackgroundMusic();
-// })
+function reloadInit() {
+    canvas = document.getElementById('gameCanvas')
+    startscreen = new StartScreen(canvas)
+    startMaskforGame();
+    renderInfo();
+    localStorage.setItem('muteStatus', true)
+    checkMuteStatus();
+    checkWinLooseIntervall;
+}
+
 
 function playBackgroundMusic() {
     backgroundSound.volume = 0.15
@@ -29,20 +36,25 @@ function playBackgroundMusic() {
 
 }
 
+function stopBubbling(event) {
+    event.stopPropagation();
+}
+
 function startMaskforGame() {
     let mask = document.getElementById('startMask')
+    mask.innerHTML = "";
     mask.innerHTML += `
     <div id="startDialog" class="startDialog">
     <h3 onclick="startGame()">Start Game</h3>
-    <h3 onclick="makeInfoVisible()">Info</h3onclick=>
+    <h3 onclick="makeInfoVisible()">Info/Impressum</h3>
     </div>
     `
 }
 
-function renderInfo(){
+function renderInfo() {
     let info = document.getElementById('infoDiv')
     info.innerHTML = /*html*/`
-    <div class="infoWrapper">
+    <div  class="infoWrapper">
     <div class="closeButton">Back to Start Screen ><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
     <div class="infoHead">Info for the game
     <img src="img/little_chicken.jpg">
@@ -70,38 +82,51 @@ function renderInfo(){
     `
 }
 
-function makeInfoVisible(){
+function makeInfoVisible() {
     let info = document.getElementById('infoDiv')
-    if(info.classList.contains('infoDivVisible')){
+    let ad = document.getElementById('closeDiv')
+    if (info.classList.contains('infoDivVisible')) {
         info.classList.remove('infoDivVisible')
-    }else{info.classList.add('infoDivVisible')}
+        ad.style.display = "none"
+    } else {
+        info.classList.add('infoDivVisible')
+        ad.style.display = 'flex'
+
+    }
 }
 
 let checkWinLooseIntervall;
 
 function checkWinLoose() {
     if (world?.Character.isDeath()) {
-        checkWinLooseIntervall = null;
-        world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
-        world = null;
-        setTimeout(() => {
-
-            endState = new endScreen(canvas, 'loose')
-            endMaskForGame()
-            stopAllIntervall()
-        }, 500);
+        setLoosingEndscreen();
     } else if (world?.level.endboss[0].isDeath()) {
-        checkWinLooseIntervall = null;
-        world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
-        world = null;
-        setTimeout(() => {
-            endState = new endScreen(canvas, 'win')
-            endMaskForGame()
-            stopAllIntervall()
-        }, 1500);
+        setWinningEndscreen()
     }
-    
 };
+
+
+function setLoosingEndscreen() {
+    checkWinLooseIntervall = null;
+    world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+    world = null;
+    setTimeout(() => {
+        endState = new endScreen(canvas, 'loose')
+        endMaskForGame()
+        stopAllIntervall()
+    }, 500);
+}
+
+function setWinningEndscreen() {
+    checkWinLooseIntervall = null;
+    world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+    world = null;
+    setTimeout(() => {
+        endState = new endScreen(canvas, 'win')
+        endMaskForGame()
+        stopAllIntervall()
+    }, 1500);
+}
 
 
 function startGame() {
@@ -109,7 +134,7 @@ function startGame() {
     dialog.style.display = "none";
     startscreen.hideStartScreen()
     world = new World(canvas, Keyboard);
-    checkWinLooseIntervall = setInterval(checkWinLoose, 1000/20);
+    checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
 }
 
 function restartGame() {
@@ -129,82 +154,82 @@ function restartGame() {
         new Coin(),
         new Coin(),
     ],
-    
-    [
-        new bottlesOnFloorObject(),
-        new bottlesOnFloorObject(),
-        new bottlesOnFloorObject(),
-        new bottlesOnFloorObject(),
-        new bottlesOnFloorObject(),
-        new bottlesOnFloorObject(),
-        
-    ],
-    
-    [
-        new miniChicken(),
-        new miniChicken(),
-        new miniChicken(),
-        new miniChicken(),
-        new miniChicken(),
-        new miniChicken(),
-    ],
-    
-    [
-        new chicken(),
-        new chicken(),
-        new chicken(),
-        new chicken(),
-        new chicken(),
-        new chicken(),
-    ],
-    
-    [
-        new cloud(),
-        new cloud(),
-        new cloud(),
-        new cloud(),
-    ],
-    
-    [
-        new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
-        new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
-        new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
-        new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-        
-        new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
-        new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
-        new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
-        new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-        
-        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
-        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
-        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
-        new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
 
-        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
-        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
-        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
-        new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-        
-        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
-        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
-        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
-        new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-        
-        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
-        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
-        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
-        new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-    ],
-    
-    [
-        new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
-    ])
+        [
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+
+        ],
+
+        [
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+        ],
+
+        [
+            new chicken(),
+            new chicken(),
+            new chicken(),
+            new chicken(),
+            new chicken(),
+            new chicken(),
+        ],
+
+        [
+            new cloud(),
+            new cloud(),
+            new cloud(),
+            new cloud(),
+        ],
+
+        [
+            new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+        ],
+
+        [
+            new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
+        ])
     world = new World(canvas, Keyboard);
     setTimeout(() => {
         checkWinLooseIntervall = setInterval(() => {
             checkWinLoose();
-        }, 1000/20);;
+        }, 1000 / 20);;
     }, 500);
 }
 
@@ -214,6 +239,98 @@ function stopAllIntervall() {
     intervalIds = [];
 }
 
+function backToStartScreen() {
+    endState.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+    endState = null;
+    let end = document.getElementById('endMask')
+    end.innerHTML = "";
+    end.style.display = "none"
+    reloadInit();
+    level1 = new Level([
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+        new Coin(),
+    ],
+
+        [
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+            new bottlesOnFloorObject(),
+
+        ],
+
+        [
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+            new miniChicken(),
+        ],
+
+        [
+            new chicken(),
+            new chicken(),
+            new chicken(),
+            new chicken(),
+            new chicken(),
+            new chicken(),
+        ],
+
+        [
+            new cloud(),
+            new cloud(),
+            new cloud(),
+            new cloud(),
+        ],
+
+        [
+            new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+        ],
+
+        [
+            new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
+        ])
+}
+
 function endMaskForGame() {
     let end = document.getElementById('endMask')
     end.innerHTML = "";
@@ -221,8 +338,8 @@ function endMaskForGame() {
     end.innerHTML += `
     <div id="endDialog" class="endDialog">
     <h3 onclick="restartGame(); hideEndDialog()">Restart Game</h3>
-    
-    <h3>Placeholder</h3>
+    <h3 onclick="backToStartScreen()">Back to Start Screen</h3>
+    <h3 onclick="makeInfoVisible()">Info/Impressum</h3>
     </div>
     `
     setTimeout(() => {
@@ -242,9 +359,13 @@ window.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowRight':
             Keyboard.RIGHT = true; // variablen werden für gedrückte Tasten auf true gesetzt
+            let right = document.getElementById('LeftRight')
+            right.style.color = 'white';
             break;
         case 'ArrowLeft':
             Keyboard.LEFT = true;
+            let left = document.getElementById('LeftRight')
+            left.style.color = 'white';
             break;
         case 'ArrowUp':
             Keyboard.UP = true;
@@ -254,10 +375,13 @@ window.addEventListener('keydown', (e) => {
             break;
         case 'd':
             Keyboard.d = true;
-            // console.log('d Taste gedrückt')
+            let d = document.getElementById('Shoot')
+            d.style.color = 'white';
             break;
         case ' ':
             Keyboard.SPACE = true;
+            let space = document.getElementById('Jump')
+            space.style.color = 'white';
             break;
 
     }
@@ -265,7 +389,6 @@ window.addEventListener('keydown', (e) => {
 
 
 window.addEventListener('keyup', (e) => {
-
     switch (e.key) {
         case 'ArrowUp':
             Keyboard.UP = false; // variablen werden für losgelassene Tasten auf false gesetzt
@@ -275,16 +398,23 @@ window.addEventListener('keyup', (e) => {
             break;
         case 'ArrowRight':
             Keyboard.RIGHT = false;
+            let test = document.getElementById('LeftRight')
+            test.style.color = 'black';
             break;
         case 'ArrowLeft':
             Keyboard.LEFT = false;
+            let left = document.getElementById('LeftRight')
+            left.style.color = 'black';
             break;
         case 'd':
             Keyboard.d = false;
-            // console.log('d Taste losgelassen')
+            let d = document.getElementById('Shoot')
+            d.style.color = 'black';
             break;
         case ' ':
             Keyboard.SPACE = false;
+            let space = document.getElementById('Jump')
+            space.style.color = 'black';
             break;
     }
 })
@@ -391,11 +521,9 @@ function resetFullscreen() {
 
 }
 
-function checkMuteStatus(){
-    
-    if(localStorage.getItem('muteStatus') == 'true'){
-
-    }else{
+function checkMuteStatus() {
+    if (localStorage.getItem('muteStatus') == 'true') {
+    } else {
         playBackgroundMusic()
     }
 }
