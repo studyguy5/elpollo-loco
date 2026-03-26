@@ -12,6 +12,8 @@ class endboss extends MovableObject {
     camera;
     endboss_speed = 4;
     endbossEnergy = 100;
+
+    chickenHurtSound = new Audio('audio/chicken_hurtSound.mp3')
     endboss_getsAngry = [
         'img/4_enemie_boss_chicken/2_alert/G5.png',
         'img/4_enemie_boss_chicken/2_alert/G6.png',
@@ -111,7 +113,10 @@ class endboss extends MovableObject {
 
             if(this.isCollidingWithEndboss()){
                 this.endbossEnergy -= 7,5
-                this.endbossHurt()  
+                this.endbossHurt();
+                if(localStorage.getItem('muteStatus') == 'true'){}else{
+                this.chickenHurtSound.volume = 0.3
+                this.chickenHurtSound.play();}
                 console.log('bottle hit Endboss Energy: ', this.endbossEnergy)
             }
             

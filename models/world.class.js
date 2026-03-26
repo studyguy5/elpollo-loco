@@ -82,7 +82,7 @@ class World {
         this.drawDeathChicken();
         this.drawMiniChickenWaling();
         this.drawCoins()
-        
+
     }
 
     img;
@@ -90,7 +90,7 @@ class World {
 
     lastHit = 0;
     timePassed = 0;
-
+    hitSound = new Audio('./audio/hit_sound.wav')
 
     //=============================================
 
@@ -110,7 +110,7 @@ class World {
         this.level.endboss.endbossEnergy;
         // console.log('Energy of Character ', this.Character.energy);
         this.endbossHealthBar.setEndbossHealthImage(this.level.endboss.endbossEnergy)
-        
+
     }
 
     isHurt() {
@@ -144,15 +144,16 @@ class World {
     d_wasPressed = false;
     drawOtherDirection = false;
     coinAmount = 0;
-    checkCollisionWithCoins(){
+    checkCollisionWithCoins() {
         this.level.coins.forEach((coins) => {
-            if(this.isCollidingWidth_Coin(coins)){
+            if (this.isCollidingWidth_Coin(coins)) {
                 coins.y = 500;
                 this.coinAmount++;
                 this.coinBar.setCoinImage(this.coinAmount)
                 // hier noch die StatusBar der Coins verändern
             }
-        })}
+        })
+    }
 
     checkCollisionWidth_Bottles() {
 
@@ -169,15 +170,15 @@ class World {
                 this.throwableObjects.push(bottle);
                 let index = (this.throwableObjects?.length - 1)
                 console.log(this.throwableObjects.length);
-                if(this.Character.otherDirection){
+                if (this.Character.otherDirection) {
                     console.log(this.Character.otherDirection);
-                this.throwableObjects[index]?.throw(-35, this)
-            }else{this.throwableObjects[index]?.throw(35, this)}
+                    this.throwableObjects[index]?.throw(-35, this)
+                } else { this.throwableObjects[index]?.throw(35, this) }
                 this.collected--
                 this.d_wasPressed = true;
             }
 
-            if(this.d_wasPressed && this.Keyboard.d == false){
+            if (this.d_wasPressed && this.Keyboard.d == false) {
                 this.d_wasPressed = false
             }
 
@@ -187,88 +188,97 @@ class World {
 
 
     checkColliding_PlayHurt_andDeleyChicken() {
-        this.level.enemies.forEach((enemies) => {            
+        this.level.enemies.forEach((enemies) => {
             if (this.Character.isChrushingChicken(enemies)) {
                 console.log('chicken gechrushed')
+                this.Character.y - 50 // test
                 this.Character.makeInvincible(3)
                 enemies.chrushChicken()
             }
 
-            
-            if(this.isCollidingWithChicken(enemies)){ //check if throwable Bottle is colliding with enemie
+
+            if (this.isCollidingWithChicken(enemies)) { //check if throwable Bottle is colliding with enemie
                 console.log('chicken getroffen')
                 enemies.chrushChicken(enemies);
                 // this.throwableObjects[0]?.splashBottle();
             }
-            
+
             if (this.Character.isColliding(enemies)) {
-                if(!this.Character.isInvincible()){
+                if (!this.Character.isInvincible()) {
                     this.hit()
                     this.Character.playHurtAnimation(this.isHurt);
+                    if (localStorage.getItem('muteStatus') == 'true') { } else {
+                        this.hitSound.volume = 0.6
+                        this.hitSound.play();
+                    }
                 }
             }
-            
+
             if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
-                if(!this.Character.isInvincible()){
+                if (!this.Character.isInvincible()) {
                     this.Character.playHurtAnimation(this.isHurt);
                 }
             }
-            
+
             if (this.timePassed > 2) {
                 if (this.timePassed > 30) { this.timePassed = 0 }
-                
+
             }
         });
     }
 
     checkColliding_PlayHurt_andDeleyMiniChicken() {
-        this.level.miniEnemies.forEach((miniEnemies) => {            
+        this.level.miniEnemies.forEach((miniEnemies) => {
             if (this.Character.isChrushingMiniChicken(miniEnemies)) {
                 console.log('MiniChicken gechrushed')
                 this.Character.makeInvincible(3)
                 miniEnemies.chrushMiniChicken(miniEnemies)
             }
 
-            
+
             //checks if a throwable bottle is colliding with a miniEnemie
-            if(this.isCollidingWithMiniChicken(miniEnemies)){ 
+            if (this.isCollidingWithMiniChicken(miniEnemies)) {
                 console.log('chicken getroffen')
                 miniEnemies.chrushMiniChicken(miniEnemies);
                 // this.throwableObjects[0]?.splashBottle();
             }
-            
+
             if (this.Character.isCollidingMiniChicken(miniEnemies)) {
-                if(!this.Character.isInvincible()){
+                if (!this.Character.isInvincible()) {
                     this.hit()
                     this.Character.playHurtAnimation(this.isHurt);
+                    if (localStorage.getItem('muteStatus') == 'true') { } else {
+                        this.hitSound.volume = 0.6
+                        this.hitSound.play();
+                    }
                 }
             }
-            
+
             if (!this.Character.isCollidingMiniChicken(miniEnemies) && this.lastHit > 0 && this.isHurt()) {
-                if(!this.Character.isInvincible()){
+                if (!this.Character.isInvincible()) {
                     this.Character.playHurtAnimation(this.isHurt);
                 }
             }
-            
+
             if (this.timePassed > 2) {
                 if (this.timePassed > 30) { this.timePassed = 0 }
-                
+
             }
         });
     }
 
-    isCollidingWithChicken(enemies){
+    isCollidingWithChicken(enemies) {
         return (
-            (this.Character.x + (this.throwableObjects[0]?.x -120)) + this.throwableObjects[0]?.width > enemies.x &&
+            (this.Character.x + (this.throwableObjects[0]?.x - 120)) + this.throwableObjects[0]?.width > enemies.x &&
             (this.Character.x + (this.throwableObjects[0]?.x - 120)) < enemies.x + enemies.width &&
             this.throwableObjects[0]?.y < enemies.y + enemies.height &&
             this.throwableObjects[0]?.y + this.throwableObjects[0]?.height > enemies.y
         );
     }
 
-    isCollidingWithMiniChicken(miniEnemies){
+    isCollidingWithMiniChicken(miniEnemies) {
         return (
-            (this.Character.x + (this.throwableObjects[0]?.x -120)) + this.throwableObjects[0]?.width > miniEnemies.x &&
+            (this.Character.x + (this.throwableObjects[0]?.x - 120)) + this.throwableObjects[0]?.width > miniEnemies.x &&
             (this.Character.x + (this.throwableObjects[0]?.x - 120)) < miniEnemies.x + miniEnemies.width &&
             this.throwableObjects[0]?.y < miniEnemies.y + miniEnemies.height &&
             this.throwableObjects[0]?.y + this.throwableObjects[0]?.height > miniEnemies.y
@@ -328,7 +338,7 @@ class World {
         );
     }
 
-    
+
 
     checkCollision_PlayHurt_andDeleyEndboss() {
         this.level.endboss.forEach((endboss) => {
@@ -405,16 +415,16 @@ class World {
 
 
 
-//=============miniChicken ===============================
-drawMiniChickenWaling(){
-    this.addMiniChickenWalkingToMap(this.level.miniEnemies);
+    //=============miniChicken ===============================
+    drawMiniChickenWaling() {
+        this.addMiniChickenWalkingToMap(this.level.miniEnemies);
         let self = this;
         requestAnimationFrame(function () {
             self.drawMiniChickenWaling()
         })
-}
+    }
 
-addMiniChickenWalkingToMap(objects) {
+    addMiniChickenWalkingToMap(objects) {
         objects.forEach((o) => {
             this.addminiChickenWalkingToMap(o)
         })
@@ -428,7 +438,7 @@ addMiniChickenWalkingToMap(objects) {
         this.ctx.translate(-this.camera_x, 0)
     }
 
-//=============EndbossAngry====================================
+    //=============EndbossAngry====================================
     drawEndboss() {
         this.addEndbossToMap(this.level.endboss);
         let self = this;
@@ -480,26 +490,27 @@ addMiniChickenWalkingToMap(objects) {
     previousX;
 
     //===========EndbossHealthbar=======================
-    drawEndbossHealthbar(){
+    drawEndbossHealthbar() {
         this.addEndbossHealthStatusToMap(this.endbossHealthBar)
         let self = this;
-        requestAnimationFrame(function (){
+        requestAnimationFrame(function () {
             self.drawEndbossHealthbar()
         })
     }
 
-    addEndbossHealthStatusToMap(endbossHealthBar){
+    addEndbossHealthStatusToMap(endbossHealthBar) {
         this.drawEndbossHealthStatusToMap(this.ctx, endbossHealthBar)
     }
 
-    drawEndbossHealthStatusToMap(ctx, endbossHealthBar){
-        if(endbossHealthBar.img){
-        try{
-            ctx.drawImage(this.endbossHealthBar.img, endbossHealthBar.x, endbossHealthBar.y, endbossHealthBar.width, endbossHealthBar.height);
-        } catch (error){
-            console.warn('Konnte nicht geladen werden', error)
-            console.log('Fehler bei ', this.img)
-        }}
+    drawEndbossHealthStatusToMap(ctx, endbossHealthBar) {
+        if (endbossHealthBar.img) {
+            try {
+                ctx.drawImage(this.endbossHealthBar.img, endbossHealthBar.x, endbossHealthBar.y, endbossHealthBar.width, endbossHealthBar.height);
+            } catch (error) {
+                console.warn('Konnte nicht geladen werden', error)
+                console.log('Fehler bei ', this.img)
+            }
+        }
     }
 
     //status Bar =================================
@@ -635,10 +646,10 @@ addMiniChickenWalkingToMap(objects) {
     }
 
     //==========Coins =======================================
-    drawCoins(){
+    drawCoins() {
         this.addCoinToMap(this.level.coins)
         let self = this;
-        requestAnimationFrame(function(){
+        requestAnimationFrame(function () {
             self.drawCoins()
         })
     }
@@ -653,12 +664,12 @@ addMiniChickenWalkingToMap(objects) {
     //     this.drawToMapCoins(this.ctx, coins)
     // }
 
-    drawToMapCoins(ctx, o){
-        try{
+    drawToMapCoins(ctx, o) {
+        try {
             this.ctx.translate(this.camera_x, 0)
             ctx.drawImage(o.img, o.x, o.y, o.width, o.height);
             this.ctx.translate(-this.camera_x, 0)
-        } catch(error){
+        } catch (error) {
             console.warn('Konnte nicht geladen werden', error)
             console.log('Fehler bei ', this.img)
         }

@@ -5,6 +5,7 @@ let Keyboard = new keyBoard();
 let startscreen;
 let endState;
 backgroundSound = new Audio('audio/background-music_short.mp3')
+backgroundSound.loop = true;
 
 function init() {
     canvas = document.getElementById('gameCanvas')
@@ -23,7 +24,7 @@ function init() {
 // })
 
 function playBackgroundMusic() {
-    backgroundSound.volume = 0.2
+    backgroundSound.volume = 0.15
     backgroundSound.play()
 
 }
@@ -323,7 +324,7 @@ window.addEventListener('touchend', (e) => {
 
 function renderControlButton() {
     let buttonField = document.getElementById('controlHudCharacter')
-    buttonField.innerHTML += `
+    buttonField.innerHTML += /*html */`
     <div class="MovePanel">
     <button class="btnLeft" id="btnLeft">Left</button>
     <button class="btnRight" id="btnRight">Right</button>
@@ -338,7 +339,7 @@ function renderControlButton() {
 
 function renderSoundButton() {
     let sound = document.getElementById('controlHudSound')
-    sound.innerHTML += `
+    sound.innerHTML += /*html */ `
     <div class="soundPanel" id="soundPanel">
     <img onclick="changeMuteStatus()" src="./img/muted_icon.jpg">
     <img onclick="changeToFullscreen()" src="./img/full-screen_logo.png">

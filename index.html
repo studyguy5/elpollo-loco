@@ -13,7 +13,8 @@
 <script>
 
     document.addEventListener('contextmenu', (e) => {
-        e.preventDefault();
+        if (e.pointerType === 'touch') {  // ✅ nur bei Touch
+        e.preventDefault();}
     });
 
 </script>

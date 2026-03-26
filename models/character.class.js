@@ -116,7 +116,7 @@ class character extends MovableObject {
     normal = null;
     long = null;
 
-    jumpsound = new Audio('/audio/jump_sound.mp3');
+    jumpsound = new Audio('/audio/jumpSound.mp3');
     walkSound = new Audio('/audio/character_walk.mp3')
     //==================change position of character when key is pressed
     Move_Character() {
@@ -129,8 +129,9 @@ class character extends MovableObject {
                 this.normalIdle = true;
                 this.sleepIdle = false;
                 this.jumpCharacter(this.jumpSpeed = 250);
+                if(localStorage.getItem('muteStatus') == 'true'){}else{
                 this.jumpsound.volume = 0.1;
-                this.jumpsound.play()
+                this.jumpsound.play()}
             }
             //Move right
             if (this.world.Keyboard.RIGHT && this.x < this.world.level.level_end_x) {
@@ -140,9 +141,10 @@ class character extends MovableObject {
                 this.long = null;
                 this.normalIdle = true;
                 this.sleepIdle = false;
-                this.walkSound.volume = 0.1;
-                this.walkSound.play()
                 this.moveRightCharacter(this.speed);
+                if(localStorage.getItem('muteStatus') == 'true'){}else{
+                this.walkSound.volume = 0.1;
+                this.walkSound.play()}
             }
             //Move left
             if (this.world.Keyboard.LEFT && this.x > 100) {
@@ -152,9 +154,10 @@ class character extends MovableObject {
                 this.long = null;
                 this.normalIdle = true;
                 this.sleepIdle = false;
-                this.walkSound.volume = 0.1;
-                this.walkSound.play()
                 this.moveLeftCharacter(this.speed);
+                if(localStorage.getItem('muteStatus') == 'true'){}else{
+                this.walkSound.volume = 0.1;
+                this.walkSound.play()}
             }
 
             if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT) {
@@ -228,10 +231,9 @@ class character extends MovableObject {
         return (console.log('isChrushing ', this.x, 'width ', this.width),
             this.x + this.width - this.offset.right > mo.x &&
             this.x + this.offsetCharacter.left < mo.x + mo.width &&
-            this.y + this.height - this.offsetCharacter.bottom <= mo.y  &&
-            this.y + this.height - this.offsetCharacter.bottom >= mo.y &&
-            this.speedY <= -0.3 &&
-            this.y < 120
+            this.y + this.height >= mo.y &&
+            this.y + this.height < mo.y + mo.height &&
+            this.speedY < 0
         );
     }
 
@@ -249,10 +251,9 @@ class character extends MovableObject {
         return( // it is easier without offset
             this.x + this.width - this.offsetCharacter.right > mo.x &&
             this.x + this.offsetCharacter.left < mo.x + mo.width &&
-            this.speedY <= -0.3 &&
-            this.y + this.height - this.offsetCharacter.bottom > mo.y  &&
-            this.y + this.height - this.offsetCharacter.bottom < mo.y &&
-            this.y < 120
+            this.speedY < 0 &&
+            this.y + this.height - this.offsetCharacter.bottom >= mo.y &&
+            this.y + this.height - this.offsetCharacter.bottom <= mo.y + 25
         );
     }
 
