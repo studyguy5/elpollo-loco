@@ -216,44 +216,47 @@ class character extends MovableObject {
             this.y + this.height - this.offset.bottom > endboss.y + endboss.offset.top);
     }
 
-
+// checks if the character is colliding with a normal chicken
     isColliding(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x &&
             this.x + this.offsetCharacter.left < mo.x + mo.width &&
             this.y + this.offsetCharacter.top < mo.y + mo.height &&
-            this.y + this.height - this.offsetCharacter.bottom > mo.y
+            this.y + this.height - this.offsetCharacter.bottom > mo.y + (mo.height * 0.9)
         );
 
     }
 
+    // checks if the character is chrushing a normal chicken
     isChrushingChicken(mo) { // it is easier without offset
         return (console.log('isChrushing ', this.x, 'width ', this.width),
             this.x + this.width - this.offset.right > mo.x &&
             this.x + this.offsetCharacter.left < mo.x + mo.width &&
-            this.y + this.height >= mo.y &&
-            this.y + this.height < mo.y + mo.height &&
-            this.speedY < 0
+            this.y + this.height - this.offsetCharacter.bottom >= mo.y  &&
+            this.speedY < 0 &&
+            this.y + this.height - this.offsetCharacter.bottom < mo.y + (mo.height * 0.6)
         );
     }
 
+    // checks if the character is colliding with a mini chicken
     isCollidingMiniChicken(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x &&
-            this.x < mo.x + mo.width &&
-            this.y < mo.y + mo.height &&
-            this.y + this.height - this.offsetCharacter.bottom > mo.y
+            this.x  + this.offsetCharacter.left < mo.x + mo.width &&
+            this.y + this.height - this.offsetCharacter.bottom >= mo.y + (mo.height * 0.9) &&
+            this.y + this.height - this.offsetCharacter.bottom <= mo.y 
         );
 
     }
 
+    // chrushing a mini Chicken
     isChrushingMiniChicken(mo) {
         return( // it is easier without offset
             this.x + this.width - this.offsetCharacter.right > mo.x &&
             this.x + this.offsetCharacter.left < mo.x + mo.width &&
             this.speedY < 0 &&
-            this.y + this.height - this.offsetCharacter.bottom >= mo.y &&
-            this.y + this.height - this.offsetCharacter.bottom <= mo.y + 25
+            this.y + this.height >= mo.y &&
+            this.y + this.height <= mo.y + (mo.height * 0.5)
         );
     }
 

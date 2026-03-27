@@ -1,7 +1,7 @@
 class ThrowableObject extends MovableObject {
 
     img;
-    img2;
+    
     x;
     y;
     width;
@@ -77,7 +77,7 @@ class ThrowableObject extends MovableObject {
     }
 
 
-    applyGravityBottle(speedX, ){
+    applyGravityBottle(speedX){
          this.x += speedX;
          this.y -= this.speedY;
          this.speedY -= this.acceleration

@@ -63,6 +63,8 @@ class MovableObject extends DrawableObjekt {
     }
 
     drawBackward(ctx) {
+        // this.ctx.translate(this.camera_x, 0)
+        // this.ctx.translate(-this.camera_x, 0)
         ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
     }
 

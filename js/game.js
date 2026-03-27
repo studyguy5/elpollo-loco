@@ -137,58 +137,18 @@ function startGame() {
     checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
 }
 
+let x = 0;
+
 function restartGame() {
-    // let dialog = document.getElementById('startDialog')
-    // dialog.style.display = "none";
     clearInterval(checkWinLoose);
     startscreen.hideStartScreen()
-    level1 = new Level([
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-    ],
-
-        [
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-
-        ],
-
-        [
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-        ],
-
-        [
-            new chicken(),
-            new chicken(),
-            new chicken(),
-            new chicken(),
-            new chicken(),
-            new chicken(),
-        ],
-
-        [
-            new cloud(),
-            new cloud(),
-            new cloud(),
-            new cloud(),
-        ],
+    level1 = new Level(
+        Array.from({ length: 10 }, () => new Coin()),
+        Array.from({ length: 6 }, () => new bottlesOnFloorObject()),
+        Array.from({ length: 6 }, () => new miniChicken()),
+        Array.from({ length: 6 }, () => new chicken()),
+        Array.from({ length: 4 }, () => new cloud()),
+        
 
         [
             new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
@@ -221,7 +181,6 @@ function restartGame() {
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
         ],
-
         [
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
@@ -246,53 +205,12 @@ function backToStartScreen() {
     end.innerHTML = "";
     end.style.display = "none"
     reloadInit();
-    level1 = new Level([
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-        new Coin(),
-    ],
-
-        [
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-            new bottlesOnFloorObject(),
-
-        ],
-
-        [
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-            new miniChicken(),
-        ],
-
-        [
-            new chicken(),
-            new chicken(),
-            new chicken(),
-            new chicken(),
-            new chicken(),
-            new chicken(),
-        ],
-
-        [
-            new cloud(),
-            new cloud(),
-            new cloud(),
-            new cloud(),
-        ],
+    level1 = new Level(
+        Array.from({ length: 10 }, () => new Coin()),
+        Array.from({ length: 6 }, () => new bottlesOnFloorObject()),
+        Array.from({ length: 6 }, () => new miniChicken()),
+        Array.from({ length: 6 }, () => new chicken()),
+        Array.from({ length: 4 }, () => new cloud()),
 
         [
             new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
@@ -351,105 +269,6 @@ function hideEndDialog() {
     let end = document.getElementById('endDialog')
     end.classList.remove('visible')
 }
-
-
-
-window.addEventListener('keydown', (e) => {
-    // e.preventDefault();  // ← Alle Keys blocken!
-    switch (e.key) {
-        case 'ArrowRight':
-            Keyboard.RIGHT = true; // variablen werden für gedrückte Tasten auf true gesetzt
-            let right = document.getElementById('LeftRight')
-            right.style.color = 'white';
-            break;
-        case 'ArrowLeft':
-            Keyboard.LEFT = true;
-            let left = document.getElementById('LeftRight')
-            left.style.color = 'white';
-            break;
-        case 'ArrowUp':
-            Keyboard.UP = true;
-            break;
-        case 'ArrowDown':
-            Keyboard.DOWN = true;
-            break;
-        case 'd':
-            Keyboard.d = true;
-            let d = document.getElementById('Shoot')
-            d.style.color = 'white';
-            break;
-        case ' ':
-            Keyboard.SPACE = true;
-            let space = document.getElementById('Jump')
-            space.style.color = 'white';
-            break;
-
-    }
-})
-
-
-window.addEventListener('keyup', (e) => {
-    switch (e.key) {
-        case 'ArrowUp':
-            Keyboard.UP = false; // variablen werden für losgelassene Tasten auf false gesetzt
-            break;
-        case 'ArrowDown':
-            Keyboard.DOWN = false;
-            break;
-        case 'ArrowRight':
-            Keyboard.RIGHT = false;
-            let test = document.getElementById('LeftRight')
-            test.style.color = 'black';
-            break;
-        case 'ArrowLeft':
-            Keyboard.LEFT = false;
-            let left = document.getElementById('LeftRight')
-            left.style.color = 'black';
-            break;
-        case 'd':
-            Keyboard.d = false;
-            let d = document.getElementById('Shoot')
-            d.style.color = 'black';
-            break;
-        case ' ':
-            Keyboard.SPACE = false;
-            let space = document.getElementById('Jump')
-            space.style.color = 'black';
-            break;
-    }
-})
-
-window.addEventListener('touchstart', (e) => {
-    switch (e.target.id) {
-        case 'btnLeft':
-            Keyboard.LEFT = true;
-            break;
-        case 'btnRight':
-            Keyboard.RIGHT = true;
-            break;
-        case 'btnShoot':
-            Keyboard.d = true; //shoot bottle
-            break;
-        case 'btnJump':
-            Keyboard.SPACE = true; // jump
-    }
-})
-
-window.addEventListener('touchend', (e) => {
-    switch (e.target.id) {
-        case 'btnLeft':
-            Keyboard.LEFT = false;
-            break;
-        case 'btnRight':
-            Keyboard.RIGHT = false;
-            break;
-        case 'btnShoot':
-            Keyboard.d = false;
-            break;
-        case 'btnJump':
-            Keyboard.SPACE = false;
-    }
-})
 
 
 function renderControlButton() {
@@ -546,22 +365,3 @@ function changeMuteStatus() {
     }
 }
 
-
-// function closeFullscreen() {
-//   if (document.exitFullscreen) {
-//     document.exitFullscreen();
-//   } else if (document.webkitExitFullscreen) { /* Safari */
-//     document.webkitExitFullscreen();
-//   } else if (document.msExitFullscreen) { /* IE11 */
-//     document.msExitFullscreen();
-//   }
-// }
-
-
-// window.addEventListener("orientationchange", () => {
-//   if (window.matchMedia("(orientation: landscape)").matches) {
-//     console.log("Jetzt Querformat");
-//   } else {
-//     console.log("Jetzt Hochformat");
-//   }
-// });
