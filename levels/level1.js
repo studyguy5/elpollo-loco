@@ -1,5 +1,5 @@
 
-
+/**this creates the first level */
 let level1 = new Level(
 
     [

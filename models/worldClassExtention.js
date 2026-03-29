@@ -1,12 +1,13 @@
 
+/**Here we check for collisions and for isChrushing with normal chickens */
 World.prototype.checkColliding_PlayHurt_andDeleyChicken = function(){
     
         this.level.enemies.forEach((enemies) => {
             if (this.Character.isChrushingChicken(enemies)) {
                 console.log('chicken gechrushed')
-                this.Character.y - 50 // test
                 this.Character.makeInvincible(3)
-                enemies.chrushChicken()
+                enemies.chrushChicken(enemies)
+                return;
             }
             if (this.isCollidingWithChicken(enemies)) { //check if throwable Bottle is colliding with enemie
                 console.log('chicken getroffen')
@@ -17,7 +18,7 @@ World.prototype.checkColliding_PlayHurt_andDeleyChicken = function(){
                 if (!this.Character.isInvincible()) {
                     this.hit()
                     this.Character.playHurtAnimation(this.isHurt);
-                    if (localStorage.getItem('muteStatus') == 'true') { } else {
+                    if (localStorage.getItem('muteStatus') == 'true'){ }else{
                         this.hitSound.volume = 0.6
                         this.hitSound.play();
                     }
@@ -36,6 +37,10 @@ World.prototype.checkColliding_PlayHurt_andDeleyChicken = function(){
     
 }
 
+
+/**Here we check for collisions and for isChrushing with normal mini chickens */
+
+
 World.prototype.checkColliding_PlayHurt_andDeleyMiniChicken = function(){
     this.level.miniEnemies.forEach((miniEnemies) => {
             if (this.Character.isChrushingMiniChicken(miniEnemies)) {
@@ -52,7 +57,7 @@ World.prototype.checkColliding_PlayHurt_andDeleyMiniChicken = function(){
                 if (!this.Character.isInvincible()) {
                     this.hit()
                     this.Character.playHurtAnimation(this.isHurt);
-                    if (localStorage.getItem('muteStatus') == 'true') { } else {
+                    if (localStorage.getItem('muteStatus') == 'true'){ }else{
                         this.hitSound.volume = 0.6
                         this.hitSound.play();
                     }
@@ -70,6 +75,7 @@ World.prototype.checkColliding_PlayHurt_andDeleyMiniChicken = function(){
         });
 }
 
+/**here we check for collisions with bottles */
 World.prototype.checkCollisionWidth_Bottles = function(){
             this.level.bottles.forEach((bottles) => {
             if (this.isCollidingWidth_Bottle(bottles)) {
@@ -98,4 +104,23 @@ World.prototype.checkCollisionWidth_Bottles = function(){
         )
     
 }
+
+/**here we check for collisions with the endboss and extend the hurt animation */
+World.prototype.checkCollision_PlayHurt_andDeleyEndboss = function(){
+        this.level.endboss.forEach((endboss) => {
+            if (this.Character.isCollidingWithEndboss(endboss)) {
+                this.hitEndboss()
+                this.Character.playHurtAnimation(this.isHurt);
+            }
+
+            if (!this.Character.isColliding(endboss) && this.lastHit > 0 && this.isHurt()) {
+                this.Character.playHurtAnimation(this.isHurt);
+            }
+
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+            }
+        })
+    }
+
 

@@ -1,7 +1,7 @@
 class ThrowableObject extends MovableObject {
 
     img;
-    
+
     x;
     y;
     width;
@@ -37,8 +37,8 @@ class ThrowableObject extends MovableObject {
         this.y = 260;
         this.width = 40;
         this.height = 80;
-        this.loadbottleRotationImages(this.bottle_Rotate_Images);
-        this.loadBottleSplashImages(this.bottle_SPLASH_Images);
+        this.loadImages(this.bottle_Rotate_Images);
+        this.loadImages(this.bottle_SPLASH_Images);
         this.loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png')
         this.loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_splash.png')
     }
@@ -49,44 +49,52 @@ class ThrowableObject extends MovableObject {
     speedY = 0;
     acceleration = 3;
     speedY = 15;
-    
 
+    /**here we handle the throwing of the bottle and the collision with the enemies and the endboss */
     throw(speedX, world) {
         this.intervalId = setStoppableInterval(() => {
             if (this.hit) return;
-            let enemiesC = world.level.enemies.some(e => world.isCollidingWithChicken(e));
-            let miniEnemiesC = world.level.miniEnemies.some(e => world.isCollidingWithMiniChicken(e));
-            let endbossC = world.isCollidingWithEndboss(world.level.endboss[0]);
+            const { enemiesC, miniEnemiesC, endbossC } = this.checkCollisionsWithBottle(world);
             console.log('collision mit Enemie ', enemiesC, 'collision mit MiniEnemie ', miniEnemiesC, 'collision mit endboss ', endbossC)
             if (enemiesC || miniEnemiesC || endbossC || this.y > 360) {
                 this.hit = true;
                 clearInterval(this.intervalId);
                 this.splashBottle()
-                return;
-            }
-            console.log('throw läuft ========================');
-            let path = this.bottle_Rotate_Images[this.currentRotateImage];
-            this.img = this.bottleRotateImage[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
-            this.currentRotateImage = (this.currentRotateImage + 1) % this.bottle_Rotate_Images.length;
-            console.log('koordinaten vom der Bottle ', this.x + 'x-achse', this.y + 'y-achse')
+                return;}
+            this.bottleRotation_Animation();
             this.applyGravityBottle(speedX)
-
         }, 1000 / 35);
-
-
     }
 
-
-    applyGravityBottle(speedX){
-         this.x += speedX;
-         this.y -= this.speedY;
-         this.speedY -= this.acceleration
+    /**here we play the bottle rotation animation */
+    bottleRotation_Animation() {
+        console.log('throw läuft ========================');
+        let path = this.bottle_Rotate_Images[this.currentRotateImage];
+        this.img = this.imageChache[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
+        this.currentRotateImage = (this.currentRotateImage + 1) % this.bottle_Rotate_Images.length;
+        console.log('koordinaten vom der Bottle ', this.x + 'x-achse', this.y + 'y-achse')
     }
 
+    /**here we check if the bottle is colliding with the enemies or the endboss and return true or false */
+    checkCollisionsWithBottle(world) {
+        let enemiesC = world.level.enemies.some(e => world.isCollidingWithChicken(e));
+        let miniEnemiesC = world.level.miniEnemies.some(e => world.isCollidingWithMiniChicken(e));
+        let endbossC = world.isCollidingWithEndboss(world.level.endboss[0]);
+        return { enemiesC, miniEnemiesC, endbossC };
+    }
+
+    /**here we apply gravity to the bottle */
+    applyGravityBottle(speedX) {
+        this.x += speedX;
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration
+    }
+
+    /**this animation appears when the bottle hits something */
     splashBottle() {
         setStoppableInterval(() => {
             let path = this.bottle_SPLASH_Images[this.currentBottleSplashImage]
-            this.img = this.bottleSplashImage[path];
+            this.img = this.imageChache[path];
             this.currentBottleSplashImage = (this.currentBottleSplashImage + 1) % this.bottle_SPLASH_Images.length
         }, 1000 / 5)
     }

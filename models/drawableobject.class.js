@@ -1,24 +1,8 @@
 class DrawableObjekt {
 
-
-    characterImages = {};
-    chickenImages = {};
-    endbossAngryImages = {};
-    endboss_WalkingImage = {};
-    endboss_AttackImages = {};
-    hurtImages = {};
-    deathImages = {};
-    endbossHurtImage = {};
-    endbossDeathImage = {};
-    idleImages = {};
-    longIdleImages = {};
-    statusBottleImages = {};
-    statusHealthImage = {};
-    statusCoinImage = {};
-    statusEndbossHealthImage = {};
-    bottleRotateImage = {};
-    bottleSplashImage = {};
-    smallChickenWalksImage = {};
+    imageChache = {};
+    
+    
     subtrahendMax = -20;
     ctx;
     canvas;
@@ -32,8 +16,10 @@ class DrawableObjekt {
     constructor() {
         const canvas = document.getElementById('gameCanvas');
         this.ctx = canvas.getContext('2d');
+        
     }
 
+    /**here we draw some single images whithout animation for the drawable object */
     loadImage(path) {
         this.img = new Image()
         this.img.src = path;
@@ -41,222 +27,30 @@ class DrawableObjekt {
     }
 
     
-
+    /**here we draw the image for the drawable object */
     draw(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
-
+    /**here we draw the image for the drawable object in the other direction */
     drawBackward(ctx) {
         ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
     }
-
+    /**here we draw the background images for the world */
     drawBackground(ctx) {
         ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
     }
-
-
-
-    //==========load Images ========================================
-
-
-
-
-
-    loadChickenImages(arr) {
-        // Array.isArray(arr) && 
+    
+    
+    /**here we load all Images from all classes into the image cache */
+    loadImages(arr) { 
         arr.forEach((path) => {
             let img = new Image()
             img.src = path;
-            this.chickenImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
+            this.imageChache[path] = img; 
         })
     }
 
 
-    loadbottleRotationImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.bottleRotateImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    }
 
-    loadBottleSplashImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.bottleSplashImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der chickenImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    }
 
-    loadImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.characterImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadImagesStatus(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.statusBottleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadImagesStatushealth(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.statusHealthImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadImageStatusCoin(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.statusCoinImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadImageStatusEndbossHealth(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.statusEndbossHealthImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadIdleImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.idleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der idleImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    }
-
-    loadLongIdleImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.longIdleImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der idleImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    }
-
-    loadJumpImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.characterImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der characterImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadHurtImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.hurtImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der hurtImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadDeathImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.deathImages[path] = img;
-        })
-    }
-
-    loadEndbossImages(arr) {
-        // console.log('loadEndbossImages', arr)
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.endbossAngryImages[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadEndbossWalkingImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.endboss_WalkingImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadEndbossHurtImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.endbossHurtImage[path] = img; //hier legen wir den Pfad als key und value in einem Objekt ab, 
-            // also der key besteht aus dem path und der value besteht aus dem img-Objekt, 
-            // damit wir später mit diesem Pfad die Bilder in der endbossImages Objekt ansprechen können, um sie dann zu animieren
-        })
-    };
-
-    loadEndbossAttackImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.endboss_AttackImages[path] = img; 
-        })
-    };
-
-    loadEndbossDeathImages(arr) {
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.endbossDeathImage[path] = img; 
-        })
-    };
-
-    loadminiChickenWalkImages(arr) {
-        // Array.isArray(arr) && 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.smallChickenWalksImage[path] = img;
-        })
-    }
 }

@@ -65,8 +65,8 @@ class World {
         this.canvas = canvas;
         this.Keyboard = Keyboard;
         this.drawBackgroundLayers();
-        this.drawCharacter();
         this.drawObjects();
+        this.drawCharacter();
         this.checkCharacter_State();
         this.reportBottleLenght();
     }
@@ -80,7 +80,7 @@ class World {
     //=============================================
 
     hit() {
-        this.Character.energy -= 2;
+        this.Character.energy -= 0.3;
         this.healthBar.sethealthImage(this.Character.energy)
         if (this.Character.energy < 0) {
             this.Character.energy = 0;
@@ -97,7 +97,7 @@ class World {
     isHurt() {
         this.timePassed = new Date().getTime() - this.lastHit;
         this.timePassed = this.timePassed / 1000;
-        return this.timePassed == 10 ? this.timePassed = 0 : "", this.timePassed < 2; //fragt ab wie lange es schon dauert
+        return  this.timePassed < 1.5; //fragt ab wie lange es schon dauert
     }
 
 
@@ -105,12 +105,12 @@ class World {
         setStoppableInterval(() => {
             this.checkColliding_PlayHurt_andDeleyChicken()
             this.checkColliding_PlayHurt_andDeleyMiniChicken()
-            this.checkIfDeath(this.Character)
             this.checkThrowObjects() //responsible for bottle bar lenght
-        }, 1000 / 10)
+            this.checkCollision_PlayHurt_andDeleyEndboss()
+        }, 1000 / 60)
         //==============================================
         setStoppableInterval(() => {
-            this.checkCollision_PlayHurt_andDeleyEndboss()
+            this.checkIfDeath(this.Character)
             this.checkIfDeath(this.Character)
         }, 1000 / 10);
 
@@ -118,7 +118,7 @@ class World {
             this.checkCollisionWithCoins()
             this.checkCollisionWidth_Bottles();
             this.cutBottleFrom_Array();
-        }, 1000 / 10);
+        }, 1000 / 60);
     }
 
     collected = 0;
@@ -204,23 +204,6 @@ class World {
         );
     }
 
-
-    checkCollision_PlayHurt_andDeleyEndboss() {
-        this.level.endboss.forEach((endboss) => {
-            if (this.Character.isCollidingWithEndboss(endboss)) {
-                this.hitEndboss()
-                this.Character.playHurtAnimation(this.isHurt);
-            }
-
-            if (!this.Character.isColliding(endboss) && this.lastHit > 0 && this.isHurt()) {
-                this.Character.playHurtAnimation(this.isHurt);
-            }
-
-            if (this.timePassed > 2) {
-                if (this.timePassed > 30) { this.timePassed = 0 }
-            }
-        })
-    }
 
     isCollidingWithEndboss(endboss) {
         return (this.Character.x + this.Character.width > endboss.x &&

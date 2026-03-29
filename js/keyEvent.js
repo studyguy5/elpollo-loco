@@ -1,3 +1,5 @@
+
+/**here we listen for keydown events to controle gamePlay */
 window.addEventListener('keydown', (e) => {
     // e.preventDefault();  // ← Alle Keys blocken!
     switch (e.key) {
@@ -31,7 +33,7 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
-
+/**here we listen for keyup events to controle gamePlay */
 window.addEventListener('keyup', (e) => {
     switch (e.key) {
         case 'ArrowUp':
@@ -63,6 +65,7 @@ window.addEventListener('keyup', (e) => {
     }
 })
 
+/**here we listen for touch Start events to control gamePlay */
 window.addEventListener('touchstart', (e) => {
     switch (e.target.id) {
         case 'btnLeft':
@@ -79,6 +82,7 @@ window.addEventListener('touchstart', (e) => {
     }
 })
 
+/**here we listen for touch End events to control gamePlay */
 window.addEventListener('touchend', (e) => {
     switch (e.target.id) {
         case 'btnLeft':

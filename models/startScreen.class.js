@@ -18,17 +18,19 @@ class StartScreen {
         this.drawStartScreen()
     }
 
+    /**here we clear the start screen to start the game */
     hideStartScreen(){
         this.ctx.clearRect(0, 0, this.width, this.height)
     }
 
-
+    /**here we load the start screen image */
     loadStartScreen(path) {
         this.img = new Image();
         this.img.src = path;
 
     }
 
+    /**here we draw the start screen */
     drawStartScreen() {
         // this.ctx.clearRect(0, 0, this.width, this.height);
         this.addStartScreenToMap(this.img)
@@ -38,10 +40,12 @@ class StartScreen {
         })
     }
     
+    /**here we add the start screen to the map */
     addStartScreenToMap() {
         this.drawStartScreenToMap(this.ctx, this.img)
     }
     
+    /**here we draw the start screen to the map */
     drawStartScreenToMap(ctx, img) {
         try {
             

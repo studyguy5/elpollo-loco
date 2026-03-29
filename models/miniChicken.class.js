@@ -16,7 +16,7 @@ smallChickenWalk = [
 
     constructor(){
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png')
-        this.loadminiChickenWalkImages(this.smallChickenWalk)
+        this.loadImages(this.smallChickenWalk)
         this.x = 400 + Math.random() *3000;
         this.y = 365;
         // this.animateMiniChicken()      
@@ -29,7 +29,7 @@ smallChickenWalk = [
         this.miniChickenIntervall = setStoppableInterval(() => {
             this.x -=this.walkingSpeed;
             let path = this.smallChickenWalk[this.currentMiniChickenImage];
-            this.img = this.smallChickenWalksImage[path];
+            this.img = this.imageChache[path];
             this.currentMiniChickenImage = (this.currentMiniChickenImage + 1) % this.smallChickenWalk.length;
         }, 1000/24);
     }

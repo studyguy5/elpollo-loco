@@ -58,11 +58,11 @@ class endboss extends MovableObject {
 
     constructor(x = 0) {
         super().loadImage(this.endboss_getsAngry[0])
-        this.loadEndbossImages(this.endboss_getsAngry)
-        this.loadEndbossWalkingImages(this.endboss_Moves_Left)
-        this.loadEndbossHurtImages(this.endboss_Is_Hurt)
-        this.loadEndbossDeathImages(this.endboss_IS_Death);
-        this.loadEndbossAttackImages(this.endboss_IS_Attacking)
+        this.loadImages(this.endboss_getsAngry)
+        this.loadImages(this.endboss_Moves_Left)
+        this.loadImages(this.endboss_Is_Hurt)
+        this.loadImages(this.endboss_IS_Death);
+        this.loadImages(this.endboss_IS_Attacking)
         this.x = x;
         this.y = 80;
         this.height = 400;
@@ -80,99 +80,110 @@ class endboss extends MovableObject {
     attackjump = 30;
     gravity = 6;
     jumped = false;
-    //load images of endboss ==== zusammenfassen: alle arraybenennungen ersetzen mit einem allgemeinen namen, z.b images
+
+    /**here we open two intervals in order to check distance and health */
     animateEndboss() {
         setStoppableInterval(() => {
-            if((this.camera?.Character.x + 400) > this.x && !this.isDeath()){
-                this.endbossIsAngry()
-            }
-            if((this.camera?.Character.x + 300) > this.x && !this.isDeath()) {
-                this.x -= this.endboss_speed
-                this.endboss_Walking()
-                console.log(this.camera.Character.x)
-            }
-            
-            if(((this.camera?.Character.x + 300) > this.x && !this.isDeath() && !this.jumped) || this.y < 70){
-                if(this.y < 90){
-                this.jumped = true;
-                this.y  -=this.attackjump;
-                this.x -=this.endboss_speed;
-                this.attackjump -= this.gravity;
-                this.endbossAttacking()
-                setTimeout(() => {
-                    this.jumped = false;
-                }, 3000);
-            }
-                if(this.y > 80){
-                    this.y = 80;
-                    this.attackjump = 30;
-                    console.log(this.y);
-                }
-                
-            }
-
-            if(this.isCollidingWithEndboss()){
-                this.endbossEnergy -= 5,5
-                this.endbossHurt();
-                if(localStorage.getItem('muteStatus') == 'true'){}else{
-                this.chickenHurtSound.volume = 0.3
-                this.chickenHurtSound.play();}
-                console.log('bottle hit Endboss Energy: ', this.endbossEnergy)
-            }
-            
+            this.checkDistanceToCharacter_And_Act();
         }, 1000 / 10);
-        
         setStoppableInterval(() => {
-            if(this.isDeath()){
+            if (this.isDeath()) {
                 this.endbossDeath()
             }
-            
         }, 600);
-        
     }
 
-    // endbossIsAboveGround(){
+    /**here we check the distance to the endboss and if the character isColliding with the endboss and act accordingly */
+    checkDistanceToCharacter_And_Act() {
+        if ((this.camera?.Character.x + 400) > this.x && !this.isDeath()) {
+                this.endbossIsAngry()
+            }
+            if ((this.camera?.Character.x + 300) > this.x && !this.isDeath()) {
+                this.x -= this.endboss_speed
+                this.endboss_Walking()
+            }
+            if (((this.camera?.Character.x + 300) > this.x && !this.isDeath() && !this.jumped) || this.y < 70) {
+                this.endbossAttack_and_jump();
+            }
+            if (this.isCollidingWithEndboss()) {
+                this.endbossIsHurtActions();
+            }
+    }
 
-    //     return this.y < 81;
-    // }
+    /**here we handle the endboss attacks and jump animation and set Value back to start*/
+    endbossAttack_and_jump() {
+        if (this.y < 90) {
+            this.endbossJump();
+            this.endbossAttacking()
+        }
+        if (this.y > 80) {
+            this.y = 80;
+            this.attackjump = 30;
+            console.log(this.y);
+        }
+    }
 
-    isDeath(){
+    /**here we handle the endboss getting hurt and play sound */
+    endbossIsHurtActions() {
+        this.endbossEnergy -= 4;
+        this.endbossHurt();
+        if (localStorage.getItem('muteStatus') == 'true') { } else {
+            this.chickenHurtSound.volume = 0.3
+            this.chickenHurtSound.play();
+        }
+        console.log('bottle hit Endboss Energy: ', this.endbossEnergy)
+    }
+
+    /**here we handle the endboss jump and set jumped to true to avoid multiple jumps at the same time */
+    endbossJump() {
+        this.jumped = true;
+        this.y -= this.attackjump;
+        this.x -= this.endboss_speed;
+        this.attackjump -= this.gravity;
+        setTimeout(() => {
+            this.jumped = false;
+        }, 3000);
+    }
+
+    /**here we check if the endboss is dead */
+    isDeath() {
         return this.endbossEnergy < 0;
     }
 
-
-    endbossHurt(){
+    /**this is the endboss hurt animation  */
+    endbossHurt() {
         let path = this.endboss_Is_Hurt[this.currentHurtEndbossImage];
-        this.img = this.endbossHurtImage[path];
+        this.img = this.imageChache[path];
         this.currentHurtEndbossImage = (this.currentHurtEndbossImage + 1) % this.endboss_Is_Hurt.length;
     }
-
-    endbossAttacking(){
+    /**here we handle the endboss attack animation */
+    endbossAttacking() {
         let path = this.endboss_IS_Attacking[this.currentEndbossAttackImage];
-        this.img = this.endboss_AttackImages[path];
+        this.img = this.imageChache[path];
         this.currentEndbossAttackImage = (this.currentEndbossAttackImage + 1) % this.endboss_IS_Attacking.length;
     }
 
-    endbossDeath(){
+    /**here we handle the endboss death animation */
+    endbossDeath() {
         let path = this.endboss_IS_Death[this.currentEndbossDeathImage];
-        this.img = this.endbossDeathImage[path];
+        this.img = this.imageChache[path];
         this.currentEndbossDeathImage = (this.currentEndbossDeathImage + 1) % this.endboss_IS_Death.length;
     }
-
-    endboss_Walking(){
+    /**here we handle the endboss walking animation */
+    endboss_Walking() {
         let path = this.endboss_Moves_Left[this.currentEndbossMoveImage];
-        this.img = this.endboss_WalkingImage[path];
+        this.img = this.imageChache[path];
         this.currentEndbossMoveImage = (this.currentEndbossMoveImage + 1) % this.endboss_Moves_Left.length;
     }
-
-    endbossIsAngry(){
+    /**here we handle the endboss getting angry animation */
+    endbossIsAngry() {
         let path = this.endboss_getsAngry[this.currentEndbossImage];
-            this.img = this.endbossAngryImages[path];
-            this.currentEndbossImage = (this.currentEndbossImage + 1) % this.endboss_getsAngry.length;
+        this.img = this.imageChache[path];
+        this.currentEndbossImage = (this.currentEndbossImage + 1) % this.endboss_getsAngry.length;
     }
-
-    isCollidingWithEndboss(){
-        return ((this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120))  + this.camera?.throwableObjects[0]?.width > this.x &&
+    /**here we check if the character's bottle is colliding with the endboss */
+    isCollidingWithEndboss() {
+        return ((this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) + this.camera?.throwableObjects[0]?.width > this.x &&
             (this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) < this.x + this.width &&
             this.camera?.throwableObjects[0]?.y < this.y + this.height &&
             this.camera?.throwableObjects[0]?.y + this.camera?.throwableObjects[0]?.height > this.y);

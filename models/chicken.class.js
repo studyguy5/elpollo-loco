@@ -15,7 +15,7 @@ class chicken extends MovableObject {
 
     constructor() {
         super().loadImage('img/3_enemies_chicken/chicken_normal/1_walk/1_w.png')
-        this.loadChickenImages(this.chicken_WALKING)
+        this.loadImages(this.chicken_WALKING)
         //wir haben Zugriff auf die keys im MovableObjekt und sagen this.x = (....) und weisen hier in der chicken class jedem Chicken einen random x wert zu
         this.x = 600 + Math.random() * 3100;
         //die chickens sollen vorerst alle am boden sein, deshalb gesamthöhe mit eigene Höhe ergebit abstand von oben y = 0, x = 0  ist in diesem 2d canvas ganz links oben in der Ecke
@@ -25,15 +25,16 @@ class chicken extends MovableObject {
     }
 
     
-
+    /**this is the animation for the chicken to walk */
     animateChicken() {
         this.chickenIntervall = setStoppableInterval(() => {
             let path = this.chicken_WALKING[this.currentImage];
-            this.img = this.chickenImages[path];
+            this.img = this.imageChache[path];
             this.currentImage = (this.currentImage + 1) % this.chicken_WALKING.length;
         }, 1000 / 20);
     }
 
+    /**this is the animation for the chicken to crush */
     chrushChicken() {
         this.loadImage('img/3_enemies_chicken/chicken_normal/2_dead/dead.png')
         clearInterval(this.chickenIntervall)

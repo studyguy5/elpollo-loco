@@ -40,10 +40,10 @@ class statusBar extends DrawableObjekt {
         this.width = width;
         this.height = height;
         this.statusBarr = statusBarr
-        this.loadImagesStatus(statusBarr)
-        this.loadImagesStatushealth(statusBarr)
-        this.loadImageStatusCoin(statusBarr)
-        this.loadImageStatusEndbossHealth(statusBarr)
+        this.loadImages(statusBarr)
+        // this.loadImages(statusBarr)
+        // this.loadImages(statusBarr)
+        // this.loadImages(statusBarr)
         this.setbottleImage(0)
         this.sethealthImage(100)
         this.setCoinImage(0)
@@ -57,14 +57,14 @@ class statusBar extends DrawableObjekt {
             if(this.world.Character.x > (719 * 3.5))
             this.setEndbossHealthImage(this.world.level.endboss[0].endbossEnergy)
         
-        }, 719*3.5);
+        }, 1000);
         }
 
     setbottleImage() {
         // this.percentige = ThrowableObject
         if(this.statusBarr[0].includes('bottle', 0)){;
         let path = this.statusBarr[this.world.reportBottleLenght()];
-        this.img = this.statusBottleImages[path];
+        this.img = this.imageChache[path];
         // console.log(this.img);
     }
     }
@@ -73,7 +73,7 @@ class statusBar extends DrawableObjekt {
         if(this.statusBarr[0].includes('health', 0)){
         this.percentige = this.energy;
         let path = this.statusBarr[this.setPercentige(energy)];
-        this.img = this.statusHealthImage[path];}
+        this.img = this.imageChache[path];}
         // console.log(this.img);
     }
 
@@ -81,14 +81,14 @@ class statusBar extends DrawableObjekt {
         if(this.statusBarr[0].includes('coin', 0)){
         
         let path = this.statusBarr[this.checkCoinAmount(coinAmount)];
-        this.img = this.statusCoinImage[path];}
+        this.img = this.imageChache[path];}
         console.log(this.img);
     }
 
     setEndbossHealthImage(endbossEnergy){
         if(this.statusBarr[0].includes('endboss', 0)){
             let path = this.statusBarr[this.setEndbossPercentige(endbossEnergy)]
-            this.img = this.statusEndbossHealthImage[path];
+            this.img = this.imageChache[path];
         }
     }
 
