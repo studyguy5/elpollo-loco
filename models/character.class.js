@@ -231,7 +231,7 @@ class character extends MovableObject {
 
     /**this checks if the character is chrushing a normal chicken */
     isChrushingChicken(mo) { // it is easier without offset
-        return (console.log('isChrushing ', this.x, 'width ', this.width, 'speedY ', this.speedY),
+        return (
             this.x + this.width - this.offset.right > mo.x &&
             this.x + this.offsetCharacter.left < mo.x + mo.width &&
             this.y + this.height - this.offsetCharacter.bottom >= mo.y + this.offset.top &&
@@ -254,7 +254,7 @@ class character extends MovableObject {
 
     /**this checks if the character is chrushing a mini chicken */
     isChrushingMiniChicken(mo) {
-        return ( // it is easier without offset
+        return (
             this.x + this.width - this.offsetCharacter.right > mo.x &&
             this.x + this.offsetCharacter.left < mo.x + mo.width &&
             this.y + this.height - this.offsetCharacter.bottom >= mo.y + this.offsetMini.top &&

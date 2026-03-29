@@ -1,7 +1,6 @@
 
 /**here we listen for keydown events to controle gamePlay */
 window.addEventListener('keydown', (e) => {
-    // e.preventDefault();  // ← Alle Keys blocken!
     switch (e.key) {
         case 'ArrowRight':
             Keyboard.RIGHT = true; // variablen werden für gedrückte Tasten auf true gesetzt

@@ -49,8 +49,4 @@ class DrawableObjekt {
             this.imageChache[path] = img; 
         })
     }
-
-
-
-
 }

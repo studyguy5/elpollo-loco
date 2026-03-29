@@ -77,8 +77,8 @@ class World {
     timePassed = 0;
     hitSound = new Audio('./audio/hit_sound.wav')
 
-    //=============================================
-
+    
+    /**this function is called when the character is hit */
     hit() {
         this.Character.energy -= 0.3;
         this.healthBar.sethealthImage(this.Character.energy)
@@ -88,19 +88,20 @@ class World {
             this.lastHit = new Date().getTime()
         }
     }
-
+    /**here we updated the endboss health */
     hitEndboss() {
         this.level.endboss.endbossEnergy;
         this.endbossHealthBar.setEndbossHealthImage(this.level.endboss.endbossEnergy)
     }
 
+    /**here we make the hurt animation go on for further 1.5 seconds */
     isHurt() {
         this.timePassed = new Date().getTime() - this.lastHit;
         this.timePassed = this.timePassed / 1000;
         return  this.timePassed < 1.5; //fragt ab wie lange es schon dauert
     }
 
-
+    /**here we check the character's state, if he is colliding or hurt with/by enemies, mini Enemies and update statusbars */
     checkCharacter_State() {
         setStoppableInterval(() => {
             this.checkColliding_PlayHurt_andDeleyChicken()
@@ -125,6 +126,8 @@ class World {
     d_wasPressed = false;
     drawOtherDirection = false;
     coinAmount = 0;
+
+    /**here we check for collisions with coins */
     checkCollisionWithCoins() {
         this.level.coins.forEach((coins) => {
             if (this.isCollidingWidth_Coin(coins)) {
@@ -135,7 +138,7 @@ class World {
         })
     }
 
-
+    /**here we check for collisions with regular chickens */
     isCollidingWithChicken(enemies) {
         return (
             (this.Character.x + (this.throwableObjects[0]?.x - 120)) + this.throwableObjects[0]?.width > enemies.x &&
@@ -145,6 +148,7 @@ class World {
         );
     }
 
+    /**here we check for collisions with mini chickens */
     isCollidingWithMiniChicken(miniEnemies) {
         return (
             (this.Character.x + (this.throwableObjects[0]?.x - 120)) + this.throwableObjects[0]?.width > miniEnemies.x &&
@@ -154,6 +158,7 @@ class World {
         );
     }
 
+    /**here we report the bottle length for the status bar */
     reportBottleLenght() {
         if (this.collected < 6) {
             return this.collected;
@@ -164,6 +169,7 @@ class World {
         }
     }
 
+    /**here we cut a bottle from the array and update the statusbar */
     cutBottleFrom_Array() {
         if (this.Keyboard.d) {
             setTimeout(() => {
@@ -172,20 +178,20 @@ class World {
         }
     }
 
+    /**here we check the throw objects and update the status bar */
     checkThrowObjects() {
         this.bottleBar.setbottleImage()
-        console.log(this.throwableObjects.length)
     }
 
-
+    /**here we check if the character is dead */
     checkIfDeath() {
         if (this.Character.isDeath()) {
             this.Character.energy = 0;
             this.Character.playDeathAnimation();
-            console.log('Game Over');
         }
     }
 
+    /**here we check for collisions with bottles on the ground */
     isCollidingWidth_Bottle(bottles) {
         return (
             this.Character.x + this.Character.width - this.Character.offsetCharacter.right > bottles.x &&
@@ -195,6 +201,7 @@ class World {
         );
     }
 
+    /**here we check for collisions with coins */
     isCollidingWidth_Coin(coins) {
         return (
             this.Character.x + this.Character.width - this.Character.offsetCharacter.right > coins.x &&
@@ -205,6 +212,7 @@ class World {
     }
 
 
+    /**here we check for collisions with the end boss */
     isCollidingWithEndboss(endboss) {
         return (this.Character.x + this.Character.width > endboss.x &&
             this.Character.x < endboss.x + endboss.width &&
@@ -212,13 +220,14 @@ class World {
             this.Character.y + this.Character.height > endboss.y);
     }
 
+    /**here we link the world to the character, bottlebar and endboss objects */
     setWorld() {
         this.Character.world = this;
         this.bottleBar.worldStatus = this;
         this.level.endboss[0].camera = this;
     }
 
-
+    /**here we draw all objects on the canvas */
     drawObjects() {
         this.addObjektsToMap(this.level.enemies);
         this.addObjektsToMap(this.level.miniEnemies);
@@ -237,6 +246,7 @@ class World {
         })
     }
 
+    /**here we iterate through objects and add them to the map */
     addObjektsToMap(objects) {
         const arr = Array.isArray(objects) ? objects : [objects];
         arr.forEach((o) => {
@@ -245,6 +255,7 @@ class World {
     }
 
 
+    /**this function executes the drawing of an object on the map with the native drawImage function */
     drawToMap(o) {
         try {
             this.ctx.translate(this.camera_x, 0)
@@ -255,6 +266,7 @@ class World {
         }
     }
 
+    /**here we iterate through throw objects and add them to the map seperately */
     addObjektsToMapThrow(objects) {
         const arr = Array.isArray(objects) ? objects : [objects];
         arr.forEach((o) => {
@@ -262,6 +274,7 @@ class World {
         })
     }
 
+    /**here we draw throw objects on the map */
     drawToMapThrow(o) {
         try {
             this.ctx.drawImage(o.img, o.x, o.y, o.width, o.height);
@@ -269,8 +282,8 @@ class World {
             console.warn('Konnte nicht geladen werden', error)
         }
     }
-
-
+    
+    /**this function draws the character on the map */
     drawCharacter() {
         this.addTomap(this.Character)
         let self = this;
@@ -278,7 +291,8 @@ class World {
             self.drawCharacter()
         })
     }
-
+    
+    /**here we draw the background layers on the map */
     drawBackgroundLayers() {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.addBackgroundToMap(this.level.bg);
@@ -287,20 +301,33 @@ class World {
             self.drawBackgroundLayers()
         })
     }
-
-
-    //=============EndbossAngry====================================
+    
+    
+    /**here we iterate through background objects and add them to the map */
     addBackgroundToMap(objects) {
         objects.forEach((o) => {
             this.drawBackgroundToMap(o)
         })
     }
+
+
+    /**this function draws a background object on the map */
+    drawBackgroundToMap(mo) {
+        this.ctx.save();
+        this.ctx.translate(this.camera_x, 0)
+        mo.draw(this.ctx)
+        this.ctx.translate(-this.camera_x, 0)
+        this.ctx.restore();
+        // mo.drawRectangleForBackground(this.ctx, this.camera_x)
+    }
     previousX;
 
+    /**this function adds a bar to the map */
     addBarToMap(o) {
         this.drawBarToMap(this.ctx, o)
     }
 
+    /**this draws a bar on the map with the native drawImage function */
     drawBarToMap(ctx, o) {
         if (o.img) {
             try {
@@ -311,11 +338,12 @@ class World {
         }
     }
 
-    //=======================health Bar====================================================================
+    /**here we add a status bar to the map */
     addStatusToMap(o) {
         this.drawToMapBar(this.ctx, o)
     }
 
+    /**here we draw a status bar on the map */
     drawToMapBar(ctx, o) {
         try {
             ctx.drawImage(o.img, o.x, o.y, o.width, o.height);
@@ -324,6 +352,7 @@ class World {
         }
     }
 
+    /**this draws the character on the map normally and reversed */
     addTomap(mo) {
         if (!mo.otherDirection) {
             this.ctx.restore();
@@ -354,12 +383,4 @@ class World {
         }
     }
 
-    drawBackgroundToMap(mo) {
-        this.ctx.save();
-        this.ctx.translate(this.camera_x, 0)
-        mo.draw(this.ctx)
-        this.ctx.translate(-this.camera_x, 0)
-        this.ctx.restore();
-        mo.drawRectangleForBackground(this.ctx, this.camera_x)
-    }
 }

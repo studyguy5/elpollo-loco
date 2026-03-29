@@ -149,6 +149,7 @@ h3:hover {
 }
 
 .userInfo p{
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
     padding: 5px 20px;
     background-color: rgb(169, 169, 169, 0.7);
     border-radius: 30px;
@@ -218,7 +219,7 @@ h3:hover {
 /* =======Responsiv normal ================================ */
 @font-face {
     font-family: 'Zabars';
-    src: url('/font/zabars.ttf') format('truetype');
+    src: url('./font/zabars.ttf') format('truetype');
     /* Chrome 4+, Firefox 3.5, Opera 10+, Safari 3-5 */
 }
 

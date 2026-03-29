@@ -40,7 +40,7 @@ class ThrowableObject extends MovableObject {
         this.loadImages(this.bottle_Rotate_Images);
         this.loadImages(this.bottle_SPLASH_Images);
         this.loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png')
-        this.loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_splash.png')
+        this.loadImage('img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png')
     }
 
 
@@ -55,8 +55,8 @@ class ThrowableObject extends MovableObject {
         this.intervalId = setStoppableInterval(() => {
             if (this.hit) return;
             const { enemiesC, miniEnemiesC, endbossC } = this.checkCollisionsWithBottle(world);
-            console.log('collision mit Enemie ', enemiesC, 'collision mit MiniEnemie ', miniEnemiesC, 'collision mit endboss ', endbossC)
             if (enemiesC || miniEnemiesC || endbossC || this.y > 360) {
+                console.log('bottle hit something')
                 this.hit = true;
                 clearInterval(this.intervalId);
                 this.splashBottle()
@@ -68,18 +68,16 @@ class ThrowableObject extends MovableObject {
 
     /**here we play the bottle rotation animation */
     bottleRotation_Animation() {
-        console.log('throw läuft ========================');
         let path = this.bottle_Rotate_Images[this.currentRotateImage];
         this.img = this.imageChache[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
         this.currentRotateImage = (this.currentRotateImage + 1) % this.bottle_Rotate_Images.length;
-        console.log('koordinaten vom der Bottle ', this.x + 'x-achse', this.y + 'y-achse')
     }
 
     /**here we check if the bottle is colliding with the enemies or the endboss and return true or false */
     checkCollisionsWithBottle(world) {
         let enemiesC = world.level.enemies.some(e => world.isCollidingWithChicken(e));
         let miniEnemiesC = world.level.miniEnemies.some(e => world.isCollidingWithMiniChicken(e));
-        let endbossC = world.isCollidingWithEndboss(world.level.endboss[0]);
+        let endbossC = world.level.endboss.some(e => e.isCollidingWithEndboss(e));
         return { enemiesC, miniEnemiesC, endbossC };
     }
 
@@ -98,9 +96,4 @@ class ThrowableObject extends MovableObject {
             this.currentBottleSplashImage = (this.currentBottleSplashImage + 1) % this.bottle_SPLASH_Images.length
         }, 1000 / 5)
     }
-
-
-
-
-
 }

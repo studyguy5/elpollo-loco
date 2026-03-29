@@ -119,7 +119,6 @@ class endboss extends MovableObject {
         if (this.y > 80) {
             this.y = 80;
             this.attackjump = 30;
-            console.log(this.y);
         }
     }
 
@@ -131,7 +130,6 @@ class endboss extends MovableObject {
             this.chickenHurtSound.volume = 0.3
             this.chickenHurtSound.play();
         }
-        console.log('bottle hit Endboss Energy: ', this.endbossEnergy)
     }
 
     /**here we handle the endboss jump and set jumped to true to avoid multiple jumps at the same time */

@@ -4,13 +4,11 @@ World.prototype.checkColliding_PlayHurt_andDeleyChicken = function(){
     
         this.level.enemies.forEach((enemies) => {
             if (this.Character.isChrushingChicken(enemies)) {
-                console.log('chicken gechrushed')
                 this.Character.makeInvincible(3)
                 enemies.chrushChicken(enemies)
                 return;
             }
             if (this.isCollidingWithChicken(enemies)) { //check if throwable Bottle is colliding with enemie
-                console.log('chicken getroffen')
                 enemies.chrushChicken(enemies);
             }
 
@@ -44,13 +42,11 @@ World.prototype.checkColliding_PlayHurt_andDeleyChicken = function(){
 World.prototype.checkColliding_PlayHurt_andDeleyMiniChicken = function(){
     this.level.miniEnemies.forEach((miniEnemies) => {
             if (this.Character.isChrushingMiniChicken(miniEnemies)) {
-                console.log('MiniChicken gechrushed')
                 this.Character.makeInvincible(3)
                 miniEnemies.chrushMiniChicken(miniEnemies)
             }
             //checks if a throwable bottle is colliding with a miniEnemies
             if (this.isCollidingWithMiniChicken(miniEnemies)) {
-                console.log('chicken getroffen')
                 miniEnemies.chrushMiniChicken(miniEnemies);
             }
             if (this.Character.isCollidingMiniChicken(miniEnemies)) {
@@ -81,16 +77,13 @@ World.prototype.checkCollisionWidth_Bottles = function(){
             if (this.isCollidingWidth_Bottle(bottles)) {
                 bottles.y = 1000;
                 this.collected++
-                console.log(this.collected)
             }
 
             if (this.Keyboard.d == true && !this.d_wasPressed && this.collected > 0) {
                 let bottle = new ThrowableObject(this.Character.x, this.Character.y);
                 this.throwableObjects.push(bottle);
                 let index = (this.throwableObjects?.length - 1)
-                console.log(this.throwableObjects.length);
                 if (this.Character.otherDirection) {
-                    console.log(this.Character.otherDirection);
                     this.throwableObjects[index]?.throw(-35, this)
                 } else { this.throwableObjects[index]?.throw(35, this) }
                 this.collected--

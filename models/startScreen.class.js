@@ -54,7 +54,6 @@ class StartScreen {
         }
         catch (error) {
             console.warn('Konnte nicht geladen werden', error)
-            console.log('Fehler bei ', this.img)
         }
 
     }

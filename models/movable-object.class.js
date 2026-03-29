@@ -36,30 +36,30 @@ class MovableObject extends DrawableObjekt {
     }
 
 
-    drawRectangle(ctx, camera_x) {
-        if (this instanceof character) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.translate(camera_x, 0)
-            ctx.rect(this.x, this.y, this.width, this.height);
-            ctx.translate(-camera_x, 0)
-            ctx.stroke();
+    // drawRectangle(ctx, camera_x) {
+    //     if (this instanceof character) {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = '3';
+    //         ctx.strokeStyle = 'blue';
+    //         ctx.translate(camera_x, 0)
+    //         ctx.rect(this.x, this.y, this.width, this.height);
+    //         ctx.translate(-camera_x, 0)
+    //         ctx.stroke();
 
-        }
-    }
+    //     }
+    // }
 
-    drawRectangleForBackground(ctx, camera_x) {
-        if (this instanceof chicken || this instanceof miniChicken) {
-            ctx.beginPath();
-            ctx.lineWidth = '3';
-            ctx.strokeStyle = 'blue';
-            ctx.translate(camera_x, 0)
-            ctx.rect((this.x + this.offset.left), (this.y + this.offset.top), this.width, this.height);
-            ctx.translate(-camera_x, 0)
-            ctx.stroke();
-        }
-    }
+    // drawRectangleForBackground(ctx, camera_x) {
+    //     if (this instanceof chicken || this instanceof miniChicken) {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = '3';
+    //         ctx.strokeStyle = 'blue';
+    //         ctx.translate(camera_x, 0)
+    //         ctx.rect((this.x + this.offset.left), (this.y + this.offset.top), this.width, this.height);
+    //         ctx.translate(-camera_x, 0)
+    //         ctx.stroke();
+    //     }
+    // }
 
     /**here we draw the image for the movable object */
     draw(ctx) {
@@ -92,7 +92,6 @@ class MovableObject extends DrawableObjekt {
                 this.speedY = 0;
                 this.y = 125
             }
-            // console.log('applyGravity', this.speedY, this.y)   // dieser Prcess passiert 25 mal in der Sekunde, daher wird speedY immer kleiner und ab einer grenze stoppt der Prozess
         }, 1000 / 25);
     }
 
@@ -113,15 +112,12 @@ class MovableObject extends DrawableObjekt {
     moveLeftCharacter() {
         this.x -= this.speed;
         this.otherDirection = true;
-        // console.log(this.otherDirection)  
     }
 
     /**here we make the character jump */
     jumpCharacter() {
         this.y -= this.jumpSpeed; // hier setzen wir die y Position des Charakters um 150 höher, damit er springt, aber nur wenn er nicht schon in der Luft ist (isAboveGround)
         this.jump = true;
-        // this.jumpSpeed -= 0.13; // hier verringern wir die jumpSpeed um 1, damit der Charakter wieder runterkommt, aber nur wenn er in der Luft ist (isAboveGround)
-        console.log('Jumping', this.y, 'jumpSpeed ', this.jumpSpeed)
         setTimeout(() => {
             this.jump = false; // hier setzen wir jump wieder auf false, damit der Charakter wieder springen kann, aber erst nach 1 Sekunde, damit er nicht sofort wieder springen kann
         }, 600);

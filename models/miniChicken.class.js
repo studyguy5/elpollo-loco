@@ -18,13 +18,12 @@ smallChickenWalk = [
         super().loadImage('img/3_enemies_chicken/chicken_small/1_walk/1_w.png')
         this.loadImages(this.smallChickenWalk)
         this.x = 400 + Math.random() *3000;
-        this.y = 365;
-        // this.animateMiniChicken()      
+        this.y = 365;      
         this.MiniChickenWalk()
     }
 
     
-    
+    /**this function makes the mini chicken walk */
     MiniChickenWalk(){
         this.miniChickenIntervall = setStoppableInterval(() => {
             this.x -=this.walkingSpeed;
@@ -34,6 +33,7 @@ smallChickenWalk = [
         }, 1000/24);
     }
 
+    /**this function crashes the mini chicken */
     chrushMiniChicken() {
         this.loadImage('img/3_enemies_chicken/chicken_small/2_dead/dead.png')
         clearInterval(this.miniChickenIntervall)
