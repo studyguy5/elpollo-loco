@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/endboss.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/endboss.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class endboss extends MovableObject {
+
+    x;
+    y;
+    height;
+    width;
+    currentEndbossImage = 0;
+    currentEndbossMoveImage = 0;
+    currentEndbossDeathImage = 0;
+    currentHurtEndbossImage = 0;
+    currentEndbossAttackImage = 0;
+    camera;
+    endboss_speed = 4;
+    endbossEnergy = 100;
+
+    chickenHurtSound = new Audio('audio/chicken_hurtSound.mp3')
+    endboss_getsAngry = [
+        'img/4_enemie_boss_chicken/2_alert/G5.png',
+        'img/4_enemie_boss_chicken/2_alert/G6.png',
+        'img/4_enemie_boss_chicken/2_alert/G7.png',
+        'img/4_enemie_boss_chicken/2_alert/G8.png',
+        'img/4_enemie_boss_chicken/2_alert/G9.png',
+        'img/4_enemie_boss_chicken/2_alert/G10.png',
+        'img/4_enemie_boss_chicken/2_alert/G11.png',
+        'img/4_enemie_boss_chicken/2_alert/G12.png'
+    ]
+
+    endboss_Moves_Left = [
+        'img/4_enemie_boss_chicken/1_walk/G1.png',
+        'img/4_enemie_boss_chicken/1_walk/G2.png',
+        'img/4_enemie_boss_chicken/1_walk/G3.png',
+        'img/4_enemie_boss_chicken/1_walk/G4.png',
+    ]
+
+    endboss_Is_Hurt = [
+        'img/4_enemie_boss_chicken/4_hurt/G21.png',
+        'img/4_enemie_boss_chicken/4_hurt/G22.png',
+        'img/4_enemie_boss_chicken/4_hurt/G23.png',
+    ]
+
+    endboss_IS_Death = [
+        'img/4_enemie_boss_chicken/5_dead/G24.png',
+        'img/4_enemie_boss_chicken/5_dead/G25.png',
+        'img/4_enemie_boss_chicken/5_dead/G26.png'
+    ]
+
+    endboss_IS_Attacking = [
+        'img/4_enemie_boss_chicken/3_attack/G13.png',
+        'img/4_enemie_boss_chicken/3_attack/G14.png',
+        'img/4_enemie_boss_chicken/3_attack/G15.png',
+        'img/4_enemie_boss_chicken/3_attack/G16.png',
+        'img/4_enemie_boss_chicken/3_attack/G17.png',
+        'img/4_enemie_boss_chicken/3_attack/G18.png',
+        'img/4_enemie_boss_chicken/3_attack/G19.png',
+        'img/4_enemie_boss_chicken/3_attack/G20.png',
+    ]
+
+
+    constructor(x = 0) {
+        super().loadImage(this.endboss_getsAngry[0])
+        this.loadImages(this.endboss_getsAngry)
+        this.loadImages(this.endboss_Moves_Left)
+        this.loadImages(this.endboss_Is_Hurt)
+        this.loadImages(this.endboss_IS_Death);
+        this.loadImages(this.endboss_IS_Attacking)
+        this.x = x;
+        this.y = 80;
+        this.height = 400;
+        this.width = 400;
+        this.animateEndboss()
+    }
+
+    offset = { //setup Values for Offset here
+        top: 15,
+        left: 8,
+        right: 8,
+        bottom: 15
+    };
+
+    attackjump = 30;
+    gravity = 6;
+    jumped = false;
+
+    /**here we open two intervals in order to check distance and health */
+    animateEndboss() {
+        setStoppableInterval(() => {
+            this.checkDistanceToCharacter_And_Act();
+        }, 1000 / 10);
+        setStoppableInterval(() => {
+            if (this.isDeath()) {
+                this.endbossDeath()
+            }
+        }, 600);
+    }
+
+    /**here we check the distance to the endboss and if the character isColliding with the endboss and act accordingly */
+    checkDistanceToCharacter_And_Act() {
+        if ((this.camera?.Character.x + 400) > this.x &amp;&amp; !this.isDeath()) {
+                this.endbossIsAngry()
+            }
+            if ((this.camera?.Character.x + 300) > this.x &amp;&amp; !this.isDeath()) {
+                this.x -= this.endboss_speed
+                this.endboss_Walking()
+            }
+            if (((this.camera?.Character.x + 300) > this.x &amp;&amp; !this.isDeath() &amp;&amp; !this.jumped) || this.y &lt; 70) {
+                this.endbossAttack_and_jump();
+            }
+            if (this.isCollidingWithEndboss()) {
+                this.endbossIsHurtActions();
+            }
+    }
+
+    /**here we handle the endboss attacks and jump animation and set Value back to start*/
+    endbossAttack_and_jump() {
+        if (this.y &lt; 90) {
+            this.endbossJump();
+            this.endbossAttacking()
+        }
+        if (this.y > 80) {
+            this.y = 80;
+            this.attackjump = 30;
+        }
+    }
+
+    /**here we handle the endboss getting hurt and play sound */
+    endbossIsHurtActions() {
+        this.endbossEnergy -= 4;
+        this.endbossHurt();
+        if (localStorage.getItem('muteStatus') == 'true') { } else {
+            this.chickenHurtSound.volume = 0.3
+            this.chickenHurtSound.play();
+        }
+    }
+
+    /**here we handle the endboss jump and set jumped to true to avoid multiple jumps at the same time */
+    endbossJump() {
+        this.jumped = true;
+        this.y -= this.attackjump;
+        this.x -= this.endboss_speed;
+        this.attackjump -= this.gravity;
+        setTimeout(() => {
+            this.jumped = false;
+        }, 3000);
+    }
+
+    /**here we check if the endboss is dead */
+    isDeath() {
+        return this.endbossEnergy &lt; 0;
+    }
+
+    /**this is the endboss hurt animation  */
+    endbossHurt() {
+        let path = this.endboss_Is_Hurt[this.currentHurtEndbossImage];
+        this.img = this.imageChache[path];
+        this.currentHurtEndbossImage = (this.currentHurtEndbossImage + 1) % this.endboss_Is_Hurt.length;
+    }
+    /**here we handle the endboss attack animation */
+    endbossAttacking() {
+        let path = this.endboss_IS_Attacking[this.currentEndbossAttackImage];
+        this.img = this.imageChache[path];
+        this.currentEndbossAttackImage = (this.currentEndbossAttackImage + 1) % this.endboss_IS_Attacking.length;
+    }
+
+    /**here we handle the endboss death animation */
+    endbossDeath() {
+        let path = this.endboss_IS_Death[this.currentEndbossDeathImage];
+        this.img = this.imageChache[path];
+        this.currentEndbossDeathImage = (this.currentEndbossDeathImage + 1) % this.endboss_IS_Death.length;
+    }
+    /**here we handle the endboss walking animation */
+    endboss_Walking() {
+        let path = this.endboss_Moves_Left[this.currentEndbossMoveImage];
+        this.img = this.imageChache[path];
+        this.currentEndbossMoveImage = (this.currentEndbossMoveImage + 1) % this.endboss_Moves_Left.length;
+    }
+    /**here we handle the endboss getting angry animation */
+    endbossIsAngry() {
+        let path = this.endboss_getsAngry[this.currentEndbossImage];
+        this.img = this.imageChache[path];
+        this.currentEndbossImage = (this.currentEndbossImage + 1) % this.endboss_getsAngry.length;
+    }
+    /**here we check if the character's bottle is colliding with the endboss */
+    isCollidingWithEndboss() {
+        return ((this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) + this.camera?.throwableObjects[0]?.width > this.x &amp;&amp;
+            (this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) &lt; this.x + this.width &amp;&amp;
+            this.camera?.throwableObjects[0]?.y &lt; this.y + this.height &amp;&amp;
+            this.camera?.throwableObjects[0]?.y + this.camera?.throwableObjects[0]?.height > this.y);
+    }
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#backToStartScreen">backToStartScreen</a></li><li><a href="global.html#changeMuteStatus">changeMuteStatus</a></li><li><a href="global.html#changeToFullscreen">changeToFullscreen</a></li><li><a href="global.html#checkMuteStatus">checkMuteStatus</a></li><li><a href="global.html#checkWinLoose">checkWinLoose</a></li><li><a href="global.html#elem">elem</a></li><li><a href="global.html#endMaskForGame">endMaskForGame</a></li><li><a href="global.html#hideEndDialog">hideEndDialog</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#makeInfoVisible">makeInfoVisible</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#playBackgroundMusic">playBackgroundMusic</a></li><li><a href="global.html#reloadInit">reloadInit</a></li><li><a href="global.html#renderControlButton">renderControlButton</a></li><li><a href="global.html#renderInfo">renderInfo</a></li><li><a href="global.html#renderSoundButton">renderSoundButton</a></li><li><a href="global.html#resetFullscreen">resetFullscreen</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setLoosingEndscreen">setLoosingEndscreen</a></li><li><a href="global.html#setWinningEndscreen">setWinningEndscreen</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startMaskforGame">startMaskforGame</a></li><li><a href="global.html#stopAllIntervall">stopAllIntervall</a></li><li><a href="global.html#stopBubbling">stopBubbling</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Mar 29 2026 22:19:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

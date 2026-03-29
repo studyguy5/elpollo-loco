@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/movable-object.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/movable-object.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+class MovableObject extends DrawableObjekt {
+
+    /**here we define the offset for collision and chrushing detection */
+    offset = { //setup Values for Offset here
+        top: 15,
+        left: 20,
+        right: 20,
+        bottom: 30
+    };
+
+    /**here we define the offset for collision and chrushing detection for mini chickens */
+    offsetMini = { //setup Values for Offset here
+        top: 10,
+        left: 3,
+        right: 3,
+        bottom: 30
+    };
+
+
+    speed = 0.5;
+    speedY = 0;
+    acceleration = 2.8;
+    otherDirection = false;
+    energy = 100;
+    gravityInterval = null;
+
+    //=================bilder laden und zeichnen=====================================
+
+
+    /**here we load the image for the movable object */
+    loadImage(path) {
+        this.img = new Image()
+        this.img.src = path;
+
+    }
+
+
+    // drawRectangle(ctx, camera_x) {
+    //     if (this instanceof character) {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = '3';
+    //         ctx.strokeStyle = 'blue';
+    //         ctx.translate(camera_x, 0)
+    //         ctx.rect(this.x, this.y, this.width, this.height);
+    //         ctx.translate(-camera_x, 0)
+    //         ctx.stroke();
+
+    //     }
+    // }
+
+    // drawRectangleForBackground(ctx, camera_x) {
+    //     if (this instanceof chicken || this instanceof miniChicken) {
+    //         ctx.beginPath();
+    //         ctx.lineWidth = '3';
+    //         ctx.strokeStyle = 'blue';
+    //         ctx.translate(camera_x, 0)
+    //         ctx.rect((this.x + this.offset.left), (this.y + this.offset.top), this.width, this.height);
+    //         ctx.translate(-camera_x, 0)
+    //         ctx.stroke();
+    //     }
+    // }
+
+    /**here we draw the image for the movable object */
+    draw(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    /**here we draw the image for the character object in the other direction */
+    drawBackward(ctx) {
+        // this.ctx.translate(this.camera_x, 0)
+        // this.ctx.translate(-this.camera_x, 0)
+        ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
+    }
+
+    /**here we draw the background images for the world */
+    drawBackground(ctx) {
+        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+    }
+
+    /**here we apply gravity to the movable object */
+
+    applyGravity() {
+        if (this.gravityInterval !== null) {
+            clearInterval(this.gravityInterval);
+        }
+        this.gravityInterval = setStoppableInterval(() => {
+            if (this.isAboveGround()) {
+                this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
+                this.speedY -= this.acceleration;
+            } else {
+                this.speedY = 0;
+                this.y = 125
+            }
+        }, 1000 / 25);
+    }
+
+    
+    /**here we check if the movable object is above the ground */
+    isAboveGround() {
+            return this.y &lt; 100;
+        }
+    
+    /**here we move the character to the right */
+    moveRightCharacter() {
+        this.x += this.speed;
+        this.otherDirection = false;
+
+    };
+
+    /**here we move the character to the left */
+    moveLeftCharacter() {
+        this.x -= this.speed;
+        this.otherDirection = true;
+    }
+
+    /**here we make the character jump */
+    jumpCharacter() {
+        this.y -= this.jumpSpeed; // hier setzen wir die y Position des Charakters um 150 höher, damit er springt, aber nur wenn er nicht schon in der Luft ist (isAboveGround)
+        this.jump = true;
+        setTimeout(() => {
+            this.jump = false; // hier setzen wir jump wieder auf false, damit der Charakter wieder springen kann, aber erst nach 1 Sekunde, damit er nicht sofort wieder springen kann
+        }, 600);
+        return true;
+    }
+
+    /**here we move the clouds to the left */
+    moveLeft() {
+        setStoppableInterval(() => {
+            this.x -= this.speed;
+            if (this.x &lt; this.subtrahendMax) {
+                this.x = Math.random() * 3100;
+            }
+        }, 1000 / 30);
+    }
+
+}</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#backToStartScreen">backToStartScreen</a></li><li><a href="global.html#changeMuteStatus">changeMuteStatus</a></li><li><a href="global.html#changeToFullscreen">changeToFullscreen</a></li><li><a href="global.html#checkMuteStatus">checkMuteStatus</a></li><li><a href="global.html#checkWinLoose">checkWinLoose</a></li><li><a href="global.html#elem">elem</a></li><li><a href="global.html#endMaskForGame">endMaskForGame</a></li><li><a href="global.html#hideEndDialog">hideEndDialog</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#makeInfoVisible">makeInfoVisible</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#playBackgroundMusic">playBackgroundMusic</a></li><li><a href="global.html#reloadInit">reloadInit</a></li><li><a href="global.html#renderControlButton">renderControlButton</a></li><li><a href="global.html#renderInfo">renderInfo</a></li><li><a href="global.html#renderSoundButton">renderSoundButton</a></li><li><a href="global.html#resetFullscreen">resetFullscreen</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setLoosingEndscreen">setLoosingEndscreen</a></li><li><a href="global.html#setWinningEndscreen">setWinningEndscreen</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startMaskforGame">startMaskforGame</a></li><li><a href="global.html#stopAllIntervall">stopAllIntervall</a></li><li><a href="global.html#stopBubbling">stopBubbling</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Mar 29 2026 22:19:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

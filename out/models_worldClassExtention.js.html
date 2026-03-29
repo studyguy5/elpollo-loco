@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/worldClassExtention.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/worldClassExtention.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+/**Here we check for collisions and for isChrushing with normal chickens */
+World.prototype.checkColliding_PlayHurt_andDeleyChicken = function(){
+    
+        this.level.enemies.forEach((enemies) => {
+            if (this.Character.isChrushingChicken(enemies)) {
+                this.Character.makeInvincible(3)
+                enemies.chrushChicken(enemies)
+                return;
+            }
+            if (this.isCollidingWithChicken(enemies)) { //check if throwable Bottle is colliding with enemie
+                enemies.chrushChicken(enemies);
+            }
+
+            if (this.Character.isColliding(enemies)) {
+                if (!this.Character.isInvincible()) {
+                    this.hit()
+                    this.Character.playHurtAnimation(this.isHurt);
+                    if (localStorage.getItem('muteStatus') == 'true'){ }else{
+                        this.hitSound.volume = 0.6
+                        this.hitSound.play();
+                    }
+                }
+            }
+            if (!this.Character.isColliding(enemies) &amp;&amp; this.lastHit > 0 &amp;&amp; this.isHurt()) {
+                if (!this.Character.isInvincible()) {
+                    this.Character.playHurtAnimation(this.isHurt);
+                }
+            }
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+
+            }
+        });
+    
+}
+
+
+/**Here we check for collisions and for isChrushing with normal mini chickens */
+
+
+World.prototype.checkColliding_PlayHurt_andDeleyMiniChicken = function(){
+    this.level.miniEnemies.forEach((miniEnemies) => {
+            if (this.Character.isChrushingMiniChicken(miniEnemies)) {
+                this.Character.makeInvincible(3)
+                miniEnemies.chrushMiniChicken(miniEnemies)
+            }
+            //checks if a throwable bottle is colliding with a miniEnemies
+            if (this.isCollidingWithMiniChicken(miniEnemies)) {
+                miniEnemies.chrushMiniChicken(miniEnemies);
+            }
+            if (this.Character.isCollidingMiniChicken(miniEnemies)) {
+                if (!this.Character.isInvincible()) {
+                    this.hit()
+                    this.Character.playHurtAnimation(this.isHurt);
+                    if (localStorage.getItem('muteStatus') == 'true'){ }else{
+                        this.hitSound.volume = 0.6
+                        this.hitSound.play();
+                    }
+                }
+            }
+            if (!this.Character.isCollidingMiniChicken(miniEnemies) &amp;&amp; this.lastHit > 0 &amp;&amp; this.isHurt()) {
+                if (!this.Character.isInvincible()) {
+                    this.Character.playHurtAnimation(this.isHurt);
+                }
+            }
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+
+            }
+        });
+}
+
+/**here we check for collisions with bottles */
+World.prototype.checkCollisionWidth_Bottles = function(){
+            this.level.bottles.forEach((bottles) => {
+            if (this.isCollidingWidth_Bottle(bottles)) {
+                bottles.y = 1000;
+                this.collected++
+            }
+
+            if (this.Keyboard.d == true &amp;&amp; !this.d_wasPressed &amp;&amp; this.collected > 0) {
+                let bottle = new ThrowableObject(this.Character.x, this.Character.y);
+                this.throwableObjects.push(bottle);
+                let index = (this.throwableObjects?.length - 1)
+                if (this.Character.otherDirection) {
+                    this.throwableObjects[index]?.throw(-35, this)
+                } else { this.throwableObjects[index]?.throw(35, this) }
+                this.collected--
+                this.d_wasPressed = true;
+            }
+
+            if (this.d_wasPressed &amp;&amp; this.Keyboard.d == false) {
+                this.d_wasPressed = false
+            }
+        }
+        )
+    
+}
+
+/**here we check for collisions with the endboss and extend the hurt animation */
+World.prototype.checkCollision_PlayHurt_andDeleyEndboss = function(){
+        this.level.endboss.forEach((endboss) => {
+            if (this.Character.isCollidingWithEndboss(endboss)) {
+                this.hitEndboss()
+                this.Character.playHurtAnimation(this.isHurt);
+            }
+
+            if (!this.Character.isColliding(endboss) &amp;&amp; this.lastHit > 0 &amp;&amp; this.isHurt()) {
+                this.Character.playHurtAnimation(this.isHurt);
+            }
+
+            if (this.timePassed > 2) {
+                if (this.timePassed > 30) { this.timePassed = 0 }
+            }
+        })
+    }
+
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#backToStartScreen">backToStartScreen</a></li><li><a href="global.html#changeMuteStatus">changeMuteStatus</a></li><li><a href="global.html#changeToFullscreen">changeToFullscreen</a></li><li><a href="global.html#checkMuteStatus">checkMuteStatus</a></li><li><a href="global.html#checkWinLoose">checkWinLoose</a></li><li><a href="global.html#elem">elem</a></li><li><a href="global.html#endMaskForGame">endMaskForGame</a></li><li><a href="global.html#hideEndDialog">hideEndDialog</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#makeInfoVisible">makeInfoVisible</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#playBackgroundMusic">playBackgroundMusic</a></li><li><a href="global.html#reloadInit">reloadInit</a></li><li><a href="global.html#renderControlButton">renderControlButton</a></li><li><a href="global.html#renderInfo">renderInfo</a></li><li><a href="global.html#renderSoundButton">renderSoundButton</a></li><li><a href="global.html#resetFullscreen">resetFullscreen</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setLoosingEndscreen">setLoosingEndscreen</a></li><li><a href="global.html#setWinningEndscreen">setWinningEndscreen</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startMaskforGame">startMaskforGame</a></li><li><a href="global.html#stopAllIntervall">stopAllIntervall</a></li><li><a href="global.html#stopBubbling">stopBubbling</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Mar 29 2026 22:19:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

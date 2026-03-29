@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: js/game.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: js/game.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>
+let canvas;
+let world;
+let Keyboard = new keyBoard();
+let startscreen;
+let endState;
+backgroundSound = new Audio('audio/background-music_short.mp3')
+backgroundSound.loop = true;
+
+/**this is the normal initialization function to start the game first time */
+function init() {
+    canvas = document.getElementById('gameCanvas')
+    startscreen = new StartScreen(canvas)
+    startMaskforGame();
+    renderControlButton();
+    renderSoundButton();
+    renderInfo();
+    localStorage.setItem('muteStatus', true)
+    checkMuteStatus();
+    checkWinLooseIntervall;
+}
+
+/**this is the initialization function to reload the game and go back to the startscreen */
+function reloadInit() {
+    canvas = document.getElementById('gameCanvas')
+    startscreen = new StartScreen(canvas)
+    startMaskforGame();
+    renderInfo();
+    localStorage.setItem('muteStatus', true)
+    checkMuteStatus();
+    checkWinLooseIntervall;
+}
+
+/**this function plays the background music */
+function playBackgroundMusic() {
+    backgroundSound.volume = 0.15
+    backgroundSound.play()
+
+}
+
+/**this is for UX purposes only */
+function stopBubbling(event) {
+    event.stopPropagation();
+}
+
+/**here we create the start mask for the game */
+function startMaskforGame() {
+    let mask = document.getElementById('startMask')
+    mask.innerHTML = "";
+    mask.innerHTML += `
+    &lt;div id="startDialog" class="startDialog">
+    &lt;h3 onclick="startGame()">Start Game&lt;/h3>
+    &lt;h3 onclick="makeInfoVisible()">Info/Impressum&lt;/h3>
+    &lt;/div>
+    `
+}
+
+/**this function renders the info div to show extra Info and the Impressum  */
+function renderInfo() {
+    let info = document.getElementById('infoDiv')
+    info.innerHTML = /*html*/`
+    &lt;div  class="infoWrapper">
+    &lt;div class="closeButton">Back to Start Screen >&lt;img onclick ="makeInfoVisible()" src="./img/closeFrame.svg">&lt;/div>
+    &lt;div class="infoHead">Info for the game
+    &lt;img src="img/little_chicken.jpg">
+    &lt;/div>
+    &lt;div class="infoMainText">
+    &lt;ol>
+    &lt;li>&lt;h4>Goal&lt;/h4> - conquer or avoid all enemies and finaly conquer the big endboss chicken to win&lt;/li>
+    &lt;li>&lt;h4>Chicken&lt;/h4> - conquer chicken by shooting a bottle at them oder jump on them&lt;/li>
+    &lt;li>&lt;h4>mini Chicken&lt;/h4> - conquer mini Chicken by shotting bottles or jump on them&lt;/li>
+    &lt;li>&lt;h4>Endboss&lt;/h4> - conquer the endboss by shooting three or up to four bottle on the endboss&lt;/li>
+    &lt;/div>
+    &lt;hr>
+    &lt;div class="inmpressum">
+    &lt;h4>Impressum&lt;/h4>
+    &lt;p>Leonhard&lt;br />
+            Fantasy Street 28b&lt;br />
+            45971 Koppenhagen Avenue&lt;/p>
+
+        &lt;h3>Kontakt&lt;/h3>
+        &lt;p>E-Mail: beispiel@gmail.com&lt;/p>
+
+        &lt;p>Quelle: &lt;a class="footer-link" href="https://www.e-recht24.de">e-recht24.de&lt;/a>&lt;/p>
+    &lt;/div>
+    &lt;/div>
+    `
+}
+
+/**this function toggles the visibility of the info div */
+function makeInfoVisible() {
+    let info = document.getElementById('infoDiv')
+    let ad = document.getElementById('closeDiv')
+    if (info.classList.contains('infoDivVisible')) {
+        info.classList.remove('infoDivVisible')
+        ad.style.display = "none"
+    } else {
+        info.classList.add('infoDivVisible')
+        ad.style.display = 'flex'
+
+    }
+}
+
+let checkWinLooseIntervall;
+
+/**this function checks if the player has won or lost the game */
+function checkWinLoose() {
+    if (world?.Character.isDeath()) {
+        setLoosingEndscreen();
+    } else if (world?.level.endboss[0].isDeath()) {
+        setWinningEndscreen()
+    }
+};
+
+
+/**this function sets the endscreen when the player loses shows the loosing EndMask and stopps all Intervalls */
+function setLoosingEndscreen() {
+    checkWinLooseIntervall = null;
+    world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+    world = null;
+    setTimeout(() => {
+        endState = new endScreen(canvas, 'loose')
+        endMaskForGame()
+        stopAllIntervall()
+    }, 500);
+}
+
+/**this function sets the endscreen when the player wins shows the winning EndMask and stopps all Intervalls */
+function setWinningEndscreen() {
+    checkWinLooseIntervall = null;
+    world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+    world = null;
+    setTimeout(() => {
+        endState = new endScreen(canvas, 'win')
+        endMaskForGame()
+        stopAllIntervall()
+    }, 1500);
+}
+
+/**this function starts the game and starts the win/loose checking Intervall */
+function startGame() {
+    let dialog = document.getElementById('startDialog')
+    dialog.style.display = "none";
+    startscreen.hideStartScreen()
+    world = new World(canvas, Keyboard);
+    checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
+}
+
+
+/**here we initialize the game for restart, set up a new level and but all new movalbe objects as parameters in it and start the game instantly*/
+function restartGame() {
+    clearInterval(checkWinLoose);
+    startscreen.hideStartScreen()
+    level1 = new Level(
+        Array.from({ length: 10 }, () => new Coin()),
+        Array.from({ length: 6 }, () => new bottlesOnFloorObject()),
+        Array.from({ length: 6 }, () => new miniChicken()),
+        Array.from({ length: 6 }, () => new chicken()),
+        Array.from({ length: 4 }, () => new cloud()),
+        
+
+        [
+            new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+        ],
+        [
+            new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
+        ])
+    world = new World(canvas, Keyboard);
+    setTimeout(() => {
+        checkWinLooseIntervall = setInterval(() => {
+            checkWinLoose();
+        }, 1000 / 20);;
+    }, 500);
+}
+
+/**this function stops all active intervals and clears the array with interval IDs */
+function stopAllIntervall() {
+    intervalIds.forEach(clearInterval);
+    intervalIds = [];
+}
+
+/**this function takes the player back to the start screen - the same way as the user opens the game the first time but not play instantly*/
+function backToStartScreen() {
+    endState.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
+    endState = null;
+    let end = document.getElementById('endMask')
+    end.innerHTML = "";
+    end.style.display = "none"
+    reloadInit();
+    level1 = new Level(
+        Array.from({ length: 10 }, () => new Coin()),
+        Array.from({ length: 6 }, () => new bottlesOnFloorObject()),
+        Array.from({ length: 6 }, () => new miniChicken()),
+        Array.from({ length: 6 }, () => new chicken()),
+        Array.from({ length: 4 }, () => new cloud()),
+
+        [
+            new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+        ],
+
+        [
+            new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
+        ])
+}
+
+/**this shows the end mask with three options for the game  (restart, back to start screen, info) */
+function endMaskForGame() {
+    let end = document.getElementById('endMask')
+    end.innerHTML = "";
+    end.style.display = "flex";
+    end.innerHTML += `
+    &lt;div id="endDialog" class="endDialog">
+    &lt;h3 onclick="restartGame(); hideEndDialog()">Restart Game&lt;/h3>
+    &lt;h3 onclick="backToStartScreen()">Back to Start Screen&lt;/h3>
+    &lt;h3 onclick="makeInfoVisible()">Info/Impressum&lt;/h3>
+    &lt;/div>
+    `
+    setTimeout(() => {
+        document.querySelector('.endDialog').classList.add('visible');
+    }, 20);  // 10ms reicht!
+}
+
+/**this function hides the end dialog if the user wants to reload the game or go back to the start screen */
+function hideEndDialog() {
+    let end = document.getElementById('endDialog')
+    end.classList.remove('visible')
+}
+
+/**this function renders the control buttons for the handy/tablet Mode*/
+function renderControlButton() {
+    let buttonField = document.getElementById('controlHudCharacter')
+    buttonField.innerHTML += /*html */`
+    &lt;div class="MovePanel">
+    &lt;button class="btnLeft" id="btnLeft">Left&lt;/button>
+    &lt;button class="btnRight" id="btnRight">Right&lt;/button>
+    &lt;/div>
+    &lt;div class="JumpShootPanel">
+    &lt;button class="btnShoot" id="btnShoot">Shoot&lt;/button>
+    &lt;button class="btnJump" id="btnJump">Jump&lt;/button>
+    &lt;/div>
+    `
+
+}
+
+/**this function renders the sound/mute button for the game in the right top corner */
+function renderSoundButton() {
+    let sound = document.getElementById('controlHudSound')
+    sound.innerHTML += /*html */ `
+    &lt;div class="soundPanel" id="soundPanel">
+    &lt;img onclick="changeMuteStatus()" src="./img/muted_icon.jpg">
+    &lt;img onclick="changeToFullscreen()" src="./img/full-screen_logo.png">
+    &lt;/div>
+    `
+}
+
+
+/**this function handles the fullscreen change event by toggling the fullscreen mode */
+document.addEventListener('fullscreenchange', () => {
+    setTimeout(() => {
+        if (document.fullscreenElement) {
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+        } else {
+            canvas.style.width = 720 + 'px';
+            canvas.style.height = 480 + 'px';
+        }
+    }, 100);
+});
+
+/**this variable is used in the fullscreen/reset fullscreen request function and catches the canvas of the document */
+let elem = document.getElementById('canvaAria');
+
+
+/**this function changes the game to fullscreen mode */
+function changeToFullscreen() {
+    if (elem.requestFullscreen &amp;&amp; !document.fullscreenElement) {
+        openFullscreen(elem)
+    } else {
+        resetFullscreen(elem)
+    }
+}
+
+/**this function opens the fullscreen mode for various browsers */
+function openFullscreen() {
+    if (elem.requestFullscreen &amp;&amp; !document.fullscreenElement) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen &amp;&amp; !document.fullscreenElement) { /* Safari */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen &amp;&amp; !document.fullscreenElement) { /* IE11 */
+        elem.msRequestFullscreen();
+    }
+}
+
+/**this function resets the fullscreen mode for various browsers */
+function resetFullscreen() {
+    if (document.exitFullscreen &amp;&amp; document.fullscreenElement) {
+        document.exitFullscreen();
+    } else if (document.webkitexitFullscreen &amp;&amp; document.fullscreenElement) { /* Safari */
+        document.exitFullscreen();
+    } else if (elem.msRequestFullscreen &amp;&amp; document.fullscreenElement) { /* IE11 */
+        document.exitFullscreen();
+    }
+
+}
+
+/**here we check the mute status of the game by checking the local storage variable */
+function checkMuteStatus() {
+    if (localStorage.getItem('muteStatus') == 'true') {
+    } else {
+        playBackgroundMusic()
+    }
+}
+
+/**here we toggle the img for the mute button, play or mute the background music and change the variable in local storage */
+function changeMuteStatus() {
+    let img = document.getElementById('soundPanel')
+    let currentImg = img.querySelector('img');
+    if (currentImg.src.includes('muted_icon')) {
+        currentImg.src = './img/not_mute.png';
+        playBackgroundMusic();
+        localStorage.removeItem('muteStatus')
+        localStorage.setItem('muteStatus', false)
+    } else {
+        currentImg.src = './img/muted_icon.jpg'
+        backgroundSound.pause();
+        backgroundSound.currentTime = 0;
+        localStorage.removeItem('muteStatus')
+        localStorage.setItem('muteStatus', true)
+    }
+}
+
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#backToStartScreen">backToStartScreen</a></li><li><a href="global.html#changeMuteStatus">changeMuteStatus</a></li><li><a href="global.html#changeToFullscreen">changeToFullscreen</a></li><li><a href="global.html#checkMuteStatus">checkMuteStatus</a></li><li><a href="global.html#checkWinLoose">checkWinLoose</a></li><li><a href="global.html#elem">elem</a></li><li><a href="global.html#endMaskForGame">endMaskForGame</a></li><li><a href="global.html#hideEndDialog">hideEndDialog</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#makeInfoVisible">makeInfoVisible</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#playBackgroundMusic">playBackgroundMusic</a></li><li><a href="global.html#reloadInit">reloadInit</a></li><li><a href="global.html#renderControlButton">renderControlButton</a></li><li><a href="global.html#renderInfo">renderInfo</a></li><li><a href="global.html#renderSoundButton">renderSoundButton</a></li><li><a href="global.html#resetFullscreen">resetFullscreen</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setLoosingEndscreen">setLoosingEndscreen</a></li><li><a href="global.html#setWinningEndscreen">setWinningEndscreen</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startMaskforGame">startMaskforGame</a></li><li><a href="global.html#stopAllIntervall">stopAllIntervall</a></li><li><a href="global.html#stopBubbling">stopBubbling</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Mar 29 2026 22:19:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

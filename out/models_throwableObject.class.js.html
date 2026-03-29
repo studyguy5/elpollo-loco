@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: models/throwableObject.class.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: models/throwableObject.class.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>class ThrowableObject extends MovableObject {
+
+    img;
+
+    x;
+    y;
+    width;
+    height;
+    speedY;
+    speedX;
+    fallOfBottle = 0.13;
+    // wordLink;
+    otherDirection = false;
+    currentRotateImage = 0;
+    currentBottleSplashImage = 0;
+
+    bottle_Rotate_Images = [
+        'img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/2_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/3_bottle_rotation.png',
+        'img/6_salsa_bottle/bottle_rotation/4_bottle_rotation.png',
+    ]
+
+    bottle_SPLASH_Images = [
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/2_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/3_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/4_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/5_bottle_splash.png',
+        'img/6_salsa_bottle/bottle_rotation/bottle_splash/6_bottle_splash.png'
+    ]
+
+
+    constructor() {
+        super()
+        this.x = 120;
+        this.y = 260;
+        this.width = 40;
+        this.height = 80;
+        this.loadImages(this.bottle_Rotate_Images);
+        this.loadImages(this.bottle_SPLASH_Images);
+        this.loadImage('img/6_salsa_bottle/bottle_rotation/1_bottle_rotation.png')
+        this.loadImage('img/6_salsa_bottle/bottle_rotation/bottle_splash/1_bottle_splash.png')
+    }
+
+
+    intervalId;
+    hit = false;
+    speedY = 0;
+    acceleration = 3;
+    speedY = 15;
+
+    /**here we handle the throwing of the bottle and the collision with the enemies and the endboss */
+    throw(speedX, world) {
+        this.intervalId = setStoppableInterval(() => {
+            if (this.hit) return;
+            const { enemiesC, miniEnemiesC, endbossC } = this.checkCollisionsWithBottle(world);
+            if (enemiesC || miniEnemiesC || endbossC || this.y > 360) {
+                console.log('bottle hit something')
+                this.hit = true;
+                clearInterval(this.intervalId);
+                this.splashBottle()
+                return;}
+            this.bottleRotation_Animation();
+            this.applyGravityBottle(speedX)
+        }, 1000 / 35);
+    }
+
+    /**here we play the bottle rotation animation */
+    bottleRotation_Animation() {
+        let path = this.bottle_Rotate_Images[this.currentRotateImage];
+        this.img = this.imageChache[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
+        this.currentRotateImage = (this.currentRotateImage + 1) % this.bottle_Rotate_Images.length;
+    }
+
+    /**here we check if the bottle is colliding with the enemies or the endboss and return true or false */
+    checkCollisionsWithBottle(world) {
+        let enemiesC = world.level.enemies.some(e => world.isCollidingWithChicken(e));
+        let miniEnemiesC = world.level.miniEnemies.some(e => world.isCollidingWithMiniChicken(e));
+        let endbossC = world.level.endboss.some(e => e.isCollidingWithEndboss(e));
+        return { enemiesC, miniEnemiesC, endbossC };
+    }
+
+    /**here we apply gravity to the bottle */
+    applyGravityBottle(speedX) {
+        this.x += speedX;
+        this.y -= this.speedY;
+        this.speedY -= this.acceleration
+    }
+
+    /**this animation appears when the bottle hits something */
+    splashBottle() {
+        setStoppableInterval(() => {
+            let path = this.bottle_SPLASH_Images[this.currentBottleSplashImage]
+            this.img = this.imageChache[path];
+            this.currentBottleSplashImage = (this.currentBottleSplashImage + 1) % this.bottle_SPLASH_Images.length
+        }, 1000 / 5)
+    }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#backToStartScreen">backToStartScreen</a></li><li><a href="global.html#changeMuteStatus">changeMuteStatus</a></li><li><a href="global.html#changeToFullscreen">changeToFullscreen</a></li><li><a href="global.html#checkMuteStatus">checkMuteStatus</a></li><li><a href="global.html#checkWinLoose">checkWinLoose</a></li><li><a href="global.html#elem">elem</a></li><li><a href="global.html#endMaskForGame">endMaskForGame</a></li><li><a href="global.html#hideEndDialog">hideEndDialog</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#makeInfoVisible">makeInfoVisible</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#playBackgroundMusic">playBackgroundMusic</a></li><li><a href="global.html#reloadInit">reloadInit</a></li><li><a href="global.html#renderControlButton">renderControlButton</a></li><li><a href="global.html#renderInfo">renderInfo</a></li><li><a href="global.html#renderSoundButton">renderSoundButton</a></li><li><a href="global.html#resetFullscreen">resetFullscreen</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setLoosingEndscreen">setLoosingEndscreen</a></li><li><a href="global.html#setWinningEndscreen">setWinningEndscreen</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startMaskforGame">startMaskforGame</a></li><li><a href="global.html#stopAllIntervall">stopAllIntervall</a></li><li><a href="global.html#stopBubbling">stopBubbling</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Mar 29 2026 22:19:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
