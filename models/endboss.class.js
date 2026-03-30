@@ -93,19 +93,23 @@ class endboss extends MovableObject {
         }, 600);
     }
 
+    flag = true;
+    
     /**here we check the distance to the endboss and if the character isColliding with the endboss and act accordingly */
     checkDistanceToCharacter_And_Act() {
-        if ((this.camera?.Character.x + 400) > this.x && !this.isDeath()) {
+        if ((this.camera?.Character.x + 400) > this.x && !this.isDeath() && this.flag) {
                 this.endbossIsAngry()
             }
             if ((this.camera?.Character.x + 300) > this.x && !this.isDeath()) {
                 this.x -= this.endboss_speed
                 this.endboss_Walking()
-            }
+                this.flag = false;
+            }else{this.flag = true;}
+            
             if (((this.camera?.Character.x + 300) > this.x && !this.isDeath() && !this.jumped) || this.y < 70) {
                 this.endbossAttack_and_jump();
             }
-            if (this.isCollidingWithEndboss()) {
+            if (this.bottleisCollidingWithEndboss() && !this.isDeath()) {
                 this.endbossIsHurtActions();
             }
     }
@@ -124,7 +128,7 @@ class endboss extends MovableObject {
 
     /**here we handle the endboss getting hurt and play sound */
     endbossIsHurtActions() {
-        this.endbossEnergy -= 4;
+        this.endbossEnergy -= 3.5;
         this.endbossHurt();
         if (localStorage.getItem('muteStatus') == 'true') { } else {
             this.chickenHurtSound.volume = 0.3
@@ -180,7 +184,7 @@ class endboss extends MovableObject {
         this.currentEndbossImage = (this.currentEndbossImage + 1) % this.endboss_getsAngry.length;
     }
     /**here we check if the character's bottle is colliding with the endboss */
-    isCollidingWithEndboss() {
+    bottleisCollidingWithEndboss() {
         return ((this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) + this.camera?.throwableObjects[0]?.width > this.x &&
             (this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) < this.x + this.width &&
             this.camera?.throwableObjects[0]?.y < this.y + this.height &&

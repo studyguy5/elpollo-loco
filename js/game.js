@@ -60,8 +60,8 @@ function renderInfo() {
     let info = document.getElementById('infoDiv')
     info.innerHTML = /*html*/`
     <div  class="infoWrapper">
-    <div class="closeButton">Back to Start Screen ><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
-    <div class="infoHead">Info for the game
+    <div class="closeButton"><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
+    <div class="infoHead"><h2>Info for the game</h2>
     <img src="img/little_chicken.jpg">
     </div>
     <div class="infoMainText">

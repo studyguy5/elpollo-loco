@@ -19,8 +19,8 @@ class MovableObject extends DrawableObjekt {
 
 
     speed = 0.5;
-    speedY = 0;
-    acceleration = 2.8;
+    speedY = 200;
+    acceleration = 0.5;
     otherDirection = false;
     energy = 100;
     gravityInterval = null;
@@ -85,12 +85,15 @@ class MovableObject extends DrawableObjekt {
             clearInterval(this.gravityInterval);
         }
         this.gravityInterval = setStoppableInterval(() => {
-            if (this.isAboveGround()) {
+            if (this.isAboveGround() || this.jump) {
+                if (this.y > 125) return 
                 this.y -= this.speedY; // hier ziehen wir speedY von this.y ab (speedY started aber bei 0)
                 this.speedY -= this.acceleration;
+                this.acceleration += 0.06;
             } else {
-                this.speedY = 0;
+                this.speedY = 15;
                 this.y = 125
+                this.acceleration = 0.3;
             }
         }, 1000 / 25);
     }
@@ -116,7 +119,7 @@ class MovableObject extends DrawableObjekt {
 
     /**here we make the character jump */
     jumpCharacter() {
-        this.y -= this.jumpSpeed; // hier setzen wir die y Position des Charakters um 150 höher, damit er springt, aber nur wenn er nicht schon in der Luft ist (isAboveGround)
+        this.applyGravity(this.y = 125) // hier setzen wir die y Position des Charakters um 150 höher, damit er springt, aber nur wenn er nicht schon in der Luft ist (isAboveGround)
         this.jump = true;
         setTimeout(() => {
             this.jump = false; // hier setzen wir jump wieder auf false, damit der Charakter wieder springen kann, aber erst nach 1 Sekunde, damit er nicht sofort wieder springen kann

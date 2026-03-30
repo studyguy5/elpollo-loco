@@ -8,13 +8,18 @@
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="./gameInfo.css">
     <link rel="icon" href="./img/favicon.png" type="image">
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+    </style>
 </head>
 
 <script>
 
     document.addEventListener('contextmenu', (e) => {
         if (e.pointerType === 'touch') {  // ✅ nur bei Touch
-        e.preventDefault();}
+            e.preventDefault();
+        }
     });
 
 </script>
@@ -32,7 +37,7 @@
         </canvas>
     </div>
     <div class="closeDiv" id="closeDiv" onclick="makeInfoVisible()"></div>
-    <div  class="infoDiv" id="infoDiv"></div>
+    <div class="infoDiv" id="infoDiv"></div>
     <div class="userInfo" id="userInfo">
         <p id="Jump">Jump = Space</p>
         <p id="LeftRight">Move = Arrow Left or Right</p>

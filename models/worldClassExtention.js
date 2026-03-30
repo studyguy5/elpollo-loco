@@ -102,11 +102,11 @@ World.prototype.checkCollisionWidth_Bottles = function(){
 World.prototype.checkCollision_PlayHurt_andDeleyEndboss = function(){
         this.level.endboss.forEach((endboss) => {
             if (this.Character.isCollidingWithEndboss(endboss)) {
-                this.hitEndboss()
+                this.hit()
                 this.Character.playHurtAnimation(this.isHurt);
             }
 
-            if (!this.Character.isColliding(endboss) && this.lastHit > 0 && this.isHurt()) {
+            if (!this.Character.isCollidingWithEndboss(endboss) && this.lastHit > 0 && this.isHurt()) {
                 this.Character.playHurtAnimation(this.isHurt);
             }
 

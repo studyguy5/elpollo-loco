@@ -56,7 +56,6 @@ class ThrowableObject extends MovableObject {
             if (this.hit) return;
             const { enemiesC, miniEnemiesC, endbossC } = this.checkCollisionsWithBottle(world);
             if (enemiesC || miniEnemiesC || endbossC || this.y > 360) {
-                console.log('bottle hit something')
                 this.hit = true;
                 clearInterval(this.intervalId);
                 this.splashBottle()
@@ -77,7 +76,7 @@ class ThrowableObject extends MovableObject {
     checkCollisionsWithBottle(world) {
         let enemiesC = world.level.enemies.some(e => world.isCollidingWithChicken(e));
         let miniEnemiesC = world.level.miniEnemies.some(e => world.isCollidingWithMiniChicken(e));
-        let endbossC = world.level.endboss.some(e => e.isCollidingWithEndboss(e));
+        let endbossC = world.level.endboss.some(e => e.bottleisCollidingWithEndboss(e));
         return { enemiesC, miniEnemiesC, endbossC };
     }
 

@@ -1,6 +1,6 @@
 class World {
 
-    bottleBar = new statusBar(this, 20, 10, 210, 40,
+    bottleBar = new statusBar(this, 20, 10, 185, 50,
         [
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/0.png',
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/20.png',
@@ -10,7 +10,7 @@ class World {
             'img/7_statusbars/1_statusbar/3_statusbar_bottle/green/100.png'
         ]
     ) //hier als Parameter die Koordinaten angeben
-    healthBar = new statusBar(this, 20, 50, 210, 40,
+    healthBar = new statusBar(this, 20, 50, 185, 50,
         [
             'img/7_statusbars/1_statusbar/2_statusbar_health/green/0.png',
             'img/7_statusbars/1_statusbar/2_statusbar_health/green/20.png',
@@ -22,7 +22,7 @@ class World {
         ]
     ) //hier als Parameter die Koordinaten angeben
 
-    coinBar = new statusBar(this, 20, 90, 210, 40,
+    coinBar = new statusBar(this, 20, 90, 185, 50,
         [
             'img/7_statusbars/1_statusbar/1_statusbar_coin/green/0.png',
             'img/7_statusbars/1_statusbar/1_statusbar_coin/green/20.png',
@@ -35,7 +35,7 @@ class World {
     ) //hier als Parameter die Koordinaten angeben
 
 
-    endbossHealthBar = new statusBar(this, 505, 50, 210, 40,
+    endbossHealthBar = new statusBar(this, 505, 50, 185, 50,
         [
             'img/7_statusbars/2_statusbar_endboss/green/green0.png',
             'img/7_statusbars/2_statusbar_endboss/green/green20.png',
@@ -212,13 +212,13 @@ class World {
     }
 
 
-    /**here we check for collisions with the end boss */
-    isCollidingWithEndboss(endboss) {
-        return (this.Character.x + this.Character.width > endboss.x &&
-            this.Character.x < endboss.x + endboss.width &&
-            this.Character.y < endboss.y + endboss.height &&
-            this.Character.y + this.Character.height > endboss.y);
-    }
+    // /**here we check for collisions with the end boss */
+    // isCollidingWithEndboss(endboss) {console.log('checking collision in World');
+    //     return (this.Character.x + this.Character.width > endboss.x &&
+    //         this.Character.x < endboss.x + endboss.width &&
+    //         this.Character.y < endboss.y + endboss.height &&
+    //         this.Character.y + this.Character.height > endboss.y);
+    // }
 
     /**here we link the world to the character, bottlebar and endboss objects */
     setWorld() {

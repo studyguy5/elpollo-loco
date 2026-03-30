@@ -11,15 +11,15 @@ class character extends MovableObject {
     ]
 
     IMAGES_JUMPING = [
-        'img/2_character_pepe/3_jump/J-31.png',
-        'img/2_character_pepe/3_jump/J-32.png',
-        'img/2_character_pepe/3_jump/J-33.png',
+        // 'img/2_character_pepe/3_jump/J-31.png',
+        // 'img/2_character_pepe/3_jump/J-32.png',
+        // 'img/2_character_pepe/3_jump/J-33.png',
         'img/2_character_pepe/3_jump/J-34.png',
         'img/2_character_pepe/3_jump/J-35.png',
         'img/2_character_pepe/3_jump/J-36.png',
         'img/2_character_pepe/3_jump/J-37.png',
         'img/2_character_pepe/3_jump/J-38.png',
-        'img/2_character_pepe/3_jump/J-39.png',
+        // 'img/2_character_pepe/3_jump/J-39.png',
     ]
 
     IMAGES_IDLE = [
@@ -99,7 +99,7 @@ class character extends MovableObject {
         this.loadImages(this.IMAGES_DEAD)
         this.loadImages(this.IMAGES_IDLE)
         this.loadImages(this.IMAGES_LONG_IDLE)
-        this.applyGravity()
+        this.applyGravity(this.speedY = 1.5);
         this.showIdle_OnCharacter()
         this.Move_Character()
         this.playCharacter_Animations();
@@ -121,21 +121,27 @@ class character extends MovableObject {
     /**here we check keystrokes and update character position accordingly */
     Move_Character() {
         setStoppableInterval(() => {
-            if (this.world.Keyboard.SPACE && !this.isAboveGround() && !this.jump) { this.jumpActions(); }
-            if (this.world.Keyboard.RIGHT && this.x < this.world.level.level_end_x) { this.moveRightActions(); }
+            if (this.world.Keyboard.RIGHT && this.x < this.world.level.endboss[0].x) { this.moveRightActions(); }
             if (this.world.Keyboard.LEFT && this.x > 100) { this.moveLeftActions(); }
             if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT) { this.walkSound.pause(); this.walkSound.currentTime = 0; }
-            if (!this.world.Keyboard.SPACE){this.jumpsound.pause(); this.jumpsound.currentTime = 0;}
-            if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT && !this.world.Keyboard.SPACE) {
-                if (!this.normal){this.setNormalTimeout();}
-                if (!this.long){this.setLongTimeout();}
+            if (!this.world.Keyboard.SPACE) { this.jumpsound.pause(); this.jumpsound.currentTime = 0; }
+            if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT && !this.world.Keyboard.SPACE && !this.isAboveGround()) {
+                if (!this.normal) { this.setNormalTimeout(); }
+                if (!this.long) { this.setLongTimeout(); }
                 this.animationCounter++
                 if (this.animationCounter % 3 === 0 && this.normalIdle) {
-                    this.playIdleAnimation()}
+                    this.playIdleAnimation()
+                }
                 if (this.animationCounter % 3 === 0 && this.sleepIdle) {
-                    this.playLongIdleAnimation()}}
+                    this.playLongIdleAnimation()
+                }
+            }
             this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
-        }, 1000 / 40);
+        }, 1000 / 30);
+        setStoppableInterval(() => {
+            if (this.world.Keyboard.SPACE && !this.isAboveGround() && !this.jump) { this.jumpActions(); }
+        }, 1000 / 25);
+
     }
 
     /**here we animate the character's jump and stop Idle Animation */
@@ -186,15 +192,15 @@ class character extends MovableObject {
     /** here we set a timeout for the normal idle animation */
     setNormalTimeout() {
         this.normal = setTimeout(() => {
-                        this.normalIdle = false;
-                    }, 8000);
+            this.normalIdle = false;
+        }, 8000);
     }
 
     /** here we set a timeout for the long idle animation */
     setLongTimeout() {
         this.long = setTimeout(() => {
-                        this.sleepIdle = true;
-                    }, 8000);
+            this.sleepIdle = true;
+        }, 8000);
     }
 
 
@@ -210,6 +216,7 @@ class character extends MovableObject {
 
     /**this checks if the character is colliding with the end boss */
     isCollidingWithEndboss(endboss) {
+        console.log('checking collision in Character');
         return (this.x + this.width - this.offset.right > endboss.x - endboss.offset.left &&
             this.x + this.offset.left < endboss.x + endboss.width - endboss.offset.right &&
             this.y - this.offset.top < endboss.y + endboss.height - endboss.offset.bottom &&
@@ -292,12 +299,13 @@ class character extends MovableObject {
         setStoppableInterval(() => {
             this.playHurtAnimation(); //normal
             this.playDeathAnimation();
-        }, 1000 / 5);
+        }, 1000 / 20);
 
     }
 
     /**here we play the idle animation */
     playIdleAnimation() {
+        if(this.world.isHurt()) return
         let path = this.IMAGES_IDLE[this.currentIdleImage];
         this.img = this.imageChache[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
         this.currentIdleImage = (this.currentIdleImage + 1) % this.IMAGES_IDLE.length;
@@ -305,6 +313,7 @@ class character extends MovableObject {
 
     /**here we play the long idle animation */
     playLongIdleAnimation() {
+        if(this.world.isHurt()) return
         let path = this.IMAGES_LONG_IDLE[this.currentLongIdleImage];
         this.img = this.imageChache[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
         this.currentLongIdleImage = (this.currentLongIdleImage + 1) % this.IMAGES_LONG_IDLE.length;
@@ -315,7 +324,7 @@ class character extends MovableObject {
     /**here we play the hurt animation */
     playHurtAnimation() {
         this.count++
-        if (this.world.isHurt() && this.count % 4 === 0) {
+        if (this.world.isHurt() && this.count % 40 === 0) {
             let path = this.IMAGES_HURT[this.currentHurtImage];
             this.img = this.imageChache[path];
             this.currentHurtImage = (this.currentHurtImage + 1) % this.IMAGES_HURT.length;
@@ -333,6 +342,7 @@ class character extends MovableObject {
     }
 
 
+    jumpCounter = 0;
 
     /**here we animate the character's jumping and walking */
     animatejumpAndWalking_Character() {
@@ -344,14 +354,17 @@ class character extends MovableObject {
                 this.currentImage = (this.currentImage + 1) % this.IMAGES_WALKING.length;
             }
         }, 1000 / 24);
-
         setStoppableInterval(() => {
-            if (this.isAboveGround()) {
+            this.jumpCounter ++;
+            if (this.y < 100 && this.jumpCounter % 13 === 0) {
                 let path = this.IMAGES_JUMPING[this.currentJumpImage];
                 this.img = this.imageChache[path];
                 this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
             }
-        }, 1000 / 10);
+            if(!this.isAboveGround()) {
+                this.currentJumpImage = 0;
+            }
+        }, 1000 / 40);
     }
 }
 
