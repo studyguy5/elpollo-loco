@@ -103,11 +103,17 @@ ol{
     border-top-right-radius: 15px;
     border-bottom-left-radius: 0px;
     border-bottom-right-radius: 0px;
-    height:282px;
+    height:283px;
     margin-bottom: 0px;
     font-family: Dancing Script;
     font-weight: bold;
     background-color: rgb(233, 232, 232, 0.5);
+}
+
+.infoHeadText{
+    font-family: Dancing Script;
+    font-weight: bold;
+    font-size: 32px;
 }
 
 h4{

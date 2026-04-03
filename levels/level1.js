@@ -1,7 +1,21 @@
 
-/**this creates the first level */
+/**
+ * @class level1 this is the main level of the game and it initializes all the objects and enemies in the level and sves it
+ * in the level1 variable
+ */
 let level1 = new Level(
 
+    /**
+     * @property {Object[]} coins the array of coin objects in the level
+     * @type {Object[]} bottlesOnFloorObject the array of bottle objects in the level, they are on the floor ready
+     * to collect for the character
+     * @type {Object[]} miniChicken the array of mini chicken objects in the level
+     * @type {Object[]} chicken the array of chicken objects in the level
+     * @type {Object[]} clouds the array of cloud objects in the level
+     * @type {Object[]} background the array of background objects in the level, we copy the backgrounds and put it 
+     * on the right position to create a longer world to walk for the character
+     * @type {Object} endboss the endboss object in the level
+     */
     [
         new Coin(),
         new Coin(),

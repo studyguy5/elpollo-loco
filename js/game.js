@@ -1,4 +1,13 @@
 
+/**
+ * @property {HTMLCanvasElement} canvas the canvas element where the game is rendered
+ * @property {World} world the connection to the world object
+ * @property {keyBoard} Keyboard the connection/definition of the keyboard
+ * @property {StartScreen} startscreen the variable for the startscreen
+ * @property {EndScreen} endState the variable for the endscreen
+ * @property {Audio} backgroundSound the variable who holds the background music
+ */
+
 let canvas;
 let world;
 let Keyboard = new keyBoard();
@@ -7,20 +16,33 @@ let endState;
 backgroundSound = new Audio('audio/background-music_short.mp3')
 backgroundSound.loop = true;
 
-/**this is the normal initialization function to start the game first time */
+/**this is the normal initialization function to start the game first time
+ * @type {HTMLCanvasElement} canvas the canvas element is the connection to the canvas div
+ * @type {StartScreen} startscreen the variable for the startscreen
+ * @function {startMaskforGame} the start mask for the game makes the start screen visible
+ * @function {renderControlButton} the control buttons are rendered on the surface of the canvas
+ * @function {renderSoundButton} the sound button is rendered on the surface of the canvas
+ * @function {renderInfo} the info is rendered in a special div to inform the user about instructions and the Impressum
+ * @type {setItem}  the mute status is saved in the local storage
+ * @function {checkMuteStatus} the mute status is checked from the local storage
+ * @type {checkWinLooseIntervall} the checkWinLooseIntervall is set up and saved with this variable
+ * @returns void 
+ */
 function init() {
     canvas = document.getElementById('gameCanvas')
     startscreen = new StartScreen(canvas)
     startMaskforGame();
-    renderControlButton();
-    renderSoundButton();
+    renderSound_MuteButton();
     renderInfo();
     localStorage.setItem('muteStatus', true)
     checkMuteStatus();
     checkWinLooseIntervall;
 }
 
-/**this is the initialization function to reload the game and go back to the startscreen */
+/**this is the initialization function to reload the game and go back to the startscreen
+ * @function {reloadInit} the reloadInit function is used to load only required variables but not all
+ * @returns void
+ */
 function reloadInit() {
     canvas = document.getElementById('gameCanvas')
     startscreen = new StartScreen(canvas)
@@ -31,19 +53,22 @@ function reloadInit() {
     checkWinLooseIntervall;
 }
 
-/**this function plays the background music */
+/**this function plays the background music
+ * @function {playBackgroundMusic} the background music is played and volume is set
+ * @returns void
+*/
 function playBackgroundMusic() {
     backgroundSound.volume = 0.15
     backgroundSound.play()
-
+    
 }
 
-/**this is for UX purposes only */
-function stopBubbling(event) {
-    event.stopPropagation();
-}
 
-/**here we create the start mask for the game */
+/**here we create the start mask for the game
+ * @function {startMaskforGame} the start mask for the game makes the start screen visible
+ * and renders the menu buttons to start the game or show the info
+ * @returns void
+*/
 function startMaskforGame() {
     let mask = document.getElementById('startMask')
     mask.innerHTML = "";
@@ -55,13 +80,16 @@ function startMaskforGame() {
     `
 }
 
-/**this function renders the info div to show extra Info and the Impressum  */
+/**this function renders the info div to show extra Info and the Impressum
+ * @function {renderInfo} this is the function itself who renders the info div into the dom
+ * @returns void
+*/
 function renderInfo() {
     let info = document.getElementById('infoDiv')
     info.innerHTML = /*html*/`
     <div  class="infoWrapper">
     <div class="closeButton"><img onclick ="makeInfoVisible()" src="./img/closeFrame.svg"></div>
-    <div class="infoHead"><h2>Info for the game</h2>
+    <div class="infoHead"><p class="infoHeadText">Info for the game</p>
     <img src="img/little_chicken.jpg">
     </div>
     <div class="infoMainText">
@@ -75,19 +103,22 @@ function renderInfo() {
     <div class="inmpressum">
     <h4>Impressum</h4>
     <p>Leonhard<br />
-            Fantasy Street 28b<br />
-            45971 Koppenhagen Avenue</p>
+    Fantasy Street 28b<br />
+    45971 Koppenhagen Avenue</p>
 
-        <h3>Kontakt</h3>
+    <h4>Kontakt</h4>
         <p>E-Mail: beispiel@gmail.com</p>
-
+        
         <p>Quelle: <a class="footer-link" href="https://www.e-recht24.de">e-recht24.de</a></p>
-    </div>
+        </div>
     </div>
     `
 }
 
-/**this function toggles the visibility of the info div */
+/**this function toggles the visibility of the info div
+ * @function {makeInfoVisible} this function toggles the visibility of the info div
+ * @returns void
+*/
 function makeInfoVisible() {
     let info = document.getElementById('infoDiv')
     let ad = document.getElementById('closeDiv')
@@ -97,13 +128,22 @@ function makeInfoVisible() {
     } else {
         info.classList.add('infoDivVisible')
         ad.style.display = 'flex'
-
     }
 }
 
+/**
+ * @type {number} checkWinLooseIntervall is used to check the character state end stop it after the game is over
+ */
 let checkWinLooseIntervall;
 
-/**this function checks if the player has won or lost the game */
+/**this function checks if the player has won or lost the game
+ * @function {checkWinLoose} this function checks if the player has won or lost the game
+ * @function {setLoosingEndscreen} this function sets the endscreen when the player 
+ * loses shows the loosing EndMask and stopps all Intervalls
+ * @function {setWinningEndscreen} this function sets the endscreen when the 
+ * player wins shows the winning EndMask and stopps all Intervalls
+ * @returns void
+*/
 function checkWinLoose() {
     if (world?.Character.isDeath()) {
         setLoosingEndscreen();
@@ -113,7 +153,10 @@ function checkWinLoose() {
 };
 
 
-/**this function sets the endscreen when the player loses shows the loosing EndMask and stopps all Intervalls */
+/**
+ * @function {setLoosingEndscreen} this function sets the endscreen when the player loses 
+ * shows the loosing EndMask and stopps all Intervalls
+*/
 function setLoosingEndscreen() {
     checkWinLooseIntervall = null;
     world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
@@ -125,7 +168,11 @@ function setLoosingEndscreen() {
     }, 500);
 }
 
-/**this function sets the endscreen when the player wins shows the winning EndMask and stopps all Intervalls */
+/**
+ * @function {setWinningEndscreen} this function sets the endscreen when the player 
+ * wins shows the winning EndMask and stopps all Intervalls
+ * @returns void
+*/
 function setWinningEndscreen() {
     checkWinLooseIntervall = null;
     world.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
@@ -137,17 +184,32 @@ function setWinningEndscreen() {
     }, 1500);
 }
 
-/**this function starts the game and starts the win/loose checking Intervall */
+/**
+ * @function {startGame} this function starts the game and starts the win/loose checking Intervall
+ * @returns void
+ *  */
 function startGame() {
     let dialog = document.getElementById('startDialog')
     dialog.style.display = "none";
     startscreen.hideStartScreen()
-    world = new World(canvas, Keyboard);
+    world = new WorldClassExtention(canvas, Keyboard);
+    renderControlButton();
     checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
 }
 
 
-/**here we initialize the game for restart, set up a new level and but all new movalbe objects as parameters in it and start the game instantly*/
+/**
+ * @function {restartGame} here we initialize the game for restart, 
+ * set up a new level and but all new movalbe objects as parameters in it and start the game instantly
+ * @type {object} level1 the new level
+ * @type {object} coins the new coins in the level
+ * @type {object} bottles the new bottles in the level
+ * @type {object} miniEnemies the new mini chicken in the level
+ * @type {object} enemies the new chicken in the level
+ * @type {object} clouds the new clouds in the level
+ * @type {object} background the new background images are repeatedly used for a longer world
+ * @type {object} endboss the new endboss in the game
+ * @returns void*/
 function restartGame() {
     clearInterval(checkWinLoose);
     startscreen.hideStartScreen()
@@ -157,24 +219,22 @@ function restartGame() {
         Array.from({ length: 6 }, () => new miniChicken()),
         Array.from({ length: 6 }, () => new chicken()),
         Array.from({ length: 4 }, () => new cloud()),
-        
-
         [
             new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
+            
             new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-
+            
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
+            
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
@@ -193,7 +253,8 @@ function restartGame() {
         [
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
-    world = new World(canvas, Keyboard);
+    world = new WorldClassExtention(canvas, Keyboard);
+    renderControlButton();
     setTimeout(() => {
         checkWinLooseIntervall = setInterval(() => {
             checkWinLoose();
@@ -201,13 +262,21 @@ function restartGame() {
     }, 500);
 }
 
-/**this function stops all active intervals and clears the array with interval IDs */
+/**
+ * @function {stopAllIntervall} this function stops all active intervals and clears the array with interval IDs
+ * @returns void
+ *  */
 function stopAllIntervall() {
     intervalIds.forEach(clearInterval);
     intervalIds = [];
 }
 
-/**this function takes the player back to the start screen - the same way as the user opens the game the first time but not play instantly*/
+/**
+ * @function {backToStartScreen}  function takes the player back to the start screen - the same 
+ * way as the user opens the game the first time but not play instantly
+ * Allmost the same as the function start game
+ * @returns void
+ * */
 function backToStartScreen() {
     endState.ctx.clearRect(0, 0, 720, 480);  // Canvas leeren
     endState = null;
@@ -221,7 +290,6 @@ function backToStartScreen() {
         Array.from({ length: 6 }, () => new miniChicken()),
         Array.from({ length: 6 }, () => new chicken()),
         Array.from({ length: 4 }, () => new cloud()),
-
         [
             new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
@@ -253,13 +321,16 @@ function backToStartScreen() {
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
         ],
-
         [
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
 }
 
-/**this shows the end mask with three options for the game  (restart, back to start screen, info) */
+/**
+ * @function {endMaskForGame} this shows the end mask with three options for 
+ * the game  (restart, back to start screen, info)
+ * @returns void
+ *  */
 function endMaskForGame() {
     let end = document.getElementById('endMask')
     end.innerHTML = "";
@@ -276,13 +347,18 @@ function endMaskForGame() {
     }, 20);  // 10ms reicht!
 }
 
-/**this function hides the end dialog if the user wants to reload the game or go back to the start screen */
+/**
+ * @function {hideEndDialog} this function hides the end dialog if the user wants 
+ * to reload the game or go back to the start screen
+ * @returns void */
 function hideEndDialog() {
     let end = document.getElementById('endDialog')
     end.classList.remove('visible')
 }
 
-/**this function renders the control buttons for the handy/tablet Mode*/
+/**
+ * @function {renderControlButton} this function renders the control buttons for the handy/tablet Mode
+ * @returns void */
 function renderControlButton() {
     let buttonField = document.getElementById('controlHudCharacter')
     buttonField.innerHTML += /*html */`
@@ -294,94 +370,29 @@ function renderControlButton() {
     <button class="btnShoot" id="btnShoot">Shoot</button>
     <button class="btnJump" id="btnJump">Jump</button>
     </div>
-    `
+    `}
 
-}
-
-/**this function renders the sound/mute button for the game in the right top corner */
-function renderSoundButton() {
+/**
+ * @function {renderSoundButton} this function renders the sound/mute button for the game in the right top corner
+ * @returns void */
+function renderSound_MuteButton() {
     let sound = document.getElementById('controlHudSound')
     sound.innerHTML += /*html */ `
     <div class="soundPanel" id="soundPanel">
-    <img onclick="changeMuteStatus()" src="./img/muted_icon.jpg">
-    <img onclick="changeToFullscreen()" src="./img/full-screen_logo.png">
+    <img onclick="changeMuteStatus()" src="./img/muted_icon_ob.png">
+    <img class="fullScreenButton" onclick="changeToFullscreen()" src="./img/full-screen_logo_ob.png">
     </div>
     `
 }
 
 
-/**this function handles the fullscreen change event by toggling the fullscreen mode */
-document.addEventListener('fullscreenchange', () => {
-    setTimeout(() => {
-        if (document.fullscreenElement) {
-            canvas.style.width = window.innerWidth + 'px';
-            canvas.style.height = window.innerHeight + 'px';
-        } else {
-            canvas.style.width = 720 + 'px';
-            canvas.style.height = 480 + 'px';
+        /**
+         * @function {checkMuteStatus} here we check the mute status of the game by checking the local storage variable
+         * @returns {boolean}
+         *  */
+        function checkMuteStatus() {
+            if (localStorage.getItem('muteStatus') == 'true') {
+            } else {
+                playBackgroundMusic()
+            }
         }
-    }, 100);
-});
-
-/**this variable is used in the fullscreen/reset fullscreen request function and catches the canvas of the document */
-let elem = document.getElementById('canvaAria');
-
-
-/**this function changes the game to fullscreen mode */
-function changeToFullscreen() {
-    if (elem.requestFullscreen && !document.fullscreenElement) {
-        openFullscreen(elem)
-    } else {
-        resetFullscreen(elem)
-    }
-}
-
-/**this function opens the fullscreen mode for various browsers */
-function openFullscreen() {
-    if (elem.requestFullscreen && !document.fullscreenElement) {
-        elem.requestFullscreen();
-    } else if (elem.webkitRequestFullscreen && !document.fullscreenElement) { /* Safari */
-        elem.webkitRequestFullscreen();
-    } else if (elem.msRequestFullscreen && !document.fullscreenElement) { /* IE11 */
-        elem.msRequestFullscreen();
-    }
-}
-
-/**this function resets the fullscreen mode for various browsers */
-function resetFullscreen() {
-    if (document.exitFullscreen && document.fullscreenElement) {
-        document.exitFullscreen();
-    } else if (document.webkitexitFullscreen && document.fullscreenElement) { /* Safari */
-        document.exitFullscreen();
-    } else if (elem.msRequestFullscreen && document.fullscreenElement) { /* IE11 */
-        document.exitFullscreen();
-    }
-
-}
-
-/**here we check the mute status of the game by checking the local storage variable */
-function checkMuteStatus() {
-    if (localStorage.getItem('muteStatus') == 'true') {
-    } else {
-        playBackgroundMusic()
-    }
-}
-
-/**here we toggle the img for the mute button, play or mute the background music and change the variable in local storage */
-function changeMuteStatus() {
-    let img = document.getElementById('soundPanel')
-    let currentImg = img.querySelector('img');
-    if (currentImg.src.includes('muted_icon')) {
-        currentImg.src = './img/not_mute.png';
-        playBackgroundMusic();
-        localStorage.removeItem('muteStatus')
-        localStorage.setItem('muteStatus', false)
-    } else {
-        currentImg.src = './img/muted_icon.jpg'
-        backgroundSound.pause();
-        backgroundSound.currentTime = 0;
-        localStorage.removeItem('muteStatus')
-        localStorage.setItem('muteStatus', true)
-    }
-}
-

@@ -1,5 +1,8 @@
 
-/**here we listen for keydown events to controle gamePlay */
+
+/**here we listen for keydown events to controle gamePlay
+ * @type {EventListener} keydown this eventListener checks for certain key events (pressed) in oder to control the game
+*/
 window.addEventListener('keydown', (e) => {
     switch (e.key) {
         case 'ArrowRight':
@@ -32,7 +35,10 @@ window.addEventListener('keydown', (e) => {
     }
 })
 
-/**here we listen for keyup events to controle gamePlay */
+/**here we listen for keyup events to controle gamePlay
+* @type {EventListener} keyup this eventListener checks for certain key events (released) in oder to control the game
+* if a key is false, it is not pressed
+*/
 window.addEventListener('keyup', (e) => {
     switch (e.key) {
         case 'ArrowUp':
@@ -64,7 +70,10 @@ window.addEventListener('keyup', (e) => {
     }
 })
 
-/**here we listen for touch Start events to control gamePlay */
+/**here we listen for touch Start events to control gamePlay
+ * @type {EventListener} touchstart this eventListener checks for certain touch events (pressed) in oder to control the game
+ * if a key is true, it is pressed
+ */
 window.addEventListener('touchstart', (e) => {
     switch (e.target.id) {
         case 'btnLeft':
@@ -81,7 +90,10 @@ window.addEventListener('touchstart', (e) => {
     }
 })
 
-/**here we listen for touch End events to control gamePlay */
+/**here we listen for touch End events to control gamePlay
+ * @type {EventListener} touchup this eventListener checks for certain touch events (released) in oder to control the game
+ * if a key is false, it is not pressed
+ */
 window.addEventListener('touchend', (e) => {
     switch (e.target.id) {
         case 'btnLeft':

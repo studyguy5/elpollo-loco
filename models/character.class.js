@@ -1,6 +1,50 @@
-
+/**
+ * @class character this class represents the main character in the game, which is controlled by the player. 
+ * It extends the MovableObject class, which provides basic movement and animation functionality. 
+ * The character class includes properties for different animations (walking, jumping, idle, hurt, dead), 
+ * as well as methods for handling movement, collisions, and animations.
+ */
 class character extends MovableObject {
 
+    /**
+     * @property {string[]} IMAGES_WALKING this array contains the image paths for the character walking animation,
+     * @property {string[]} IMAGES_JUMPING this array contains the image paths for the character jumping animation,
+     * @property {string[]} IMAGES_IDLE this array contains the image paths for the character idle animation,
+     * @property {string[]} IMAGES_LONG_IDLE this array contains the image paths for the character long idle animation,
+     * @property {string[]} IMAGES_HURT this array contains the image paths for the character hurt animation,
+     * @property {string[]} IMAGES_DEAD this array contains the image paths for the character dead animation,
+     * these arrays are used for the character animations and are loaded in the constructor
+     * @type {number} y this is the y position of the character in the game, which is used for the character's position on the canvas
+     * @property {number} currentImage this is the index of the current image for the character walking animation, which is used for the character walking animation
+     * @property {number} currentJumpImage this is the index of the current image for the character jumping animation, which is used for the character jumping animation
+     * @property {number} currentHurtImage this is the index of the current image for the character hurt animation, which is used for the character hurt animation
+     * @property {number} currentIdleImage this is the index of the current image for the character idle animation, which is used for the character idle animation
+     * @property {number} currentLongIdleImage this is the index of the current image for the character long idle animation, which is used for the character long idle animation
+     * @property {number} currentDeathImage this is the index of the current image for the character dead animation, which is used for the character dead animation
+     * @property {World} world this is the world object, which is used to access the character and the endboss, and to check for collisions and other interactions in the game
+     * @property {number} speed this is the speed of the character, which is used for moving the character to the right and left
+     * @property {number} ReverseSpeed this is the speed of the character, which is used for moving the character to the left
+     * @property {number} jumpSpeed this is the speed of the character, which is used for jumping and applying gravity to the character
+     * @property {boolean} jump this is a boolean that indicates whether the character is currently jumping, which is used for handling the character's jump actions and animations
+     * @property {number} invincibleUntil this is a timestamp that indicates until when the character is invincible, 
+     * which is used for handling the character's invincibility after getting hurt
+     * @property {object} offsetCharacter this is an object that contains the offset values for the character's collision detection, 
+     * which is used for checking collisions with other objects in the game
+     * @property {function} checkCollision this is a function that checks for collisions between the character and other objects in the game,
+     * @property {number} animationCounter this is a counter that is used for controlling the timing of the character's idle animations,
+     * @property {boolean} normalIdle this is a boolean that indicates whether the character is in the normal idle state, 
+     * which is used for controlling the character's idle animations,
+     * @property {boolean} sleepIdle this is a boolean that indicates whether the character is in the long idle state,
+     * which is used for controlling the character's long idle animations,
+     * @property {number} idleAnimation  this is defined as null, but it is the varialbe for the idle Intervall
+     * @type {number} longIdleAnimation  this is defined as null, but it is the varialbe for the long idle Intervall
+     * @type {number} normal this is a Timeout for the idle animation
+     * @type {number} long this is a Timeout for the long idle animation
+     * @type {audio} jumpSound this is the sound that plays when the character jumps, 
+     * which is used for adding sound effects to the game
+     * @type {audio} walkSound this is the sound that plays when the character walks, 
+     * which is used for adding sound effects to the game  
+     */
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -54,7 +98,7 @@ class character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png',
     ]
-
+    
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -63,8 +107,8 @@ class character extends MovableObject {
         'img/2_character_pepe/5_dead/D-55.png',
         'img/2_character_pepe/5_dead/D-56.png',
     ]
-
-
+    
+    
     y = 40;
     currentImage = 0;
     currentJumpImage = 0;
@@ -77,36 +121,16 @@ class character extends MovableObject {
     ReverseSpeed = 15;
     jumpSpeed;
     jump = false;
-
+    
     invincibleUntil;
-
+    
     offsetCharacter = { //setup Values for Offset here
         top: 50,
         left: 30,
         right: 30,
         bottom: 30
     };
-
-
-    constructor() {
-
-        super()
-        this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png'),
-
-            this.loadImages(this.IMAGES_WALKING)
-        this.loadImages(this.IMAGES_JUMPING)
-        this.loadImages(this.IMAGES_HURT)
-        this.loadImages(this.IMAGES_DEAD)
-        this.loadImages(this.IMAGES_IDLE)
-        this.loadImages(this.IMAGES_LONG_IDLE)
-        this.applyGravity(this.speedY = 1.5);
-        this.showIdle_OnCharacter()
-        this.Move_Character()
-        this.playCharacter_Animations();
-        this.animatejumpAndWalking_Character()
-
-    }
-
+    
     checkCollision;
     idleAnimation = null;
     longIdleAnimation = null;
@@ -118,33 +142,37 @@ class character extends MovableObject {
 
     jumpsound = new Audio('/audio/jumpSound.mp3');
     walkSound = new Audio('/audio/character_walk.mp3')
-    /**here we check keystrokes and update character position accordingly */
-    Move_Character() {
-        setStoppableInterval(() => {
-            if (this.world.Keyboard.RIGHT && this.x < this.world.level.endboss[0].x) { this.moveRightActions(); }
-            if (this.world.Keyboard.LEFT && this.x > 100) { this.moveLeftActions(); }
-            if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT) { this.walkSound.pause(); this.walkSound.currentTime = 0; }
-            if (!this.world.Keyboard.SPACE) { this.jumpsound.pause(); this.jumpsound.currentTime = 0; }
-            if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT && !this.world.Keyboard.SPACE && !this.isAboveGround()) {
-                if (!this.normal) { this.setNormalTimeout(); }
-                if (!this.long) { this.setLongTimeout(); }
-                this.animationCounter++
-                if (this.animationCounter % 3 === 0 && this.normalIdle) {
-                    this.playIdleAnimation()
-                }
-                if (this.animationCounter % 3 === 0 && this.sleepIdle) {
-                    this.playLongIdleAnimation()
-                }
-            }
-            this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
-        }, 1000 / 30);
-        setStoppableInterval(() => {
-            if (this.world.Keyboard.SPACE && !this.isAboveGround() && !this.jump) { this.jumpActions(); }
-        }, 1000 / 25);
 
+    /**
+     * @constructor this constructor loads the images for the character animations, 
+     * applies gravity to the character, shows the idle animation on the character, 
+     * handles the character's movement and plays the character's animations
+     * @type {function} loadImage this function loads the first idle image for the character, 
+     * which is used for the character's initial appearance in the game
+     * @type {function} loadImages this function loads the images for the character
+     *  walking, jumping, hurt, dead, idle and long idle animations,
+     * @type {function} applyGravity this function applies gravity to the character, 
+     * which is used for the character's jump and fall actions
+     * 
+     */
+    constructor() {
+        super()
+        this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png'),
+            this.loadImages(this.IMAGES_WALKING)
+        this.loadImages(this.IMAGES_JUMPING)
+        this.loadImages(this.IMAGES_HURT)
+        this.loadImages(this.IMAGES_DEAD)
+        this.loadImages(this.IMAGES_IDLE)
+        this.loadImages(this.IMAGES_LONG_IDLE)
+        this.applyGravity(this.speedY = 1.5);
+        
     }
 
-    /**here we animate the character's jump and stop Idle Animation */
+    
+
+    /**here we animate the character's jump and stop Idle Animation
+     * @returns void
+     */
     jumpActions() {
         clearTimeout(this.normal);
         this.idleAnimation = null
@@ -159,7 +187,9 @@ class character extends MovableObject {
         }
     }
 
-    /**here we handle the character's movement to the right and stop Idle Animation */
+    /**here we handle the character's movement to the right and stop Idle Animation
+     * @returns void    
+     */
     moveRightActions() {
         clearTimeout(this.normal);
         this.idleAnimation = null
@@ -174,7 +204,9 @@ class character extends MovableObject {
         }
     }
 
-    /**here we handle the character's movement to the left and stop Idle Animation */
+    /**here we handle the character's movement to the left and stop Idle Animation
+     * @returns void
+     */
     moveLeftActions() {
         clearTimeout(this.normal);
         this.idleAnimation = null
@@ -189,14 +221,20 @@ class character extends MovableObject {
         }
     }
 
-    /** here we set a timeout for the normal idle animation */
+    /** here we set a timeout for the normal idle animation
+     * @type {boolean} false
+     * @returns void
+     */
     setNormalTimeout() {
         this.normal = setTimeout(() => {
             this.normalIdle = false;
         }, 8000);
     }
 
-    /** here we set a timeout for the long idle animation */
+    /** here we set a timeout for the long idle animation
+     * @type {boolean} true
+     * @returns void
+     */
     setLongTimeout() {
         this.long = setTimeout(() => {
             this.sleepIdle = true;
@@ -204,26 +242,22 @@ class character extends MovableObject {
     }
 
 
-    /**this shows the idle animation on the character after a set time */
-    showIdle_OnCharacter() {
-        this.IdleTimeout = setTimeout(() => {
-            this.playIdleAnimation()
-        }, 3000);
-        this.longIdleTimeout = setTimeout(() => {
-            this.playLongIdleAnimation()
-        }, 8000);
-    }
+    
 
-    /**this checks if the character is colliding with the end boss */
+    /**this checks if the character is colliding with the end boss
+     * @returns {boolean} true if the character is colliding with the end boss, false if it is not
+     */
     isCollidingWithEndboss(endboss) {
-        console.log('checking collision in Character');
-        return (this.x + this.width - this.offset.right > endboss.x - endboss.offset.left &&
+        
+        return (this.x + this.width - this.offset.right > endboss.x + endboss.offset.left &&
             this.x + this.offset.left < endboss.x + endboss.width - endboss.offset.right &&
             this.y - this.offset.top < endboss.y + endboss.height - endboss.offset.bottom &&
             this.y + this.height - this.offset.bottom > endboss.y + endboss.offset.top);
     }
 
-    /**this checks if the character is colliding with a normal chicken */
+    /**this checks if the character is colliding with a normal chicken
+     * @returns {boolean} true if the character is colliding with a normal chicken, false if it is not
+     */
     isColliding(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x &&
@@ -236,7 +270,9 @@ class character extends MovableObject {
 
 
 
-    /**this checks if the character is chrushing a normal chicken */
+    /**this checks if the character is chrushing a normal chicken
+     * @returns {boolean} true if the character is chrushing a normal chicken, false if it is not
+     */
     isChrushingChicken(mo) { // it is easier without offset
         return (
             this.x + this.width - this.offset.right > mo.x &&
@@ -248,7 +284,9 @@ class character extends MovableObject {
         );
     }
 
-    /**this checks if the character is colliding with a mini chicken */
+    /**this checks if the character is colliding with a mini chicken
+     * @returns {boolean} true if the character is colliding with a mini chicken, false if it is not
+     */
     isCollidingMiniChicken(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x + mo.offsetMini.left &&
@@ -259,7 +297,9 @@ class character extends MovableObject {
 
     }
 
-    /**this checks if the character is chrushing a mini chicken */
+    /**this checks if the character is chrushing a mini chicken
+     * @returns {boolean} true if the character is chrushing a mini chicken, false if it is not
+     */
     isChrushingMiniChicken(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x &&
@@ -271,13 +311,17 @@ class character extends MovableObject {
         );
     }
 
-    /**here we make the character invincible for a specified number of seconds */
+    /**here we make the character invincible for a specified number of seconds
+     * @type {number} seconds the number of seconds the character will be invincible
+     */
     makeInvincible(seconds) {
         let fiveSecond = seconds * 1000
         this.invincibleUntil = new Date().getTime() + fiveSecond
     }
 
-    /**this checks the time who has passed and sets the invincibility status */
+    /**this checks the time who has passed and sets the invincibility status
+     * @returns {boolean} true if the character is invincible, false if it is not
+     */
     isInvincible() {
         let now = new Date().getTime()
         if (now < this.invincibleUntil) {
@@ -288,22 +332,17 @@ class character extends MovableObject {
     }
 
 
-    /**this checks if the character is dead */
+    /**this checks if the character is dead
+     * @returns {boolean} true if the character is dead, false if it is not
+     */
     isDeath() {
         return this.energy <= 0;
     }
 
-
-    /**here we play the character's hurt and death animation */
-    playCharacter_Animations() {
-        setStoppableInterval(() => {
-            this.playHurtAnimation(); //normal
-            this.playDeathAnimation();
-        }, 1000 / 20);
-
-    }
-
-    /**here we play the idle animation */
+    /**here we play the idle animation
+     * @type {function} playIdleAnimation this function shows the idle animation on the character
+     * @returns void
+     */
     playIdleAnimation() {
         if(this.world.isHurt()) return
         let path = this.IMAGES_IDLE[this.currentIdleImage];
@@ -311,7 +350,10 @@ class character extends MovableObject {
         this.currentIdleImage = (this.currentIdleImage + 1) % this.IMAGES_IDLE.length;
     }
 
-    /**here we play the long idle animation */
+    /**here we play the long idle animation
+     * @type {function} playLongIdleAnimation this function shows the long idle animation on the character
+     * @returns void
+     */
     playLongIdleAnimation() {
         if(this.world.isHurt()) return
         let path = this.IMAGES_LONG_IDLE[this.currentLongIdleImage];
@@ -319,9 +361,15 @@ class character extends MovableObject {
         this.currentLongIdleImage = (this.currentLongIdleImage + 1) % this.IMAGES_LONG_IDLE.length;
     }
 
-
+    /**
+     * this does slow down the idle animation
+     *  */
     count = 0;
-    /**here we play the hurt animation */
+
+    /**here we play the hurt animation
+     * @type {HTMLImageElement} img for the hurt Animation
+     * @returns void
+     */
     playHurtAnimation() {
         this.count++
         if (this.world.isHurt() && this.count % 40 === 0) {
@@ -332,39 +380,16 @@ class character extends MovableObject {
 
     }
 
-    /**here we play the death animation */
+    /**here we play the death animation
+     * @type {HTMLImageElement} img for the death Animation
+     * @returns void
+     */
     playDeathAnimation() {
         if (this.isDeath()) {
             let path = this.IMAGES_DEAD[this.currentDeathImage];
             this.img = this.imageChache[path];
             this.currentDeathImage = (this.currentDeathImage + 1) % this.IMAGES_DEAD.length;
         }
-    }
-
-
-    jumpCounter = 0;
-
-    /**here we animate the character's jumping and walking */
-    animatejumpAndWalking_Character() {
-        //================Animate character============
-        setStoppableInterval(() => {
-            if (this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) {
-                let path = this.IMAGES_WALKING[this.currentImage];
-                this.img = this.imageChache[path];
-                this.currentImage = (this.currentImage + 1) % this.IMAGES_WALKING.length;
-            }
-        }, 1000 / 24);
-        setStoppableInterval(() => {
-            this.jumpCounter ++;
-            if (this.y < 100 && this.jumpCounter % 13 === 0) {
-                let path = this.IMAGES_JUMPING[this.currentJumpImage];
-                this.img = this.imageChache[path];
-                this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
-            }
-            if(!this.isAboveGround()) {
-                this.currentJumpImage = 0;
-            }
-        }, 1000 / 40);
     }
 }
 
