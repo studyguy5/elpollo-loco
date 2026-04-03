@@ -101,10 +101,7 @@ class ThrowableObject extends MovableObject {
                 if(enemiesC || miniEnemiesC || endbossC || this.y > 360) {
                     this.hit = true;
                     clearInterval(this.intervalId);
-
-                    // this.x_intervall(enemiesC, miniEnemiesC, endbossC, world);
                     this.splashBottle();
-
                     return;
                 }
                 this.bottleRotation_Animation();

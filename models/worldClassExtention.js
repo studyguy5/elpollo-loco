@@ -97,8 +97,8 @@ class WorldClassExtention extends World {
      */
     bottleisCollidingWithChicken(enemies) {
         const hit = (
-            (this.Character.x + (this.throwableObjects[0]?.x - 120)) + this.throwableObjects[0]?.width > enemies.x &&
-            (this.Character.x + (this.throwableObjects[0]?.x - 120)) < enemies.x + enemies.width &&
+            this.throwableObjects[0]?.x + this.throwableObjects[0]?.width > enemies.x &&
+            this.throwableObjects[0]?.x < enemies.x + enemies.width &&
             this.throwableObjects[0]?.y < enemies.y + enemies.height &&
             this.throwableObjects[0]?.y + this.throwableObjects[0]?.height > enemies.y
         )
@@ -111,8 +111,8 @@ class WorldClassExtention extends World {
      */
     bottleisCollidingWithMiniChicken(miniEnemies) {
         const hit = (
-            (this.Character.x + (this.throwableObjects[0]?.x - 120)) + this.throwableObjects[0]?.width > miniEnemies.x &&
-            (this.Character.x + (this.throwableObjects[0]?.x - 120)) < miniEnemies.x + miniEnemies.width &&
+            this.throwableObjects[0]?.x + this.throwableObjects[0]?.width > miniEnemies.x &&
+            this.throwableObjects[0]?.x < miniEnemies.x + miniEnemies.width &&
             this.throwableObjects[0]?.y < miniEnemies.y + miniEnemies.height &&
             this.throwableObjects[0]?.y + this.throwableObjects[0]?.height > miniEnemies.y
         )
@@ -131,6 +131,8 @@ class WorldClassExtention extends World {
             this.Character.y + this.Character.height + this.Character.offsetCharacter.bottom > bottles.y
         );
     }
+
+    
 
     /**here we check for collisions with coins
      * @param {object} coins the coin object
@@ -295,8 +297,8 @@ class WorldClassExtention extends World {
         this.throwableObjects.push(bottle);
         let index = (this.throwableObjects?.length - 1)
         if (this.Character.otherDirection) {
-            this.throwableObjects[index]?.throw(-35, this)
-        } else { this.throwableObjects[index]?.throw(35, this) }
+            this.throwableObjects[index]?.throw(-25, this)
+        } else { this.throwableObjects[index]?.throw(25, this) }
         this.collected--
         this.d_wasPressed = true;
     }

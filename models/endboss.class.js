@@ -282,8 +282,8 @@ class endboss extends MovableObject {
      * @returns void
      */
     bottleisCollidingWithEndboss() {
-        const hit = ((this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) + this.camera?.throwableObjects[0]?.width > this.x &&
-            (this.camera?.Character.x + (this.camera?.throwableObjects[0]?.x - 120)) < this.x + this.width &&
+        const hit = (this.camera?.throwableObjects[0]?.x + this.camera?.throwableObjects[0]?.width > this.x &&
+            this.camera?.throwableObjects[0]?.x < this.x + this.width &&
             this.camera?.throwableObjects[0]?.y < this.y + this.height &&
             this.camera?.throwableObjects[0]?.y + this.camera?.throwableObjects[0]?.height > this.y)
             return hit ? this.x : null;

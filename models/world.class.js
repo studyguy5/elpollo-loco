@@ -250,9 +250,9 @@ class World {
      */
     drawToMapThrow(o) {
         try {
-            // this.ctx.translate(this.camera_x, 0)
-            this.ctx.drawImage(o.img, o.x + this.camera_x, o.y, o.width, o.height);
-            // this.ctx.translate(-this.camera_x, 0)
+            this.ctx.translate(this.camera_x, 0)
+            this.ctx.drawImage(o.img, o.x, o.y, o.width, o.height);
+            this.ctx.translate(-this.camera_x, 0)
         } catch (error) {
             console.warn('Konnte nicht geladen werden', error)
         }
