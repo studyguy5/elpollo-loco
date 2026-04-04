@@ -108,7 +108,7 @@ class ThrowableObject extends MovableObject {
                 this.applyGravityBottle(speedX)
             }
         
-        }, 1000 / 45);
+        }, 1000 / 30);
     }
     
 

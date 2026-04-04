@@ -140,8 +140,7 @@ class character extends MovableObject {
     normal = null;
     long = null;
 
-    jumpsound = new Audio('/audio/jumpSound.mp3');
-    walkSound = new Audio('/audio/character_walk.mp3')
+    
 
     /**
      * @constructor this constructor loads the images for the character animations, 
