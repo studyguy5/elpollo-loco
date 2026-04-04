@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/drawableobject.class.js</title>
+    <title>JSDoc: Source: models/coinObject.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/drawableobject.class.js</h1>
+    <h1 class="page-title">Source: models/coinObject.class.js</h1>
 
     
 
@@ -26,93 +26,39 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @classdesc this class is for all object we have to draw on the canvas and holds functions to draw object, 
- * background layers and loads images
+            <pre class="prettyprint source linenums"><code>
+/**
+ * @class this class is simply for the coins which are collectable for the character with an img, width and height
  */
-
-class DrawableObjekt {
+class Coin extends MovableObject {
 
     /**
-     * @property {object} imageChache this is the big object we put all images for animation in, and choose via key the right one
-     * when we need the pictures
-     * @property {number} subtrahendMax this number is the border for reaching too far left out of the screen
-     * @property {HTMLCanvasElement} ctx this variable holds the 2d context for the canvas in order to draw
-     * @property {HTMLCanvasElement} canvas this is the id for the canvas div we want to draw Objects in
-     * @property {number} x this x is the x-Axis position of the character
-     * @property {number} y this y is the y-Axis position of the character
-     * @property {number} height this height is for the Character
-     * @property {number} width this width is for the character
-     * @property {HTMLImageElement} img this is the img of the Character itself
+     * @property {number} x this x is the x position of the coin, which is random
+     * @property {number} y this y is the y position of any coin which is random too
+     * @property {number} width this width represents the width of the coins in the game
+     * @property {number} height this height represents the height of every coin in the game
      */
-    imageChache = {}; 
-    subtrahendMax = -20;
-    ctx;
-    canvas;
-    x = 80;
-    y = 145;
-    height = 300;
-    width = 100;
-    img;    
-    
+    x;
+    y;
+    width;
+    height;
+
 
     /**
-     * @constructor here we get the connection to the canvas window and the context window in ctx
+     * @constructor this constructor load the img of the coin, sets random x and y values and sets the width, height of the coins
+     * @type {function} loadImage here we load the image for the coin in the game
+     * @type {number} x this x is the x position of the coin, which is random
+     * @type {number} y this y is the y position of any coin which is random too
+     * @type {number} width this width represents the width of the coins in the game
+     * @type {number} height this height represents the height of every coin in the game
+      * @returns void
      */
     constructor() {
-        const canvas = document.getElementById('gameCanvas');
-        this.ctx = canvas.getContext('2d');
-        
-    }
-
-    /**
-     * here we draw some single images whithout animation for the drawable object
-     * @type {HTMLImageElement} img this img loads some drawable Objects
-     * @returns void
-     */
-    loadImage(path) {
-        this.img = new Image()
-        this.img.src = path;
-
-    }
-
-    
-    /**
-     * here we draw the image for the drawable object
-     * @type {HTMLImageElement} img here we draw Objects like the character or something else
-     * @returns void */
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * here we draw the image for the drawable object in the other direction
-     * @type {HTMLImageElement} img here we draw the character in reverse direction
-     * @returns void */
-     * 
-    drawBackward(ctx) {
-        ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * here we draw the background images for the world
-     * @type {HTMLImageElement} img here we draw Objects like the background layers in the game
-     * @returns void */
-    drawBackground(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-    
-    
-    /**
-     * here we load all Images from all classes into the image cache
-     * @type {HTMLImageElement} img this img load diferent images from inheritad classes like movable Object or something else
-     * @type {object} imageChache here we collect all Object Images to use it and draw it on the canvas */
-    loadImages(arr) { 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.imageChache[path] = img; 
-        })
+        super().loadImage('img/7_statusbars/3_icons/icon_coin.png')
+        this.x = 300 + Math.random() * 3000;
+        this.y = 200 + Math.random() * 150;
+        this.width = 60;
+        this.height = 60;
     }
 }</code></pre>
         </article>

@@ -104,7 +104,6 @@ class World {
         this.canvas = canvas;
         this.Keyboard = Keyboard;
         this.drawBackgroundLayers();
-        this.drawCharacter();
         this.reportBottleLenght();
     }
 

@@ -40,7 +40,7 @@ class bottlesOnFloorObject extends MovableObject {
         super()
         this.chooseNumber()
         this.loadImage(`img/6_salsa_bottle/${this.randomIndex}_salsa_bottle_on_ground.png`)
-        this.random_x = 300 + Math.random() * 3300;
+        this.random_x = 300 + Math.random() * 3000;
         this.x = Math.trunc(this.random_x)
         this.y = 360
         this.width = 50

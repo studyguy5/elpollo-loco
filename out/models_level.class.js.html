@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/drawableobject.class.js</title>
+    <title>JSDoc: Source: models/level.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/drawableobject.class.js</h1>
+    <h1 class="page-title">Source: models/level.class.js</h1>
 
     
 
@@ -26,93 +26,45 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @classdesc this class is for all object we have to draw on the canvas and holds functions to draw object, 
- * background layers and loads images
+            <pre class="prettyprint source linenums"><code>
+/**
+ * @classdesc This class represents the whole level in the game, which contains all the objects and enemies that are present in the level. It also contains the background and the endboss of the level.
+ * The level class is used to create the level and to manage the objects and enemies in the level.
  */
-
-class DrawableObjekt {
+class Level {
 
     /**
-     * @property {object} imageChache this is the big object we put all images for animation in, and choose via key the right one
-     * when we need the pictures
-     * @property {number} subtrahendMax this number is the border for reaching too far left out of the screen
-     * @property {HTMLCanvasElement} ctx this variable holds the 2d context for the canvas in order to draw
-     * @property {HTMLCanvasElement} canvas this is the id for the canvas div we want to draw Objects in
-     * @property {number} x this x is the x-Axis position of the character
-     * @property {number} y this y is the y-Axis position of the character
-     * @property {number} height this height is for the Character
-     * @property {number} width this width is for the character
-     * @property {HTMLImageElement} img this is the img of the Character itself
+     * @property {Object[]} coins the array of coin objects in the level, which is used for the coins in the level
+     * @property {Object[]} bottles the array of bottle objects in the level, which is used for the bottles in the level
+     * and so on...
+     * @property {number} level_end_x the x position of the end of the level, which is used for checking if the character has reached the end of the level
      */
-    imageChache = {}; 
-    subtrahendMax = -20;
-    ctx;
-    canvas;
-    x = 80;
-    y = 145;
-    height = 300;
-    width = 100;
-    img;    
-    
+    coins;
+    bottles;
+    miniEnemies;
+    enemies;
+    clouds;
+    bg;
+    endboss;
+    level_end_x = 719 * 5;
 
-    /**
-     * @constructor here we get the connection to the canvas window and the context window in ctx
-     */
-    constructor() {
-        const canvas = document.getElementById('gameCanvas');
-        this.ctx = canvas.getContext('2d');
-        
-    }
 
-    /**
-     * here we draw some single images whithout animation for the drawable object
-     * @type {HTMLImageElement} img this img loads some drawable Objects
-     * @returns void
-     */
-    loadImage(path) {
-        this.img = new Image()
-        this.img.src = path;
-
-    }
-
-    
-    /**
-     * here we draw the image for the drawable object
-     * @type {HTMLImageElement} img here we draw Objects like the character or something else
-     * @returns void */
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * here we draw the image for the drawable object in the other direction
-     * @type {HTMLImageElement} img here we draw the character in reverse direction
-     * @returns void */
+    /** @constructor spreads the arrays to the keys in this class in order to work with the objects in the level and to 
+     * create the level
+     * @property {Object[]} coins the array of coin objects in the level
+     * @property {Object[]} bottles the array of bottle objects in the level
+     * and so on...
      * 
-    drawBackward(ctx) {
-        ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * here we draw the background images for the world
-     * @type {HTMLImageElement} img here we draw Objects like the background layers in the game
-     * @returns void */
-    drawBackground(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-    
-    
-    /**
-     * here we load all Images from all classes into the image cache
-     * @type {HTMLImageElement} img this img load diferent images from inheritad classes like movable Object or something else
-     * @type {object} imageChache here we collect all Object Images to use it and draw it on the canvas */
-    loadImages(arr) { 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.imageChache[path] = img; 
-        })
+     * @property {number} level_end_x the x position of the end of the level
+     */
+    constructor(coins, bottles, miniEnemies, enemies, clouds, bg, endboss) {
+        this.coins = coins;
+        this.bottles = bottles;
+        this.miniEnemies = miniEnemies;
+        this.enemies = enemies;
+        this.clouds = clouds;
+        this.bg = bg;
+        this.endboss = endboss;
     }
 }</code></pre>
         </article>

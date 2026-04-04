@@ -26,9 +26,53 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>
+            <pre class="prettyprint source linenums"><code>/**
+ * @class character this class represents the main character in the game, which is controlled by the player. 
+ * It extends the MovableObject class, which provides basic movement and animation functionality. 
+ * The character class includes properties for different animations (walking, jumping, idle, hurt, dead), 
+ * as well as methods for handling movement, collisions, and animations.
+ */
 class character extends MovableObject {
 
+    /**
+     * @property {string[]} IMAGES_WALKING this array contains the image paths for the character walking animation,
+     * @property {string[]} IMAGES_JUMPING this array contains the image paths for the character jumping animation,
+     * @property {string[]} IMAGES_IDLE this array contains the image paths for the character idle animation,
+     * @property {string[]} IMAGES_LONG_IDLE this array contains the image paths for the character long idle animation,
+     * @property {string[]} IMAGES_HURT this array contains the image paths for the character hurt animation,
+     * @property {string[]} IMAGES_DEAD this array contains the image paths for the character dead animation,
+     * these arrays are used for the character animations and are loaded in the constructor
+     * @type {number} y this is the y position of the character in the game, which is used for the character's position on the canvas
+     * @property {number} currentImage this is the index of the current image for the character walking animation, which is used for the character walking animation
+     * @property {number} currentJumpImage this is the index of the current image for the character jumping animation, which is used for the character jumping animation
+     * @property {number} currentHurtImage this is the index of the current image for the character hurt animation, which is used for the character hurt animation
+     * @property {number} currentIdleImage this is the index of the current image for the character idle animation, which is used for the character idle animation
+     * @property {number} currentLongIdleImage this is the index of the current image for the character long idle animation, which is used for the character long idle animation
+     * @property {number} currentDeathImage this is the index of the current image for the character dead animation, which is used for the character dead animation
+     * @property {World} world this is the world object, which is used to access the character and the endboss, and to check for collisions and other interactions in the game
+     * @property {number} speed this is the speed of the character, which is used for moving the character to the right and left
+     * @property {number} ReverseSpeed this is the speed of the character, which is used for moving the character to the left
+     * @property {number} jumpSpeed this is the speed of the character, which is used for jumping and applying gravity to the character
+     * @property {boolean} jump this is a boolean that indicates whether the character is currently jumping, which is used for handling the character's jump actions and animations
+     * @property {number} invincibleUntil this is a timestamp that indicates until when the character is invincible, 
+     * which is used for handling the character's invincibility after getting hurt
+     * @property {object} offsetCharacter this is an object that contains the offset values for the character's collision detection, 
+     * which is used for checking collisions with other objects in the game
+     * @property {function} checkCollision this is a function that checks for collisions between the character and other objects in the game,
+     * @property {number} animationCounter this is a counter that is used for controlling the timing of the character's idle animations,
+     * @property {boolean} normalIdle this is a boolean that indicates whether the character is in the normal idle state, 
+     * which is used for controlling the character's idle animations,
+     * @property {boolean} sleepIdle this is a boolean that indicates whether the character is in the long idle state,
+     * which is used for controlling the character's long idle animations,
+     * @property {number} idleAnimation  this is defined as null, but it is the varialbe for the idle Intervall
+     * @type {number} longIdleAnimation  this is defined as null, but it is the varialbe for the long idle Intervall
+     * @type {number} normal this is a Timeout for the idle animation
+     * @type {number} long this is a Timeout for the long idle animation
+     * @type {audio} jumpSound this is the sound that plays when the character jumps, 
+     * which is used for adding sound effects to the game
+     * @type {audio} walkSound this is the sound that plays when the character walks, 
+     * which is used for adding sound effects to the game  
+     */
     IMAGES_WALKING = [
         'img/2_character_pepe/2_walk/W-21.png',
         'img/2_character_pepe/2_walk/W-22.png',
@@ -39,15 +83,15 @@ class character extends MovableObject {
     ]
 
     IMAGES_JUMPING = [
-        'img/2_character_pepe/3_jump/J-31.png',
-        'img/2_character_pepe/3_jump/J-32.png',
-        'img/2_character_pepe/3_jump/J-33.png',
+        // 'img/2_character_pepe/3_jump/J-31.png',
+        // 'img/2_character_pepe/3_jump/J-32.png',
+        // 'img/2_character_pepe/3_jump/J-33.png',
         'img/2_character_pepe/3_jump/J-34.png',
         'img/2_character_pepe/3_jump/J-35.png',
         'img/2_character_pepe/3_jump/J-36.png',
         'img/2_character_pepe/3_jump/J-37.png',
         'img/2_character_pepe/3_jump/J-38.png',
-        'img/2_character_pepe/3_jump/J-39.png',
+        // 'img/2_character_pepe/3_jump/J-39.png',
     ]
 
     IMAGES_IDLE = [
@@ -82,7 +126,7 @@ class character extends MovableObject {
         'img/2_character_pepe/4_hurt/H-42.png',
         'img/2_character_pepe/4_hurt/H-43.png',
     ]
-
+    
     IMAGES_DEAD = [
         'img/2_character_pepe/5_dead/D-51.png',
         'img/2_character_pepe/5_dead/D-52.png',
@@ -91,8 +135,8 @@ class character extends MovableObject {
         'img/2_character_pepe/5_dead/D-55.png',
         'img/2_character_pepe/5_dead/D-56.png',
     ]
-
-
+    
+    
     y = 40;
     currentImage = 0;
     currentJumpImage = 0;
@@ -105,36 +149,16 @@ class character extends MovableObject {
     ReverseSpeed = 15;
     jumpSpeed;
     jump = false;
-
+    
     invincibleUntil;
-
+    
     offsetCharacter = { //setup Values for Offset here
         top: 50,
         left: 30,
         right: 30,
         bottom: 30
     };
-
-
-    constructor() {
-
-        super()
-        this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png'),
-
-            this.loadImages(this.IMAGES_WALKING)
-        this.loadImages(this.IMAGES_JUMPING)
-        this.loadImages(this.IMAGES_HURT)
-        this.loadImages(this.IMAGES_DEAD)
-        this.loadImages(this.IMAGES_IDLE)
-        this.loadImages(this.IMAGES_LONG_IDLE)
-        this.applyGravity()
-        this.showIdle_OnCharacter()
-        this.Move_Character()
-        this.playCharacter_Animations();
-        this.animatejumpAndWalking_Character()
-
-    }
-
+    
     checkCollision;
     idleAnimation = null;
     longIdleAnimation = null;
@@ -146,27 +170,37 @@ class character extends MovableObject {
 
     jumpsound = new Audio('/audio/jumpSound.mp3');
     walkSound = new Audio('/audio/character_walk.mp3')
-    /**here we check keystrokes and update character position accordingly */
-    Move_Character() {
-        setStoppableInterval(() => {
-            if (this.world.Keyboard.SPACE &amp;&amp; !this.isAboveGround() &amp;&amp; !this.jump) { this.jumpActions(); }
-            if (this.world.Keyboard.RIGHT &amp;&amp; this.x &lt; this.world.level.level_end_x) { this.moveRightActions(); }
-            if (this.world.Keyboard.LEFT &amp;&amp; this.x > 100) { this.moveLeftActions(); }
-            if (!this.world.Keyboard.RIGHT &amp;&amp; !this.world.Keyboard.LEFT) { this.walkSound.pause(); this.walkSound.currentTime = 0; }
-            if (!this.world.Keyboard.SPACE){this.jumpsound.pause(); this.jumpsound.currentTime = 0;}
-            if (!this.world.Keyboard.RIGHT &amp;&amp; !this.world.Keyboard.LEFT &amp;&amp; !this.world.Keyboard.SPACE) {
-                if (!this.normal){this.setNormalTimeout();}
-                if (!this.long){this.setLongTimeout();}
-                this.animationCounter++
-                if (this.animationCounter % 3 === 0 &amp;&amp; this.normalIdle) {
-                    this.playIdleAnimation()}
-                if (this.animationCounter % 3 === 0 &amp;&amp; this.sleepIdle) {
-                    this.playLongIdleAnimation()}}
-            this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
-        }, 1000 / 40);
+
+    /**
+     * @constructor this constructor loads the images for the character animations, 
+     * applies gravity to the character, shows the idle animation on the character, 
+     * handles the character's movement and plays the character's animations
+     * @type {function} loadImage this function loads the first idle image for the character, 
+     * which is used for the character's initial appearance in the game
+     * @type {function} loadImages this function loads the images for the character
+     *  walking, jumping, hurt, dead, idle and long idle animations,
+     * @type {function} applyGravity this function applies gravity to the character, 
+     * which is used for the character's jump and fall actions
+     * 
+     */
+    constructor() {
+        super()
+        this.loadImage('img/2_character_pepe/1_idle/idle/I-1.png'),
+            this.loadImages(this.IMAGES_WALKING)
+        this.loadImages(this.IMAGES_JUMPING)
+        this.loadImages(this.IMAGES_HURT)
+        this.loadImages(this.IMAGES_DEAD)
+        this.loadImages(this.IMAGES_IDLE)
+        this.loadImages(this.IMAGES_LONG_IDLE)
+        this.applyGravity(this.speedY = 1.5);
+        
     }
 
-    /**here we animate the character's jump and stop Idle Animation */
+    
+
+    /**here we animate the character's jump and stop Idle Animation
+     * @returns void
+     */
     jumpActions() {
         clearTimeout(this.normal);
         this.idleAnimation = null
@@ -181,7 +215,9 @@ class character extends MovableObject {
         }
     }
 
-    /**here we handle the character's movement to the right and stop Idle Animation */
+    /**here we handle the character's movement to the right and stop Idle Animation
+     * @returns void    
+     */
     moveRightActions() {
         clearTimeout(this.normal);
         this.idleAnimation = null
@@ -196,7 +232,9 @@ class character extends MovableObject {
         }
     }
 
-    /**here we handle the character's movement to the left and stop Idle Animation */
+    /**here we handle the character's movement to the left and stop Idle Animation
+     * @returns void
+     */
     moveLeftActions() {
         clearTimeout(this.normal);
         this.idleAnimation = null
@@ -211,40 +249,43 @@ class character extends MovableObject {
         }
     }
 
-    /** here we set a timeout for the normal idle animation */
+    /** here we set a timeout for the normal idle animation
+     * @type {boolean} false
+     * @returns void
+     */
     setNormalTimeout() {
         this.normal = setTimeout(() => {
-                        this.normalIdle = false;
-                    }, 8000);
-    }
-
-    /** here we set a timeout for the long idle animation */
-    setLongTimeout() {
-        this.long = setTimeout(() => {
-                        this.sleepIdle = true;
-                    }, 8000);
-    }
-
-
-    /**this shows the idle animation on the character after a set time */
-    showIdle_OnCharacter() {
-        this.IdleTimeout = setTimeout(() => {
-            this.playIdleAnimation()
-        }, 3000);
-        this.longIdleTimeout = setTimeout(() => {
-            this.playLongIdleAnimation()
+            this.normalIdle = false;
         }, 8000);
     }
 
-    /**this checks if the character is colliding with the end boss */
+    /** here we set a timeout for the long idle animation
+     * @type {boolean} true
+     * @returns void
+     */
+    setLongTimeout() {
+        this.long = setTimeout(() => {
+            this.sleepIdle = true;
+        }, 8000);
+    }
+
+
+    
+
+    /**this checks if the character is colliding with the end boss
+     * @returns {boolean} true if the character is colliding with the end boss, false if it is not
+     */
     isCollidingWithEndboss(endboss) {
-        return (this.x + this.width - this.offset.right > endboss.x - endboss.offset.left &amp;&amp;
+        
+        return (this.x + this.width - this.offset.right > endboss.x + endboss.offset.left &amp;&amp;
             this.x + this.offset.left &lt; endboss.x + endboss.width - endboss.offset.right &amp;&amp;
             this.y - this.offset.top &lt; endboss.y + endboss.height - endboss.offset.bottom &amp;&amp;
             this.y + this.height - this.offset.bottom > endboss.y + endboss.offset.top);
     }
 
-    /**this checks if the character is colliding with a normal chicken */
+    /**this checks if the character is colliding with a normal chicken
+     * @returns {boolean} true if the character is colliding with a normal chicken, false if it is not
+     */
     isColliding(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x &amp;&amp;
@@ -257,7 +298,9 @@ class character extends MovableObject {
 
 
 
-    /**this checks if the character is chrushing a normal chicken */
+    /**this checks if the character is chrushing a normal chicken
+     * @returns {boolean} true if the character is chrushing a normal chicken, false if it is not
+     */
     isChrushingChicken(mo) { // it is easier without offset
         return (
             this.x + this.width - this.offset.right > mo.x &amp;&amp;
@@ -269,7 +312,9 @@ class character extends MovableObject {
         );
     }
 
-    /**this checks if the character is colliding with a mini chicken */
+    /**this checks if the character is colliding with a mini chicken
+     * @returns {boolean} true if the character is colliding with a mini chicken, false if it is not
+     */
     isCollidingMiniChicken(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x + mo.offsetMini.left &amp;&amp;
@@ -280,7 +325,9 @@ class character extends MovableObject {
 
     }
 
-    /**this checks if the character is chrushing a mini chicken */
+    /**this checks if the character is chrushing a mini chicken
+     * @returns {boolean} true if the character is chrushing a mini chicken, false if it is not
+     */
     isChrushingMiniChicken(mo) {
         return (
             this.x + this.width - this.offsetCharacter.right > mo.x &amp;&amp;
@@ -292,13 +339,17 @@ class character extends MovableObject {
         );
     }
 
-    /**here we make the character invincible for a specified number of seconds */
+    /**here we make the character invincible for a specified number of seconds
+     * @type {number} seconds the number of seconds the character will be invincible
+     */
     makeInvincible(seconds) {
         let fiveSecond = seconds * 1000
         this.invincibleUntil = new Date().getTime() + fiveSecond
     }
 
-    /**this checks the time who has passed and sets the invincibility status */
+    /**this checks the time who has passed and sets the invincibility status
+     * @returns {boolean} true if the character is invincible, false if it is not
+     */
     isInvincible() {
         let now = new Date().getTime()
         if (now &lt; this.invincibleUntil) {
@@ -309,41 +360,47 @@ class character extends MovableObject {
     }
 
 
-    /**this checks if the character is dead */
+    /**this checks if the character is dead
+     * @returns {boolean} true if the character is dead, false if it is not
+     */
     isDeath() {
         return this.energy &lt;= 0;
     }
 
-
-    /**here we play the character's hurt and death animation */
-    playCharacter_Animations() {
-        setStoppableInterval(() => {
-            this.playHurtAnimation(); //normal
-            this.playDeathAnimation();
-        }, 1000 / 5);
-
-    }
-
-    /**here we play the idle animation */
+    /**here we play the idle animation
+     * @type {function} playIdleAnimation this function shows the idle animation on the character
+     * @returns void
+     */
     playIdleAnimation() {
+        if(this.world.isHurt()) return
         let path = this.IMAGES_IDLE[this.currentIdleImage];
         this.img = this.imageChache[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
         this.currentIdleImage = (this.currentIdleImage + 1) % this.IMAGES_IDLE.length;
     }
 
-    /**here we play the long idle animation */
+    /**here we play the long idle animation
+     * @type {function} playLongIdleAnimation this function shows the long idle animation on the character
+     * @returns void
+     */
     playLongIdleAnimation() {
+        if(this.world.isHurt()) return
         let path = this.IMAGES_LONG_IDLE[this.currentLongIdleImage];
         this.img = this.imageChache[path]; //objekt idleImages befindet sich im Movalble Objekt, das wird im img tag gespeichert, welcher mit drawImage im Movable Objekt gezeichent wird
         this.currentLongIdleImage = (this.currentLongIdleImage + 1) % this.IMAGES_LONG_IDLE.length;
     }
 
-
+    /**
+     * this does slow down the idle animation
+     *  */
     count = 0;
-    /**here we play the hurt animation */
+
+    /**here we play the hurt animation
+     * @type {HTMLImageElement} img for the hurt Animation
+     * @returns void
+     */
     playHurtAnimation() {
         this.count++
-        if (this.world.isHurt() &amp;&amp; this.count % 4 === 0) {
+        if (this.world.isHurt() &amp;&amp; this.count % 40 === 0) {
             let path = this.IMAGES_HURT[this.currentHurtImage];
             this.img = this.imageChache[path];
             this.currentHurtImage = (this.currentHurtImage + 1) % this.IMAGES_HURT.length;
@@ -351,35 +408,16 @@ class character extends MovableObject {
 
     }
 
-    /**here we play the death animation */
+    /**here we play the death animation
+     * @type {HTMLImageElement} img for the death Animation
+     * @returns void
+     */
     playDeathAnimation() {
         if (this.isDeath()) {
             let path = this.IMAGES_DEAD[this.currentDeathImage];
             this.img = this.imageChache[path];
             this.currentDeathImage = (this.currentDeathImage + 1) % this.IMAGES_DEAD.length;
         }
-    }
-
-
-
-    /**here we animate the character's jumping and walking */
-    animatejumpAndWalking_Character() {
-        //================Animate character============
-        setStoppableInterval(() => {
-            if (this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) {
-                let path = this.IMAGES_WALKING[this.currentImage];
-                this.img = this.imageChache[path];
-                this.currentImage = (this.currentImage + 1) % this.IMAGES_WALKING.length;
-            }
-        }, 1000 / 24);
-
-        setStoppableInterval(() => {
-            if (this.isAboveGround()) {
-                let path = this.IMAGES_JUMPING[this.currentJumpImage];
-                this.img = this.imageChache[path];
-                this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
-            }
-        }, 1000 / 10);
     }
 }
 
@@ -398,13 +436,13 @@ class character extends MovableObject {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Global</h3><ul><li><a href="global.html#backToStartScreen">backToStartScreen</a></li><li><a href="global.html#changeMuteStatus">changeMuteStatus</a></li><li><a href="global.html#changeToFullscreen">changeToFullscreen</a></li><li><a href="global.html#checkMuteStatus">checkMuteStatus</a></li><li><a href="global.html#checkWinLoose">checkWinLoose</a></li><li><a href="global.html#elem">elem</a></li><li><a href="global.html#endMaskForGame">endMaskForGame</a></li><li><a href="global.html#hideEndDialog">hideEndDialog</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#level1">level1</a></li><li><a href="global.html#makeInfoVisible">makeInfoVisible</a></li><li><a href="global.html#openFullscreen">openFullscreen</a></li><li><a href="global.html#playBackgroundMusic">playBackgroundMusic</a></li><li><a href="global.html#reloadInit">reloadInit</a></li><li><a href="global.html#renderControlButton">renderControlButton</a></li><li><a href="global.html#renderInfo">renderInfo</a></li><li><a href="global.html#renderSoundButton">renderSoundButton</a></li><li><a href="global.html#resetFullscreen">resetFullscreen</a></li><li><a href="global.html#restartGame">restartGame</a></li><li><a href="global.html#setLoosingEndscreen">setLoosingEndscreen</a></li><li><a href="global.html#setWinningEndscreen">setWinningEndscreen</a></li><li><a href="global.html#startGame">startGame</a></li><li><a href="global.html#startMaskforGame">startMaskforGame</a></li><li><a href="global.html#stopAllIntervall">stopAllIntervall</a></li><li><a href="global.html#stopBubbling">stopBubbling</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="CharacterExtention.html">CharacterExtention</a></li><li><a href="Coin.html">Coin</a></li><li><a href="DrawableObjekt.html">DrawableObjekt</a></li><li><a href="Level.html">Level</a></li><li><a href="MovableObject.html">MovableObject</a></li><li><a href="StartScreen.html">StartScreen</a></li><li><a href="ThrowableObject.html">ThrowableObject</a></li><li><a href="World.html">World</a></li><li><a href="WorldClassExtention.html">WorldClassExtention</a></li><li><a href="background.html">background</a></li><li><a href="bottlesOnFloorObject.html">bottlesOnFloorObject</a></li><li><a href="character.html">character</a></li><li><a href="chicken.html">chicken</a></li><li><a href="cloud.html">cloud</a></li><li><a href="creates%2520a%2520new%2520background%2520object.html">creates a new background object</a></li><li><a href="creates%2520a%2520new%2520bottle%2520on%2520the%2520floor%2520object%2520with%2520random%2520image%2520and%2520random%2520x%2520position.html">creates a new bottle on the floor object with random image and random x position</a></li><li><a href="creates%2520a%2520new%2520chicken%2520object%2520with%2520random%2520x%2520position%2520and%2520y%2520position,%250Dand%2520loads%2520the%2520walking%2520animation%2520for%2520the%2520chicken.html">creates a new chicken object with random x position and y position,and loads the walking animation for the chicken</a></li><li><a href="creates%2520a%2520new%2520end%2520screen%2520object%2520and%2520loads%2520the%2520end%2520screen%2520image%2520depending%2520on%2520the%2520state%2520of%2520the%2520game.html">creates a new end screen object and loads the end screen image depending on the state of the game</a></li><li><a href="creates%2520a%2520new%2520endboss%2520object%2520with%2520the%2520given%2520x%2520position%2520and%2520loads%2520the%2520images%2520for%2520the%2520endboss%2520animations.html">creates a new endboss object with the given x position and loads the images for the endboss animations</a></li><li><a href="creates%2520a%2520new%2520mini%2520chicken%2520object%2520with%2520random%2520x%2520position%2520and%2520y%2520position,%2520%250Dand%2520loads%2520the%2520walking%2520animation%2520for%2520the%2520mini%2520chicken.html">creates a new mini chicken object with random x position and y position, and loads the walking animation for the mini chicken</a></li><li><a href="creates%2520a%2520new%2520start%2520screen%2520object%2520and%2520loads%2520the%2520start%2520screen%2520image.html">creates a new start screen object and loads the start screen image</a></li><li><a href="creates%2520a%2520new%2520throwable%2520object%2520and%2520loads%2520the%2520images%2520for%2520the%2520bottle%2520rotation%2520and%2520bottle%2520splash%2520animation.html">creates a new throwable object and loads the images for the bottle rotation and bottle splash animation</a></li><li><a href="endScreen.html">endScreen</a></li><li><a href="endboss.html">endboss</a></li><li><a href="here%2520we%2520get%2520the%2520connection%2520to%2520the%2520canvas%2520window%2520and%2520the%2520context%2520window%2520in%2520ctx.html">here we get the connection to the canvas window and the context window in ctx</a></li><li><a href="keyBoard.html">keyBoard</a></li><li><a href="level1.html">level1</a></li><li><a href="miniChicken.html">miniChicken</a></li><li><a href="spreads%2520the%2520arrays%2520to%2520the%2520keys%2520in%2520this%2520class%2520in%2520order%2520to%2520work%2520with%2520the%2520objects%2520in%2520the%2520level%2520and%2520to%2520%250Dcreate%2520the%2520level.html">spreads the arrays to the keys in this class in order to work with the objects in the level and to create the level</a></li><li><a href="statusBar.html">statusBar</a></li><li><a href="this%2520constructor%2520is%2520called%2520when%2520the%2520world%2520object%2520is%2520created,%2520it%2520connects%2520the%2520canvas%2520and%2520the%2520keyboard,%2520%250Dsets%2520up%2520the%2520world%2520and%2520loads%2520the%2520images,%2520loads%2520background%2520layers,%2520draws%2520objects,%2520character%2520and%2520checks%2520the%2520character%2520state.html">this constructor is called when the world object is created, it connects the canvas and the keyboard, sets up the world and loads the images, loads background layers, draws objects, character and checks the character state</a></li><li><a href="this%2520constructor%2520load%2520the%2520img%2520of%2520the%2520coin,%2520sets%2520random%2520x%2520and%2520y%2520values%2520and%2520sets%2520the%2520width,%2520height%2520of%2520the%2520coins.html"> height of the coins</a></li><li><a href="this%2520constructor%2520loads%2520the%2520cloud%2520image,%2520sets%2520x%2520and%2520y%2520values%2520and%2520finaly%2520moves%2520the%2520clouds.html"> sets x and y values and finaly moves the clouds</a></li><li><a href="this%252520constructor%252520loads%252520the%252520images%252520for%252520the%252520character%252520animations,%252520%25250Dapplies%252520gravity%252520to%252520the%252520character,%252520shows%252520the%252520idle%252520animation%252520on%252520the%252520character,%252520%25250Dhandles%252520the%252520character_s%252520movement%252520and%252520plays%252520the%252520character_s%252520animations.html">this constructor loads the images for the character animations, applies gravity to the character, shows the idle animation on the character, handles the character's movement and plays the character's animations</a></li></ul><h3>Global</h3><ul><li><a href="global.html#canvas">canvas</a></li><li><a href="global.html#checkWinLooseIntervall">checkWinLooseIntervall</a></li><li><a href="global.html#elem">elem</a></li><li><a href="global.html#intervalIds">intervalIds</a></li><li><a href="global.html#%257BbackToStartScreen%257Dfunctiontakestheplayerbacktothestartscreen-thesamewayastheuseropensthegamethefirsttimebutnotplayinstantlyAllmostthesameasthefunctionstartgame">{backToStartScreen}  function takes the player back to the start screen - the same way as the user opens the game the first time but not play instantlyAllmost the same as the function start game</a></li><li><a href="global.html#%257BchangeMuteStatus%257Dherewetoggletheimgforthemutebutton,playormutethebackgroundmusicandchangethevariableinlocalstorage">{changeMuteStatus} here we toggle the img for the mute button, play or mute the background music and change the variable in local storage</a></li><li><a href="global.html#%257BchangeToFullscreen%257Dthisfunctionchangesthegametofullscreenmodeorbacktonormal">{changeToFullscreen} this function changes the game to fullscreen mode or back to normal</a></li><li><a href="global.html#%257BchangeToFullscreen%257Dthisfunctionhandlesthefullscreenchangeeventbytogglingthefullscreenmode">{changeToFullscreen} this function handles the fullscreen change event by toggling the fullscreen mode</a></li><li><a href="global.html#%257BcheckMuteStatus%257Dherewecheckthemutestatusofthegamebycheckingthelocalstoragevariable">{checkMuteStatus} here we check the mute status of the game by checking the local storage variable</a></li><li><a href="global.html#%257BcheckMuteStatus%257Dthemutestatusischeckedfromthelocalstorage">{checkMuteStatus} the mute status is checked from the local storage</a></li><li><a href="global.html#%257BendMaskForGame%257Dthisshowstheendmaskwiththreeoptionsforthegame(restart,backtostartscreen,info)">{endMaskForGame} this shows the end mask with three options for the game  (restart, back to start screen, info)</a></li><li><a href="global.html#%257BhideEndDialog%257Dthisfunctionhidestheenddialogiftheuserwantstoreloadthegameorgobacktothestartscreen">{hideEndDialog} this function hides the end dialog if the user wants to reload the game or go back to the start screen</a></li><li><a href="global.html#%257BmakeInfoVisible%257Dthisfunctiontogglesthevisibilityoftheinfodiv">{makeInfoVisible} this function toggles the visibility of the info div</a></li><li><a href="global.html#%257BopenFullscreen%257Dthisfunctionopensthefullscreenmodeforvariousbrowsers">{openFullscreen} this function opens the fullscreen mode for various browsers</a></li><li><a href="global.html#%257BplayBackgroundMusic%257Dthebackgroundmusicisplayedandvolumeisset">{playBackgroundMusic} the background music is played and volume is set</a></li><li><a href="global.html#%257BreloadInit%257DthereloadInitfunctionisusedtoloadonlyrequiredvariablesbutnotall">{reloadInit} the reloadInit function is used to load only required variables but not all</a></li><li><a href="global.html#%257BrenderControlButton%257Dthisfunctionrendersthecontrolbuttonsforthehandy/tabletMode">{renderControlButton} this function renders the control buttons for the handy/tablet Mode</a></li><li><a href="global.html#%257BrenderInfo%257Dthisisthefunctionitselfwhorenderstheinfodivintothedom">{renderInfo} this is the function itself who renders the info div into the dom</a></li><li><a href="global.html#%257BrenderSoundButton%257Dthisfunctionrendersthesound/mutebuttonforthegameintherighttopcorner">{renderSoundButton} this function renders the sound/mute button for the game in the right top corner</a></li><li><a href="global.html#%257BresetFullscreen%257Dthisfunctionresetsthefullscreenmodeforvariousbrowsers">{resetFullscreen} this function resets the fullscreen mode for various browsers</a></li><li><a href="global.html#%257BrestartGame%257Dhereweinitializethegameforrestart,setupanewlevelandbutallnewmovalbeobjectsasparametersinitandstartthegameinstantly">{restartGame} here we initialize the game for restart, set up a new level and but all new movalbe objects as parameters in it and start the game instantly</a></li><li><a href="global.html#%257BsetLoosingEndscreen%257DthisfunctionsetstheendscreenwhentheplayerlosesshowstheloosingEndMaskandstoppsallIntervalls">{setLoosingEndscreen} this function sets the endscreen when the player loses shows the loosing EndMask and stopps all Intervalls</a></li><li><a href="global.html#%257BsetWinningEndscreen%257DthisfunctionsetstheendscreenwhentheplayerwinsshowsthewinningEndMaskandstoppsallIntervalls">{setWinningEndscreen} this function sets the endscreen when the player wins shows the winning EndMask and stopps all Intervalls</a></li><li><a href="global.html#%257BsetWinningEndscreen%257DthisfunctionsetstheendscreenwhentheplayerwinsshowsthewinningEndMaskandstoppsallIntervalls">{setWinningEndscreen} this function sets the endscreen when the player wins shows the winning EndMask and stopps all Intervalls</a></li><li><a href="global.html#%257BstartGame%257Dthisfunctionstartsthegameandstartsthewin/loosecheckingIntervall">{startGame} this function starts the game and starts the win/loose checking Intervall</a></li><li><a href="global.html#%257BstartMaskforGame%257Dthestartmaskforthegamemakesthestartscreenvisibleandrendersthemenubuttonstostartthegameorshowtheinfo">{startMaskforGame} the start mask for the game makes the start screen visibleand renders the menu buttons to start the game or show the info</a></li><li><a href="global.html#%257BstopAllIntervall%257DthisfunctionstopsallactiveintervalsandclearsthearraywithintervalIDs">{stopAllIntervall} this function stops all active intervals and clears the array with interval IDs</a></li><li><a href="global.html#%257BstopBubbling%257Dtheevent.stopPropagation()isusedtopreventtheeventfrombubblinguptotheparentelementandiscurrentlyusedfortheinfodivtocloseviaclickoutsidethediv">{stopBubbling} the event.stopPropagation() is used to prevent the event from bubbling up to the parent elementand is currently used for the info div to close via click outside the div</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sun Mar 29 2026 22:19:42 GMT+0200 (Mitteleuropäische Sommerzeit)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.5</a> on Sat Apr 04 2026 04:50:41 GMT+0200 (Mitteleuropäische Sommerzeit)
 </footer>
 
 <script> prettyPrint(); </script>

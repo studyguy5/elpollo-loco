@@ -29,6 +29,7 @@ class CharacterExtention extends character {
         this.playCharacter_Animations();
         this.animatejumpAndWalking_Character();
         this.showIdle_OnCharacter();
+        this.setTimeout();
     }
 
 
@@ -44,6 +45,13 @@ class CharacterExtention extends character {
 
     }
 
+    started = false;
+    
+    setTimeout() {
+        setTimeout(() => {
+            this.started = true;
+        }, 1000);
+    }
 
 
     /**here we animate the character's jumping and walking
@@ -59,7 +67,7 @@ class CharacterExtention extends character {
         }, 1000 / 24);
         setStoppableInterval(() => {
             this.jumpCounter++;
-            if (this.y < 100 && this.jumpCounter % 13 === 0) {
+            if (this.y < 100 && this.jumpCounter % 13 === 0 && this.started) {
                 this.animateJumping();
             }
             if (!this.isAboveGround()) {

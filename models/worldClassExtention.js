@@ -16,6 +16,7 @@ class WorldClassExtention extends World {
     constructor(canvas, Keyboard) {
         super(canvas, Keyboard);
         this.drawObjects();
+        this.drawCharacter();
         this.checkCharacter_State();
     }
 
@@ -62,12 +63,10 @@ class WorldClassExtention extends World {
             this.checkThrowObjects() //responsible for bottle bar lenght
             this.checkCollision_PlayHurt_andDeleyEndboss()
         }, 1000 / 60)
-        //==============================================
         setStoppableInterval(() => {
             this.checkIfDeath(this.Character)
             // this.checkIfDeath(this.Character)
         }, 1000 / 10);
-
         setStoppableInterval(() => {
             this.checkCollisionWithCoins()
             this.checkCollisionWidth_Bottles();
@@ -128,7 +127,7 @@ class WorldClassExtention extends World {
             this.Character.x + this.Character.width - this.Character.offsetCharacter.right > bottles.x &&
             this.Character.x + this.Character.offsetCharacter.left < bottles.x + bottles.width &&
             this.Character.y < bottles.y + bottles.height &&
-            this.Character.y + this.Character.height + this.Character.offsetCharacter.bottom > bottles.y
+            this.Character.y + this.Character.height - this.Character.offsetCharacter.bottom > bottles.y
         );
     }
 
@@ -143,26 +142,46 @@ class WorldClassExtention extends World {
             this.Character.x + this.Character.width - this.Character.offsetCharacter.right > coins.x &&
             this.Character.x + this.Character.offsetCharacter.left < coins.x + coins.width &&
             this.Character.y < coins.y + coins.height &&
-            this.Character.y + this.Character.height + this.Character.offsetCharacter.bottom > coins.y
+            this.Character.y + this.Character.height - this.Character.offsetCharacter.bottom > coins.y
         );
     }
 
     /**Here we check for collisions and for isChrushing with normal chickens 
-     * @type {function} makeInvincible_and_CrushChicken this makes the character invincible for a specified number of seconds
      * and crushes the chicken
-     * @type {function} hurttAnimation_and_Sound this plays the hurt animation for the character and plays the sound effect
-     * @type {function} keepHurting_Character this keeps the character hurting for a specified number of seconds
      * @returns void
     */
     checkColliding_PlayHurt_andDeleyChicken() {
         this.level.enemies.forEach((enemies) => {
-            if (this.Character.isChrushingChicken(enemies)) {
+            this.checkCharacter_or_bottle_crushing(enemies)
+            this.checkCollission_timestamp_resetTimestamp(enemies)
+        });
+    }
+
+    /**
+     * 
+     * @param {enemies} enemies
+     * @type {function} makeInvincible_and_CrushChicken this makes the character invincible for a specified number of seconds
+     * @type {function} chrushChicken this crushes the chicken, if a bottle is thrown at the chicken
+     *  
+     */
+    checkCharacter_or_bottle_crushing(enemies) {
+        if (this.Character.isChrushingChicken(enemies)) {
                 this.makeInvincible_and_CrushChicken(enemies);
             }
             if (this.bottleisCollidingWithChicken(enemies)) { //check if throwable Bottle is colliding with enemie
                 enemies.chrushChicken(enemies);
             }
-            if (this.Character.isColliding(enemies)) {
+    }
+
+    /**
+     * 
+     * @param {enemies} enemies
+     * @type {function} hurttAnimation_and_Sound this plays the hurt animation for the character and plays the sound effect
+     * @type {function} keepHurting_Character this keeps the character hurting for a specified number of seconds 
+     * 
+     */
+    checkCollission_timestamp_resetTimestamp(enemies) {
+        if (this.Character.isColliding(enemies)) {
                 this.hurtAnimation_and_Sound();
             }
             if (!this.Character.isColliding(enemies) && this.lastHit > 0 && this.isHurt()) {
@@ -171,7 +190,6 @@ class WorldClassExtention extends World {
             if (this.timePassed > 2) {
                 if (this.timePassed > 30) { this.timePassed = 0 }
             }
-        });
     }
 
 
@@ -214,22 +232,44 @@ class WorldClassExtention extends World {
 
     /**Here we check for collisions and for isChrushing with normal mini chickens
      * @param {object} miniEnemies the mini chicken object
-     * @type {function} hurtAnimation_and_Sound_MiniChicken this plays the hurt animation for the character and plays the sound effect
-     * @type {function} keepHurting_MiniChicken this keeps the character hurting for a specified number of seconds
      * @returns void
-     */
-
+    */
+   
     checkColliding_PlayHurt_andDeleyMiniChicken() {
         this.level.miniEnemies.forEach((miniEnemies) => {
-            if (this.Character.isChrushingMiniChicken(miniEnemies)) {
+            this.check_chrushing_character_or_bottle_miniChicken(miniEnemies);
+            this.check_collission_timestamp_resetTimestamp_MiniChicken(miniEnemies);
+        });
+    }
+
+
+    /**
+     * 
+     * @param {miniEnemies} miniEnemies
+     * @type {function} makeInvincible this makes the character invincible for a specified number of seconds
+     * @type {function} chrushMiniChicken this crushes the mini chicken, if a bottle is thrown at the mini chicken
+     * @returns void 
+     */
+    check_chrushing_character_or_bottle_miniChicken(miniEnemies) {
+        if (this.Character.isChrushingMiniChicken(miniEnemies)) {
                 this.Character.makeInvincible(3)
                 miniEnemies.chrushMiniChicken(miniEnemies)
-            }
+                }
             //checks if a throwable bottle is colliding with a miniEnemies
             if (this.bottleisCollidingWithMiniChicken(miniEnemies)) {
                 miniEnemies.chrushMiniChicken(miniEnemies);
             }
-            if (this.Character.isCollidingMiniChicken(miniEnemies)) {
+        }
+
+    /**
+     * 
+     * @param {miniEnemies} miniEnemies 
+     * @type {function} hurtAnimation_and_Sound_MiniChicken this plays the hurt animation for the character and plays the sound effect
+     * @type {function} keepHurting_MiniChicken this keeps the character hurting for a specified number of seconds
+     * @returns void
+     */
+    check_collission_timestamp_resetTimestamp_MiniChicken(miniEnemies) {
+        if (this.Character.isCollidingMiniChicken(miniEnemies)) {
                 this.hurtAnimation_and_Sound_MiniChicken();
             }
             if (!this.Character.isCollidingMiniChicken(miniEnemies) && this.lastHit > 0 && this.isHurt()) {
@@ -238,7 +278,6 @@ class WorldClassExtention extends World {
             if (this.timePassed > 2) {
                 if (this.timePassed > 30) { this.timePassed = 0 }
             }
-        });
     }
 
     /**

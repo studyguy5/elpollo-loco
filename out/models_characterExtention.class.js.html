@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/drawableobject.class.js</title>
+    <title>JSDoc: Source: models/characterExtention.class.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/drawableobject.class.js</h1>
+    <h1 class="page-title">Source: models/characterExtention.class.js</h1>
 
     
 
@@ -26,95 +26,153 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @classdesc this class is for all object we have to draw on the canvas and holds functions to draw object, 
- * background layers and loads images
+            <pre class="prettyprint source linenums"><code>
+/**
+ * @class characterExtention this class extends the character class and adds additional functionality to the character
+ * it is a way to split the longer charcacter class into smaller parts
  */
-
-class DrawableObjekt {
+class CharacterExtention extends character {
 
     /**
-     * @property {object} imageChache this is the big object we put all images for animation in, and choose via key the right one
-     * when we need the pictures
-     * @property {number} subtrahendMax this number is the border for reaching too far left out of the screen
-     * @property {HTMLCanvasElement} ctx this variable holds the 2d context for the canvas in order to draw
-     * @property {HTMLCanvasElement} canvas this is the id for the canvas div we want to draw Objects in
-     * @property {number} x this x is the x-Axis position of the character
-     * @property {number} y this y is the y-Axis position of the character
-     * @property {number} height this height is for the Character
-     * @property {number} width this width is for the character
-     * @property {HTMLImageElement} img this is the img of the Character itself
+     * @type {number} slows down the jump frequency
      */
-    imageChache = {}; 
-    subtrahendMax = -20;
-    ctx;
-    canvas;
-    x = 80;
-    y = 145;
-    height = 300;
-    width = 100;
-    img;    
-    
+    jumpCounter = 0;
 
     /**
-     * @constructor here we get the connection to the canvas window and the context window in ctx
+     * @constructor this constructor loads the images for the character animations, 
+     * applies gravity to the character, shows the idle animation on the character, 
+     * handles the character's movement and plays the character's animations
+     * @type {function} showIdle_OnCharacter this function shows the idle animation on the character after a set time,
+     * which is used for the character's idle behavior when the player is not providing input
+     * @type {function} Move_Character this function checks for keyboard input and updates the character's position accordingly,
+     * which is used for handling the character's movement to the right, left and jump actions
+     * @type {function} playCharacter_Animations this function plays the character's animations based 
+     * on the character's state and actions,
+     * @type {function} animatejumpAndWalking_Character this function animates the character's jump 
+     * and walking animations based on the character's state and actions
      */
     constructor() {
-        const canvas = document.getElementById('gameCanvas');
-        this.ctx = canvas.getContext('2d');
-        
+        super();
+        this.move_Character();
+        this.playCharacter_Animations();
+        this.animatejumpAndWalking_Character();
+        this.showIdle_OnCharacter();
+        this.setTimeout();
     }
 
-    /**
-     * here we draw some single images whithout animation for the drawable object
-     * @type {HTMLImageElement} img this img loads some drawable Objects
+
+    /**here we play the character's hurt and death animation
+     * @type {function} playHurtAnimation this function plays the hurt animation for the character when it gets hurt
+     * @type {function} playDeathAnimation this function plays the death animation for the character when it dies
+     */
+    playCharacter_Animations() {
+        setStoppableInterval(() => {
+            this.playHurtAnimation();
+            this.playDeathAnimation();
+        }, 1000 / 20);
+
+    }
+
+    started = false;
+    
+    setTimeout() {
+        setTimeout(() => {
+            this.started = true;
+        }, 1000);
+    }
+
+
+    /**here we animate the character's jumping and walking
+     * @type {HTMLImageElement} img for the walking Animation
+     * @type {HTMLImageElement} img for the jumping Animation
      * @returns void
      */
-    loadImage(path) {
-        this.img = new Image()
-        this.img.src = path;
-
-    }
-
-    
-    /**
-     * here we draw the image for the drawable object
-     * @type {HTMLImageElement} img here we draw Objects like the character or something else
-     * @returns void */
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * here we draw the image for the drawable object in the other direction
-     * @type {HTMLImageElement} img here we draw the character in reverse direction
-     * @returns void */
-     * 
-    drawBackward(ctx) {
-        ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
+    animatejumpAndWalking_Character() {
+        setStoppableInterval(() => {
+            if (this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) {
+                this.animateWalking();
+            }
+        }, 1000 / 24);
+        setStoppableInterval(() => {
+            this.jumpCounter++;
+            if (this.y &lt; 100 &amp;&amp; this.jumpCounter % 13 === 0 &amp;&amp; this.started) {
+                this.animateJumping();
+            }
+            if (!this.isAboveGround()) {
+                this.currentJumpImage = 0;
+            }
+        }, 1000 / 40);
     }
 
     /**
-     * here we draw the background images for the world
-     * @type {HTMLImageElement} img here we draw Objects like the background layers in the game
-     * @returns void */
-    drawBackground(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+     * animate the images of walking in a intervall
+     * @type {HTMLImageElement} img for the walking Animation
+     * @returns void
+     */
+    animateWalking() {
+        let path = this.IMAGES_WALKING[this.currentImage];
+        this.img = this.imageChache[path];
+        this.currentImage = (this.currentImage + 1) % this.IMAGES_WALKING.length;
     }
-    
-    
+
     /**
-     * here we load all Images from all classes into the image cache
-     * @type {HTMLImageElement} img this img load diferent images from inheritad classes like movable Object or something else
-     * @type {object} imageChache here we collect all Object Images to use it and draw it on the canvas */
-    loadImages(arr) { 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.imageChache[path] = img; 
-        })
+     * animate the images of jumping in a intervall
+     * @type {HTMLImageElement} img for the jumping Animation
+     * @returns void
+     */
+    animateJumping(){
+        let path = this.IMAGES_JUMPING[this.currentJumpImage];
+                this.img = this.imageChache[path];
+                this.currentJumpImage = (this.currentJumpImage + 1) % this.IMAGES_JUMPING.length;
     }
-}</code></pre>
+
+    /**
+     * @type {function} Move_Character this function checks for keyboard input and updates the character's position accordingly
+     * @type {Object} this.world.Keyboard this object is used to check for keyboard input
+     * @type {object} endboss this object is used to check for the endboss position
+     * @type {number} world.camera_x this number is used to check for the camera position
+     * @returns void
+     */
+    move_Character() {
+        setStoppableInterval(() => {
+            if (this.world.Keyboard.RIGHT &amp;&amp; this.x &lt; this.world.level.endboss[0].x) { this.moveRightActions(); }
+            if (this.world.Keyboard.LEFT &amp;&amp; this.x > 100) { this.moveLeftActions(); }
+            if (!this.world.Keyboard.RIGHT &amp;&amp; !this.world.Keyboard.LEFT) { this.walkSound.pause(); this.walkSound.currentTime = 0; }
+            if (!this.world.Keyboard.SPACE) { this.jumpsound.pause(); this.jumpsound.currentTime = 0; }
+            if (!this.world.Keyboard.RIGHT &amp;&amp; !this.world.Keyboard.LEFT &amp;&amp; !this.world.Keyboard.SPACE &amp;&amp; !this.isAboveGround()) {
+                if (!this.normal) { this.setNormalTimeout(); }
+                if (!this.long) { this.setLongTimeout(); }
+                this.animationCounter++
+                if (this.animationCounter % 3 === 0 &amp;&amp; this.normalIdle) {
+                    this.playIdleAnimation()
+                }
+                if (this.animationCounter % 3 === 0 &amp;&amp; this.sleepIdle) {
+                    this.playLongIdleAnimation()
+                }
+            }
+            this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
+        }, 1000 / 30);
+        setStoppableInterval(() => {
+            if (this.world.Keyboard.SPACE &amp;&amp; !this.isAboveGround() &amp;&amp; !this.jump) { this.jumpActions(); }
+        }, 1000 / 25);
+
+    }
+
+    /**this shows the idle animation on the character after a set time
+     * @type {function} playIdleAnimation this function shows the idle animation on the character
+     * @type {function} playLongIdleAnimation this function shows the long idle animation on the character
+     * @returns void
+     */
+    showIdle_OnCharacter() {
+        this.IdleTimeout = setTimeout(() => {
+            this.playIdleAnimation()
+        }, 3000);
+        this.longIdleTimeout = setTimeout(() => {
+            this.playLongIdleAnimation()
+        }, 8000);
+    }
+}
+</code></pre>
         </article>
     </section>
 

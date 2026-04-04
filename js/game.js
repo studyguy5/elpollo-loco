@@ -192,6 +192,47 @@ function startGame() {
     let dialog = document.getElementById('startDialog')
     dialog.style.display = "none";
     startscreen.hideStartScreen()
+    level1 = new Level(
+        Array.from({ length: 10 }, () => new Coin()),
+        Array.from({ length: 6 }, () => new bottlesOnFloorObject()),
+        Array.from({ length: 6 }, () => new miniChicken()),
+        Array.from({ length: 6 }, () => new chicken()),
+        Array.from({ length: 4 }, () => new cloud()),
+        [
+            new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
+            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
+
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
+            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
+        ],
+        [
+            new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
+        ])
+
     world = new WorldClassExtention(canvas, Keyboard);
     renderControlButton();
     checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
@@ -284,46 +325,6 @@ function backToStartScreen() {
     end.innerHTML = "";
     end.style.display = "none"
     reloadInit();
-    level1 = new Level(
-        Array.from({ length: 10 }, () => new Coin()),
-        Array.from({ length: 6 }, () => new bottlesOnFloorObject()),
-        Array.from({ length: 6 }, () => new miniChicken()),
-        Array.from({ length: 6 }, () => new chicken()),
-        Array.from({ length: 4 }, () => new cloud()),
-        [
-            new background(0, 0, 720, 480, 'img/5_background/layers/air.png'),
-            new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
-            new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
-            new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
-            new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
-            new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
-            new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
-            new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-
-            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
-            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
-            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
-            new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
-            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
-            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
-            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
-            new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-
-            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
-            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
-            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
-            new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
-            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
-            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
-            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
-            new background(719 * 5, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-        ],
-        [
-            new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
-        ])
 }
 
 /**
@@ -344,7 +345,7 @@ function endMaskForGame() {
     `
     setTimeout(() => {
         document.querySelector('.endDialog').classList.add('visible');
-    }, 20);  // 10ms reicht!
+    }, 1000);  // 10ms reicht!
 }
 
 /**

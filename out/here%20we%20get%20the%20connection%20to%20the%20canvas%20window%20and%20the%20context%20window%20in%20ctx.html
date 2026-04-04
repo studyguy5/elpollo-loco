@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/drawableobject.class.js</title>
+    <title>JSDoc: Class: here we get the connection to the canvas window and the context window in ctx</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,106 +17,133 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/drawableobject.class.js</h1>
+    <h1 class="page-title">Class: here we get the connection to the canvas window and the context window in ctx</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @classdesc this class is for all object we have to draw on the canvas and holds functions to draw object, 
- * background layers and loads images
- */
-
-class DrawableObjekt {
-
-    /**
-     * @property {object} imageChache this is the big object we put all images for animation in, and choose via key the right one
-     * when we need the pictures
-     * @property {number} subtrahendMax this number is the border for reaching too far left out of the screen
-     * @property {HTMLCanvasElement} ctx this variable holds the 2d context for the canvas in order to draw
-     * @property {HTMLCanvasElement} canvas this is the id for the canvas div we want to draw Objects in
-     * @property {number} x this x is the x-Axis position of the character
-     * @property {number} y this y is the y-Axis position of the character
-     * @property {number} height this height is for the Character
-     * @property {number} width this width is for the character
-     * @property {HTMLImageElement} img this is the img of the Character itself
-     */
-    imageChache = {}; 
-    subtrahendMax = -20;
-    ctx;
-    canvas;
-    x = 80;
-    y = 145;
-    height = 300;
-    width = 100;
-    img;    
-    
-
-    /**
-     * @constructor here we get the connection to the canvas window and the context window in ctx
-     */
-    constructor() {
-        const canvas = document.getElementById('gameCanvas');
-        this.ctx = canvas.getContext('2d');
+        <h2><span class="attribs"><span class="type-signature"></span></span>here we get the connection to the canvas window and the context window in ctx<span class="signature">()</span><span class="type-signature"></span></h2>
         
-    }
+    
+</header>
 
-    /**
-     * here we draw some single images whithout animation for the drawable object
-     * @type {HTMLImageElement} img this img loads some drawable Objects
-     * @returns void
-     */
-    loadImage(path) {
-        this.img = new Image()
-        this.img.src = path;
-
-    }
+<article>
+    <div class="container-overview">
+    
+        
 
     
-    /**
-     * here we draw the image for the drawable object
-     * @type {HTMLImageElement} img here we draw Objects like the character or something else
-     * @returns void */
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
 
-    /**
-     * here we draw the image for the drawable object in the other direction
-     * @type {HTMLImageElement} img here we draw the character in reverse direction
-     * @returns void */
-     * 
-    drawBackward(ctx) {
-        ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
-    }
+    
+    <h4 class="name" id="here we get the connection to the canvas window and the context window in ctx"><span class="type-signature"></span>new here we get the connection to the canvas window and the context window in ctx<span class="signature">()</span><span class="type-signature"></span></h4>
+    
 
-    /**
-     * here we draw the background images for the world
-     * @type {HTMLImageElement} img here we draw Objects like the background layers in the game
-     * @returns void */
-    drawBackground(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
     
-    /**
-     * here we load all Images from all classes into the image cache
-     * @type {HTMLImageElement} img this img load diferent images from inheritad classes like movable Object or something else
-     * @type {object} imageChache here we collect all Object Images to use it and draw it on the canvas */
-    loadImages(arr) { 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.imageChache[path] = img; 
-        })
-    }
-}</code></pre>
-        </article>
-    </section>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="models_drawableobject.class.js.html">models/drawableobject.class.js</a>, <a href="models_drawableobject.class.js.html#line31">line 31</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

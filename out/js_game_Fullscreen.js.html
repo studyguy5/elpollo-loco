@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: models/drawableobject.class.js</title>
+    <title>JSDoc: Source: js/game_Fullscreen.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: models/drawableobject.class.js</h1>
+    <h1 class="page-title">Source: js/game_Fullscreen.js</h1>
 
     
 
@@ -26,94 +26,94 @@
     
     <section>
         <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @classdesc this class is for all object we have to draw on the canvas and holds functions to draw object, 
- * background layers and loads images
+            <pre class="prettyprint source linenums"><code>
+/**
+ * @function {changeToFullscreen} this function handles the fullscreen change event by toggling the fullscreen mode
+ * @returns void */
+document.addEventListener('fullscreenchange', () => {
+    setTimeout(() => {
+        if (document.fullscreenElement) {
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = window.innerHeight + 'px';
+        } else {
+            canvas.style.width = 720 + 'px';
+            canvas.style.height = 480 + 'px';
+        }
+    }, 100);
+});
+
+/**
+ * @type {HTMLCanvasElement} this variable is used in the fullscreen/reset fullscreen request function and catches the canvas of the document */
+let elem = document.getElementById('canvaAria');
+
+
+/**
+ * @function {changeToFullscreen} this function changes the game to fullscreen mode or back to normal
+ * @returns void */
+function changeToFullscreen() {
+    if (elem.requestFullscreen &amp;&amp; !document.fullscreenElement) {
+        openFullscreen(elem)
+    } else {
+        resetFullscreen(elem)
+    }
+}
+
+/**
+ * @function {openFullscreen} this function opens the fullscreen mode for various browsers
+ * @returns void */
+function openFullscreen() {
+    if (elem.requestFullscreen &amp;&amp; !document.fullscreenElement) {
+        elem.requestFullscreen();
+    } else if (elem.webkitRequestFullscreen &amp;&amp; !document.fullscreenElement) { /* Safari */
+        elem.webkitRequestFullscreen();
+    } else if (elem.msRequestFullscreen &amp;&amp; !document.fullscreenElement) { /* IE11 */
+        elem.msRequestFullscreen();
+    }
+}
+
+/**
+ * @function {resetFullscreen} this function resets the fullscreen mode for various browsers
+ * @returns void */
+function resetFullscreen() {
+    if (document.exitFullscreen &amp;&amp; document.fullscreenElement) {
+        document.exitFullscreen();
+    } else if (document.webkitexitFullscreen &amp;&amp; document.fullscreenElement) { /* Safari */
+        document.exitFullscreen();
+    } else if (elem.msRequestFullscreen &amp;&amp; document.fullscreenElement) { /* IE11 */
+        document.exitFullscreen();
+    }
+
+}
+
+
+/**
+ * @function {changeMuteStatus} here we toggle the img for the mute button, play or mute the 
+ * background music and change the variable in local storage
+ *  */
+function changeMuteStatus() {
+    let img = document.getElementById('soundPanel')
+    let currentImg = img.querySelector('img');
+    if (currentImg.src.includes('muted_icon')) {
+        currentImg.src = './img/not_mute.png';
+        playBackgroundMusic();
+        localStorage.removeItem('muteStatus')
+        localStorage.setItem('muteStatus', false)
+    } else {
+        currentImg.src = './img/muted_icon_ob.png'
+        backgroundSound.pause();
+        backgroundSound.currentTime = 0;
+        localStorage.removeItem('muteStatus')
+        localStorage.setItem('muteStatus', true)
+    }
+}
+
+/**this is for UX purposes only
+ * @function {stopBubbling} the event.stopPropagation() is used to prevent the event from bubbling up to the parent element
+ * and is currently used for the info div to close via click outside the div
+ * @returns void
  */
-
-class DrawableObjekt {
-
-    /**
-     * @property {object} imageChache this is the big object we put all images for animation in, and choose via key the right one
-     * when we need the pictures
-     * @property {number} subtrahendMax this number is the border for reaching too far left out of the screen
-     * @property {HTMLCanvasElement} ctx this variable holds the 2d context for the canvas in order to draw
-     * @property {HTMLCanvasElement} canvas this is the id for the canvas div we want to draw Objects in
-     * @property {number} x this x is the x-Axis position of the character
-     * @property {number} y this y is the y-Axis position of the character
-     * @property {number} height this height is for the Character
-     * @property {number} width this width is for the character
-     * @property {HTMLImageElement} img this is the img of the Character itself
-     */
-    imageChache = {}; 
-    subtrahendMax = -20;
-    ctx;
-    canvas;
-    x = 80;
-    y = 145;
-    height = 300;
-    width = 100;
-    img;    
-    
-
-    /**
-     * @constructor here we get the connection to the canvas window and the context window in ctx
-     */
-    constructor() {
-        const canvas = document.getElementById('gameCanvas');
-        this.ctx = canvas.getContext('2d');
-        
-    }
-
-    /**
-     * here we draw some single images whithout animation for the drawable object
-     * @type {HTMLImageElement} img this img loads some drawable Objects
-     * @returns void
-     */
-    loadImage(path) {
-        this.img = new Image()
-        this.img.src = path;
-
-    }
-
-    
-    /**
-     * here we draw the image for the drawable object
-     * @type {HTMLImageElement} img here we draw Objects like the character or something else
-     * @returns void */
-    draw(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * here we draw the image for the drawable object in the other direction
-     * @type {HTMLImageElement} img here we draw the character in reverse direction
-     * @returns void */
-     * 
-    drawBackward(ctx) {
-        ctx.drawImage(this.img, -this.x, this.y, this.width, this.height);
-    }
-
-    /**
-     * here we draw the background images for the world
-     * @type {HTMLImageElement} img here we draw Objects like the background layers in the game
-     * @returns void */
-    drawBackground(ctx) {
-        ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
-    }
-    
-    
-    /**
-     * here we load all Images from all classes into the image cache
-     * @type {HTMLImageElement} img this img load diferent images from inheritad classes like movable Object or something else
-     * @type {object} imageChache here we collect all Object Images to use it and draw it on the canvas */
-    loadImages(arr) { 
-        arr.forEach((path) => {
-            let img = new Image()
-            img.src = path;
-            this.imageChache[path] = img; 
-        })
-    }
+function stopBubbling(event) {
+    event.stopPropagation();
 }</code></pre>
         </article>
     </section>
