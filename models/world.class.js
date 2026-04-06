@@ -167,11 +167,9 @@ class World {
     /**here we cut a bottle from the array and update the statusbar combined with a setTimeout
      * @returns void
      */
-    cutBottleFrom_Array() {
-        if (this.Keyboard.d) {
-            setTimeout(() => {
-                this.throwableObjects.pop()
-            }, 1000);
+    cutBottleFrom_Array(d_wasPressed) {
+        if (!d_wasPressed) {
+                this.throwableObjects.pop();
         }
     }
 

@@ -2,6 +2,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background-image: url(./img/bg_big.png);
     background-position: center;
     background-repeat: no-repeat;

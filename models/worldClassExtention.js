@@ -65,12 +65,11 @@ class WorldClassExtention extends World {
         }, 1000 / 60)
         setStoppableInterval(() => {
             this.checkIfDeath(this.Character)
-            // this.checkIfDeath(this.Character)
+            // this.cutBottleFrom_Array();
         }, 1000 / 10);
         setStoppableInterval(() => {
             this.checkCollisionWithCoins()
             this.checkCollisionWidth_Bottles();
-            this.cutBottleFrom_Array();
         }, 1000 / 60);
     }
 
@@ -304,7 +303,8 @@ class WorldClassExtention extends World {
             }
         }
     }
-
+    
+    throwTimeout = null;
     /**here we check for collisions with bottles
      * @type {function} isCollidingWidth_Bottle this checks if the character is colliding with a bottle
      * @type {function} pushBottle_And_Throw this checks if the character is pressing d, pushes the bottle and throws it
@@ -316,15 +316,21 @@ class WorldClassExtention extends World {
                 bottles.y = 1000;
                 this.collected++
             }
-            if (this.Keyboard.d == true && !this.d_wasPressed && this.collected > 0) {
-                this.pushBottle_And_Throw()
-            }
-            if (this.d_wasPressed && this.Keyboard.d == false) {
-                this.d_wasPressed = false
-            }
+            
         })
+        if (this.Keyboard.d == true && !this.d_wasPressed && this.collected > 0) {
+                this.d_wasPressed = true
+                this.pushBottle_And_Throw()
+                this.timeoutForBottle()
+            }
     }
 
+    timeoutForBottle(){
+        setTimeout(() => {
+            this.d_wasPressed = false;
+            this.cutBottleFrom_Array(this.d_wasPressed);
+        }, 1500);
+    }
 
     /**
      * this function pushes the bottle in the throwableObjects array and throws it with the character's direction
@@ -337,7 +343,8 @@ class WorldClassExtention extends World {
         let index = (this.throwableObjects?.length - 1)
         if (this.Character.otherDirection) {
             this.throwableObjects[index]?.throw(-25, this)
-        } else { this.throwableObjects[index]?.throw(25, this) }
+        } else { this.throwableObjects[index]?.throw(25, this)
+         }
         this.collected--
         this.d_wasPressed = true;
     }

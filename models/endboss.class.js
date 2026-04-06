@@ -154,7 +154,7 @@ class endboss extends MovableObject {
         if ((this.camera?.Character.x + 800) > this.x && !this.isDeath() && this.flag) {
             this.endbossIsAngry()
         }
-        if ((this.camera?.Character.x + 300) > this.x && !this.isDeath()) {
+        if ((this.camera?.Character.x + 600) > this.x && !this.isDeath()) {
             this.endbossWalking_Actions();
         } else { this.flag = true; }
 

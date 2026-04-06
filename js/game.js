@@ -34,10 +34,14 @@ function init() {
     startMaskforGame();
     renderSound_MuteButton();
     renderInfo();
-    localStorage.setItem('muteStatus', true)
-    checkMuteStatus();
     checkWinLooseIntervall;
 }
+
+document.addEventListener('click', () => {
+    if (localStorage.getItem('muteStatus') !== 'true') {
+        playBackgroundMusic();
+    }
+}, { once: true });
 
 /**this is the initialization function to reload the game and go back to the startscreen
  * @function {reloadInit} the reloadInit function is used to load only required variables but not all
@@ -48,8 +52,9 @@ function reloadInit() {
     startscreen = new StartScreen(canvas)
     startMaskforGame();
     renderInfo();
-    localStorage.setItem('muteStatus', true)
+    // localStorage.setItem('muteStatus', true)
     checkMuteStatus();
+    // checkMuteStatusSession();
     checkWinLooseIntervall;
 }
 
@@ -59,7 +64,7 @@ function reloadInit() {
 */
 function playBackgroundMusic() {
     backgroundSound.volume = 0.15
-    backgroundSound.play()
+    backgroundSound.play().catch(e => console.log('Autoplay blocked', e))
     
 }
 
@@ -234,7 +239,7 @@ function startGame() {
         ])
 
     world = new WorldClassExtention(canvas, Keyboard);
-    renderControlButton();
+    // renderControlButton();
     checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
 }
 
@@ -295,7 +300,7 @@ function restartGame() {
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
     world = new WorldClassExtention(canvas, Keyboard);
-    renderControlButton();
+    // renderControlButton();
     setTimeout(() => {
         checkWinLooseIntervall = setInterval(() => {
             checkWinLoose();
@@ -373,27 +378,42 @@ function renderControlButton() {
     </div>
     `}
 
+    // let firstTime = true;
+
+    
 /**
  * @function {renderSoundButton} this function renders the sound/mute button for the game in the right top corner
  * @returns void */
 function renderSound_MuteButton() {
     let sound = document.getElementById('controlHudSound')
-    sound.innerHTML += /*html */ `
+
+    if(localStorage.getItem('muteStatus') == 'true'){
+        sound.innerHTML = "";
+       sound.innerHTML += /*html */ `
     <div class="soundPanel" id="soundPanel">
     <img onclick="changeMuteStatus()" src="./img/muted_icon_ob.png">
     <img class="fullScreenButton" onclick="changeToFullscreen()" src="./img/full-screen_logo_ob.png">
     </div>
-    `
+    ` 
+    }
+    if(localStorage.getItem('muteStatus') == 'false'){
+        sound.innerHTML = "";
+        sound.innerHTML += /*html */ `
+    <div class="soundPanel" id="soundPanel">
+    <img onclick="changeMuteStatus()" src="./img/not_mute.png">
+    <img class="fullScreenButton" onclick="changeToFullscreen()" src="./img/full-screen_logo_ob.png">
+    </div>
+    ` 
+    }
+    if(localStorage.length == 0){
+        sound.innerHTML = "";
+        
+        sound.innerHTML += /*html */ `
+        <div class="soundPanel" id="soundPanel">
+        <img onclick="changeMuteStatus()" src="./img/muted_icon_ob.png">
+        <img class="fullScreenButton" onclick="changeToFullscreen()" src="./img/full-screen_logo_ob.png">
+        </div>
+        `
+    }
 }
 
-
-        /**
-         * @function {checkMuteStatus} here we check the mute status of the game by checking the local storage variable
-         * @returns {boolean}
-         *  */
-        function checkMuteStatus() {
-            if (localStorage.getItem('muteStatus') == 'true') {
-            } else {
-                playBackgroundMusic()
-            }
-        }

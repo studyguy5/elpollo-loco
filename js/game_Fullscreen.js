@@ -3,20 +3,41 @@
  * @function {changeToFullscreen} this function handles the fullscreen change event by toggling the fullscreen mode
  * @returns void */
 document.addEventListener('fullscreenchange', () => {
+    let container = document.querySelector('.canvaAria');
+    let startscreen = document.querySelector('.startMask');
+    let endscreen = document.querySelector('.endMask');
     setTimeout(() => {
         if (document.fullscreenElement) {
-            canvas.style.width = window.innerWidth + 'px';
-            canvas.style.height = window.innerHeight + 'px';
-        } else {
-            canvas.style.width = 720 + 'px';
-            canvas.style.height = 480 + 'px';
-        }
-    }, 100);
+        container.style.width = '100vw';
+        container.style.height = '100vh';
+        container.style.maxWidth = '100vw';
+        container.style.maxHeight = '100vh';
+        canvas.style.width = '100vw';
+        canvas.style.height = '100vh';
+        startscreen.style.width = '100vw';
+        startscreen.style.height = '100vh';
+        endscreen.style.width = '100vw';
+        endscreen.style.height = '100vh';
+    } else {
+        container.style.width = '100%';
+        container.style.height = '100%';
+        container.style.maxWidth = '720px';
+        container.style.maxHeight = '480px';
+        canvas.style.width = '720px';
+        canvas.style.height = '480px';
+        startscreen.style.width = '720px';
+        startscreen.style.height = '480px';
+        endscreen.style.width = '720px';
+        endscreen.style.height = '480px';
+    }}, 100);
 });
+;
+;
 
 /**
  * @type {HTMLCanvasElement} this variable is used in the fullscreen/reset fullscreen request function and catches the canvas of the document */
-let elem = document.getElementById('canvaAria');
+let elem = document.body;
+
 
 
 /**
