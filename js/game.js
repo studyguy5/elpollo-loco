@@ -33,6 +33,7 @@ function init() {
     startscreen = new StartScreen(canvas)
     startMaskforGame();
     renderSound_MuteButton();
+    
     renderInfo();
     checkWinLooseIntervall;
 }
@@ -107,13 +108,13 @@ function renderInfo() {
     <p>Leonhard<br />
     Fantasy Street 28b<br />
     45971 Koppenhagen Avenue</p>
-
+    
     <h4>Kontakt</h4>
-        <p>E-Mail: beispiel@gmail.com</p>
-        
+    <p>E-Mail: beispiel@gmail.com</p>
+    
         <p>Quelle: <a class="footer-link" href="https://www.e-recht24.de">e-recht24.de</a></p>
         </div>
-    </div>
+        </div>
     `
 }
 
@@ -205,12 +206,12 @@ function startGame() {
             new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
+            
             new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-
+            
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
@@ -220,12 +221,12 @@ function startGame() {
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-
+            
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
+            
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
@@ -234,8 +235,8 @@ function startGame() {
         [
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
-
-    world = new WorldClassExtention(canvas, Keyboard);
+        renderControlButton();
+        world = new WorldClassExtention(canvas, Keyboard);
     // renderControlButton();
     checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
 }
@@ -287,7 +288,7 @@ function restartGame() {
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-
+            
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
@@ -296,13 +297,13 @@ function restartGame() {
         [
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
-    world = new WorldClassExtention(canvas, Keyboard);
-    // renderControlButton();
-    setTimeout(() => {
-        checkWinLooseIntervall = setInterval(() => {
-            checkWinLoose();
-        }, 1000 / 20);;
-    }, 500);
+        world = new WorldClassExtention(canvas, Keyboard);
+        renderControlButton();
+        setTimeout(() => {
+            checkWinLooseIntervall = setInterval(() => {
+                checkWinLoose();
+            }, 1000 / 20);;
+        }, 500);
 }
 
 /**
@@ -335,6 +336,8 @@ function backToStartScreen() {
  * @returns void
  *  */
 function endMaskForGame() {
+    let buttonField = document.getElementById('controlHudCharacter')
+    buttonField.innerHTML = "";
     let end = document.getElementById('endMask')
     end.innerHTML = "";
     end.style.display = "flex";
@@ -364,6 +367,7 @@ function hideEndDialog() {
  * @returns void */
 function renderControlButton() {
     let buttonField = document.getElementById('controlHudCharacter')
+    buttonField.innerHTML = "";
     buttonField.innerHTML += /*html */`
     <div class="MovePanel">
     <button class="btnLeft" id="btnLeft">Left</button>
