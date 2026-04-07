@@ -254,7 +254,6 @@ class WorldClassExtention extends World {
                 this.Character.makeInvincible(3)
                 miniEnemies.chrushMiniChicken(miniEnemies)
                 }
-            //checks if a throwable bottle is colliding with a miniEnemies
             if (this.bottleisCollidingWithMiniChicken(miniEnemies)) {
                 miniEnemies.chrushMiniChicken(miniEnemies);
             }
@@ -329,7 +328,7 @@ class WorldClassExtention extends World {
         setTimeout(() => {
             this.d_wasPressed = false;
             this.cutBottleFrom_Array(this.d_wasPressed);
-        }, 1500);
+        }, 1000);
     }
 
     /**
@@ -338,7 +337,6 @@ class WorldClassExtention extends World {
      */
     pushBottle_And_Throw() {
         let bottle = new ThrowableObject(this.Character);
-        // bottle.world = this
         this.throwableObjects.push(bottle);
         let index = (this.throwableObjects?.length - 1)
         if (this.Character.otherDirection) {

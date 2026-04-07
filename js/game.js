@@ -52,9 +52,6 @@ function reloadInit() {
     startscreen = new StartScreen(canvas)
     startMaskforGame();
     renderInfo();
-    // localStorage.setItem('muteStatus', true)
-    checkMuteStatus();
-    // checkMuteStatusSession();
     checkWinLooseIntervall;
 }
 
@@ -341,7 +338,7 @@ function endMaskForGame() {
     let end = document.getElementById('endMask')
     end.innerHTML = "";
     end.style.display = "flex";
-    end.innerHTML += `
+    end.innerHTML += /*html */`
     <div id="endDialog" class="endDialog">
     <h3 onclick="restartGame(); hideEndDialog()">Restart Game</h3>
     <h3 onclick="backToStartScreen()">Back to Start Screen</h3>

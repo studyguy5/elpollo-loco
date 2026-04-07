@@ -2,12 +2,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    background-image: url(./img/bg_big.png);
+    background-image: url(./img/4k_bg.png);
+    background-size:cover;
     background-position: center;
     background-repeat: no-repeat;
     width: 100%;
-    /* min-height: 100vh; */
+    height: 100vh;
     margin: 0;
 }
 
@@ -80,8 +80,7 @@ h3:hover {
     align-items: center;
     position: absolute;
     top: 0px;
-    /* width: 720px; */
-    /* height: 480px; */
+    max-height:100vh;
     width: 100%;
     max-width: 720px;
     aspect-ratio: 720 / 480;
