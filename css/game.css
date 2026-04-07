@@ -1,8 +1,11 @@
+
+
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-image: url(./img/4k_bg.png);
+    background-image: url(../img/4k_bg.png);
     background-size:cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -16,8 +19,6 @@ body {
     justify-content: center;
     align-items: center;
     position: relative;
-    /* width:100%; */
-    /* max-height:480px; */
     max-width: 720px;
     aspect-ratio: 720 / 480;
 }
@@ -25,6 +26,8 @@ body {
 h1,
 h2 {
     font-family: 'zabars', Arial, Helvetica, sans-serif;
+    color: rgb(19, 20, 14);
+    text-align: center;
     padding: 0px;
     margin: 10px;
 
