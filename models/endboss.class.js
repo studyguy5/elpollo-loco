@@ -40,12 +40,12 @@ class endboss extends MovableObject {
     currentHurtEndbossImage = 0;
     currentEndbossAttackImage = 0;
     camera;
-    endboss_speed = 4;
+    endboss_speed = 12;
     endbossEnergy = 100;
 
     offset = { 
         top: 15,
-        left: 20,
+        left: 50,
         right: 20,
         bottom: 15
     };
@@ -158,7 +158,7 @@ class endboss extends MovableObject {
             this.endbossWalking_Actions();
         } else { this.flag = true; }
 
-        if (((this.camera?.Character.x + 300) > this.x && !this.isDeath() && !this.jumped) || this.y < 70) {
+        if (((this.camera?.Character.x + 400) > this.x && !this.isDeath() && !this.jumped) || this.y < 70) {
             this.endbossAttack_and_jump();
         }
         if (this.bottleisCollidingWithEndboss() && !this.isDeath()) {
@@ -282,10 +282,10 @@ class endboss extends MovableObject {
      * @returns void
      */
     bottleisCollidingWithEndboss() {
-        const hit = (this.camera?.throwableObjects[0]?.x + this.camera?.throwableObjects[0]?.width > this.x &&
+        const hit = (this.camera?.throwableObjects[0]?.x + this.camera?.throwableObjects[0]?.width > this.x + this.offset.left &&
             this.camera?.throwableObjects[0]?.x < this.x + this.width &&
             this.camera?.throwableObjects[0]?.y < this.y + this.height &&
-            this.camera?.throwableObjects[0]?.y + this.camera?.throwableObjects[0]?.height > this.y)
+            this.camera?.throwableObjects[0]?.y + this.camera?.throwableObjects[0]?.height > this.y + this.offset.top);
             return hit ? this.x : null;
     }
 }

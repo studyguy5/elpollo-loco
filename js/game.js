@@ -13,6 +13,8 @@ let world;
 let Keyboard = new keyBoard();
 let startscreen;
 let endState;
+let win_Sound = new Audio('./audio/win_sound.wav');
+let loose_Sound = new Audio('./audio/loose_sound.mp3');
 backgroundSound = new Audio('audio/background-music_short.mp3')
 backgroundSound.loop = true;
 
@@ -33,7 +35,7 @@ function init() {
     startscreen = new StartScreen(canvas)
     startMaskforGame();
     renderSound_MuteButton();
-    
+
     renderInfo();
     checkWinLooseIntervall;
 }
@@ -63,7 +65,7 @@ function reloadInit() {
 function playBackgroundMusic() {
     backgroundSound.volume = 0.15
     backgroundSound.play().catch(e => console.log('Autoplay blocked', e))
-    
+
 }
 
 
@@ -166,9 +168,25 @@ function setLoosingEndscreen() {
     world = null;
     setTimeout(() => {
         endState = new endScreen(canvas, 'loose')
+        playLooseSound();
         endMaskForGame()
         stopAllIntervall()
     }, 500);
+}
+
+/**
+ * @function {playLooseSound} this function plays the loosing sound if the sound is not muted
+ * pauses the background music before playing the loosing sound and sets the volume
+ * @returns void
+ */
+function playLooseSound(){
+    if (localStorage.getItem('muteStatus') == 'false') {
+        backgroundSound.pause();
+        backgroundSound.currentTime = 0;
+        loose_Sound.currentTime = 0;
+        loose_Sound.volume = 0.5
+        loose_Sound.play();
+    }
 }
 
 /**
@@ -182,9 +200,25 @@ function setWinningEndscreen() {
     world = null;
     setTimeout(() => {
         endState = new endScreen(canvas, 'win')
-        endMaskForGame()
-        stopAllIntervall()
+        playWinnerSound();
+        endMaskForGame();
+        stopAllIntervall();
     }, 1500);
+}
+
+/**
+ * @function {playWinnerSound} this function plays the winning sound if the sound is not muted
+ * pauses the background music before playing the winning sound and sets the volume
+ * @returns void
+ */
+function playWinnerSound(){
+    if (localStorage.getItem('muteStatus') == 'false') {
+        backgroundSound.pause();
+        backgroundSound.currentTime = 0;
+        win_Sound.currentTime = 0;
+        win_Sound.volume = 0.5
+        win_Sound.play();
+    }
 }
 
 /**
@@ -206,12 +240,12 @@ function startGame() {
             new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-            
+
             new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-            
+
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
@@ -221,12 +255,12 @@ function startGame() {
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-            
+
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-            
+
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
@@ -235,8 +269,8 @@ function startGame() {
         [
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
-        renderControlButton();
-        world = new WorldClassExtention(canvas, Keyboard);
+    renderControlButton();
+    world = new WorldClassExtention(canvas, Keyboard);
     // renderControlButton();
     checkWinLooseIntervall = setInterval(checkWinLoose, 1000 / 20);
 }
@@ -268,17 +302,17 @@ function restartGame() {
             new background(0, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(0, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-            
+
             new background(719, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
             new background(719, 0, 720, 480, 'img/5_background/layers/1_first_layer/2.png'),
-            
+
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(719 * 2, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-            
+
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 3, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
@@ -288,7 +322,7 @@ function restartGame() {
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/3_third_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/2_second_layer/1.png'),
             new background(719 * 4, 0, 720, 480, 'img/5_background/layers/1_first_layer/1.png'),
-            
+
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/air.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/3_third_layer/2.png'),
             new background(719 * 5, 0, 720, 480, 'img/5_background/layers/2_second_layer/2.png'),
@@ -297,13 +331,13 @@ function restartGame() {
         [
             new endboss(3400, 80, 400, 400, 'img/4_enemie_boss_chicken/2_alert/G5.png'),
         ])
-        world = new WorldClassExtention(canvas, Keyboard);
-        renderControlButton();
-        setTimeout(() => {
-            checkWinLooseIntervall = setInterval(() => {
-                checkWinLoose();
-            }, 1000 / 20);;
-        }, 500);
+    world = new WorldClassExtention(canvas, Keyboard);
+    renderControlButton();
+    setTimeout(() => {
+        checkWinLooseIntervall = setInterval(() => {
+            checkWinLoose();
+        }, 1000 / 20);;
+    }, 500);
 }
 
 /**
@@ -379,36 +413,36 @@ function renderControlButton() {
     </div>
     `}
 
-    // let firstTime = true;
+// let firstTime = true;
 
-    
+
 /**
  * @function {renderSoundButton} this function renders the sound/mute button for the game in the right top corner
  * @returns void */
 function renderSound_MuteButton() {
     let sound = document.getElementById('controlHudSound')
 
-    if(localStorage.getItem('muteStatus') == 'true'){
+    if (localStorage.getItem('muteStatus') == 'true') {
         sound.innerHTML = "";
-       sound.innerHTML += /*html */ `
+        sound.innerHTML += /*html */ `
     <div class="soundPanel" id="soundPanel">
     <img onclick="changeMuteStatus()" src="./img/muted_icon_ob.png">
     <img class="fullScreenButton" onclick="changeToFullscreen()" src="./img/full-screen_logo_ob.png">
     </div>
-    ` 
+    `
     }
-    if(localStorage.getItem('muteStatus') == 'false'){
+    if (localStorage.getItem('muteStatus') == 'false') {
         sound.innerHTML = "";
         sound.innerHTML += /*html */ `
     <div class="soundPanel" id="soundPanel">
     <img onclick="changeMuteStatus()" src="./img/not_mute.png">
     <img class="fullScreenButton" onclick="changeToFullscreen()" src="./img/full-screen_logo_ob.png">
     </div>
-    ` 
+    `
     }
-    if(localStorage.length == 0){
+    if (localStorage.length == 0) {
         sound.innerHTML = "";
-        
+
         sound.innerHTML += /*html */ `
         <div class="soundPanel" id="soundPanel">
         <img onclick="changeMuteStatus()" src="./img/muted_icon_ob.png">

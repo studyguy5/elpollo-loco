@@ -335,7 +335,7 @@ class character extends MovableObject {
      * @returns {boolean} true if the character is dead, false if it is not
      */
     isDeath() {
-        return this.energy <= 0;
+        return this.energy <= 0 || this.x > this.world.level.endboss[0].x + this.world.level.endboss[0].width;
     }
 
     /**here we play the idle animation

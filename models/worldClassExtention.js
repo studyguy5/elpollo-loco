@@ -82,6 +82,12 @@ class WorldClassExtention extends World {
     checkCollisionWithCoins() {
         this.level.coins.forEach((coins) => {
             if (this.isCollidingWidth_Coin(coins)) {
+                if(localStorage.getItem('muteStatus') == 'true') {} else{
+                    this.coindHit.pause();
+                    this.coindHit.currentTime = 0;
+                    this.coindHit.volume = 0.2
+                    this.coindHit.play();         
+                }
                 coins.y = 500;
                 this.coinAmount++;
                 this.coinBar.setCoinImage(this.coinAmount)
@@ -296,13 +302,13 @@ class WorldClassExtention extends World {
         if (!this.Character.isInvincible()) {
             this.hit()
             this.Character.playHurtAnimation(this.isHurt);
-            if (localStorage.getItem('muteStatus') == 'true') { } else {
+            if (localStorage.getItem('muteStatus') == 'false'){
                 this.hitSound.volume = 0.6
                 this.hitSound.play();
             }
         }
     }
-    
+    coindHit = new Audio('./audio/coin_collect.mp3')
     throwTimeout = null;
     /**here we check for collisions with bottles
      * @type {function} isCollidingWidth_Bottle this checks if the character is colliding with a bottle

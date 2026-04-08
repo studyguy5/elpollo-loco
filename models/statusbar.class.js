@@ -28,6 +28,7 @@ class statusBar extends DrawableObjekt {
     currentStatusImage = 5;
     camera_x = 0;
     percentige = 100;
+    distanceFlag = false
 
     /**
      * 
@@ -37,7 +38,7 @@ class statusBar extends DrawableObjekt {
      * @param {number} width the width of the status bar
      * @param {number} height the height of the status bar
      * @param {string[]} statusBarr the array of image paths for the status bar, which is used to set the images for the health, bottles, coins and endboss health
-     */
+    */
 
     constructor(world, x, y, width, height, statusBarr) {
         super()
@@ -59,10 +60,10 @@ class statusBar extends DrawableObjekt {
      * @returns void
      */
     checkCharacterReach() {
-        setStoppableInterval(() => {
-            if (this.world.Character.x > (719 * 3.5))
-                this.setEndbossHealthImage(this.world.level.endboss[0].endbossEnergy)
-        }, 1000);
+        setStoppableInterval(() => {  
+        this.checkCharacterDistance();      
+        this.setEndbossHealthImage(this.world.level.endboss[0].endbossEnergy)
+        }, 800);
     }
 
     /**this function sets the image for the bottle status bar
@@ -108,9 +109,16 @@ class statusBar extends DrawableObjekt {
      */
     setEndbossHealthImage(endbossEnergy) {
         if (this.statusBarr[0].includes('endboss', 0)) {
+            if(this.distanceFlag == true){
             let path = this.statusBarr[this.setEndbossPercentige(endbossEnergy)]
-            this.img = this.imageChache[path];
+            this.img = this.imageChache[path];}
         }
+    }
+    checkCharacterDistance() {
+        if (this.world.Character.x > 2500) {
+            this.distanceFlag = true
+        }
+        return this.distanceFlag;
     }
 
     /**this function checks the coin amount and returns the corresponding image index
@@ -136,6 +144,7 @@ class statusBar extends DrawableObjekt {
      * @returns number the index of the image for the endboss health bar, which is used to set the image for the endboss health bar
      */
     setEndbossPercentige(endbossEnergy) {
+        console.log(endbossEnergy)
         // let endbossEnergy = this.world.level.endboss.endbossEnergy
         if (endbossEnergy == 100) {
             return 5;

@@ -108,7 +108,7 @@ class World {
     }
 
 
-    /**this function is called when the character is hit
+    /**this function is called when the character is hit and updates the character health
      * @retunrns void
      */
     hit() {
@@ -185,6 +185,7 @@ class World {
      */
     checkIfDeath() {
         if (this.Character.isDeath()) {
+            this.healthBar.sethealthImage(0)
             this.Character.energy = 0;
             this.Character.playDeathAnimation();
         }

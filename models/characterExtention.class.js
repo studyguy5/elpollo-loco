@@ -63,7 +63,7 @@ class CharacterExtention extends character {
      */
     animatejumpAndWalking_Character() {
         setStoppableInterval(() => {
-            if (this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) {
+            if ((this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) && !this.isAboveGround()) {
                 this.animateWalking();
             }
         }, 1000 / 24);

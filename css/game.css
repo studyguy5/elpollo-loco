@@ -4,6 +4,7 @@
 body {
     display: flex;
     flex-direction: column;
+    justify-content: center;
     align-items: center;
     background-image: url(../img/4k_bg.png);
     background-size:cover;
@@ -103,6 +104,24 @@ h3:hover {
 
 .endDialog.visible {
     opacity: 1;
+}
+
+.userInfo {
+    display: flex;
+    margin-top: 10px;
+    gap: 10px;
+    padding: 10px 25px;
+    border-radius: 15px;
+    background-color: #d1d1d1;
+    font-size: 22px;
+}
+
+.userInfo p {
+    font-family: 'zabars', Arial, Helvetica, sans-serif;
+    margin: 0px;
+    padding: 5px 20px;
+    background-color: rgb(169, 169, 169, 0.7);
+    border-radius: 30px;
 }
 
 
