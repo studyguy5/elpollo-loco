@@ -74,7 +74,7 @@ class ThrowableObject extends MovableObject {
      */
     constructor(Character) {
         super()
-        this.x = Character.x + 70;
+        this.x = Character.x + 40;
         this.y = Character.y + 120;
         this.width = 40;
         this.height = 80;

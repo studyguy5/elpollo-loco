@@ -34,17 +34,36 @@ function init() {
     canvas = document.getElementById('gameCanvas')
     startscreen = new StartScreen(canvas)
     startMaskforGame();
+    setMuteStatus();
     renderSound_MuteButton();
 
     renderInfo();
     checkWinLooseIntervall;
 }
 
+/**
+ * @function {addEventListener} the click event listener is used to start the background music
+ * after the first click, if it is not muted, because of the chrome "first interaction policy"
+ * @returns void
+ */
 document.addEventListener('click', () => {
     if (localStorage.getItem('muteStatus') !== 'true') {
         playBackgroundMusic();
     }
-}, { once: true });
+});
+
+/**
+ * @function {setMuteStatus} ckecks if local storage has a mutestatus
+ * if not (null) it sets it to true
+ * @returns void
+ */
+function setMuteStatus() {
+    // Beim Laden DEFAULT setzen:
+const muteStatus = localStorage.getItem('muteStatus');
+if (muteStatus === null) {  // Inkognito-Erster-Start
+  localStorage.setItem('muteStatus', 'true');  // MUTE als Default
+}
+}
 
 /**this is the initialization function to reload the game and go back to the startscreen
  * @function {reloadInit} the reloadInit function is used to load only required variables but not all
