@@ -371,7 +371,7 @@ class character extends MovableObject {
      */
     playHurtAnimation() {
         this.count++
-        if (this.world.isHurt() && this.count % 40 === 0) {
+        if (this.world.isHurt() && this.count % 60 === 0) {
             let path = this.IMAGES_HURT[this.currentHurtImage];
             this.img = this.imageChache[path];
             this.currentHurtImage = (this.currentHurtImage + 1) % this.IMAGES_HURT.length;

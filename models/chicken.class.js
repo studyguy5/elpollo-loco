@@ -73,6 +73,6 @@ class chicken extends MovableObject {
         clearInterval(this.chickenIntervall)
         this.speed = 0;
         setTimeout(() => { 
-            this.y = 490 }, 1500);
+            this.y = 490 }, 500);
     }
 }

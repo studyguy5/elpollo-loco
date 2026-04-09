@@ -63,13 +63,13 @@ class CharacterExtention extends character {
      */
     animatejumpAndWalking_Character() {
         setStoppableInterval(() => {
-            if ((this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) && !this.isAboveGround()) {
+            if ((this.world.Keyboard.RIGHT || this.world.Keyboard.LEFT) && !this.isAboveGround() && !this.world.isHurt()) {
                 this.animateWalking();
             }
         }, 1000 / 24);
         setStoppableInterval(() => {
             this.jumpCounter++;
-            if (this.y < 100 && this.jumpCounter % 13 === 0 && this.started) {
+            if (this.y < 100 && this.jumpCounter % 13 === 0 && this.started && !this.world.isHurt()) {
                 this.animateJumping();
             }
             if (!this.isAboveGround()) {
@@ -109,8 +109,6 @@ class CharacterExtention extends character {
      */
     move_Character() {
         setStoppableInterval(() => {
-            if (this.world.Keyboard.RIGHT && this.x < this.world.level.endboss[0].x) { this.moveRightActions(); }
-            if (this.world.Keyboard.LEFT && this.x > 100) { this.moveLeftActions(); }
             if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT) { this.walkSound.pause(); this.walkSound.currentTime = 0; }
             if (!this.world.Keyboard.SPACE) { this.jumpsound.pause(); this.jumpsound.currentTime = 0; }
             if (!this.world.Keyboard.RIGHT && !this.world.Keyboard.LEFT && !this.world.Keyboard.SPACE && !this.isAboveGround()) {
@@ -124,6 +122,8 @@ class CharacterExtention extends character {
                     this.playLongIdleAnimation()
                 }
             }
+            if (this.world.Keyboard.RIGHT && this.x < this.world.level.endboss[0].x) { this.moveRightActions(); }
+            if (this.world.Keyboard.LEFT && this.x > 100) { this.moveLeftActions(); }
             this.world.camera_x = -this.x + 80; //versetzt die Kamera proportional zur Position des Charakters
         }, 1000 / 30);
         setStoppableInterval(() => {

@@ -78,7 +78,7 @@ class miniChicken extends MovableObject {
         this.speed = 0;
         setTimeout(() => {
             this.y = 490
-        }, 1500);
+        }, 500);
     }
 
 }

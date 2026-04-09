@@ -204,7 +204,7 @@ class WorldClassExtention extends World {
      * @returns void
      */
     makeInvincible_and_CrushChicken(enemies) {
-        this.Character.makeInvincible(3)
+        this.Character.makeInvincible(0.7);
         enemies.chrushChicken(enemies)
         return;
     }
@@ -257,7 +257,7 @@ class WorldClassExtention extends World {
      */
     check_chrushing_character_or_bottle_miniChicken(miniEnemies) {
         if (this.Character.isChrushingMiniChicken(miniEnemies)) {
-                this.Character.makeInvincible(3)
+                this.Character.makeInvincible(0.7)
                 miniEnemies.chrushMiniChicken(miniEnemies)
                 }
             if (this.bottleisCollidingWithMiniChicken(miniEnemies)) {
