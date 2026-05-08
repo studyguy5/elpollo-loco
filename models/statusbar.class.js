@@ -144,8 +144,6 @@ class statusBar extends DrawableObjekt {
      * @returns number the index of the image for the endboss health bar, which is used to set the image for the endboss health bar
      */
     setEndbossPercentige(endbossEnergy) {
-        console.log(endbossEnergy)
-        // let endbossEnergy = this.world.level.endboss.endbossEnergy
         if (endbossEnergy == 100) {
             return 5;
         } else if (endbossEnergy > 80 && endbossEnergy < 100) {
